@@ -1,5 +1,11 @@
 package com.dfteam.desktop.controller;
 
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -12,29 +18,29 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class LoginController {
-    @FXML
-    private Button btnOK;
 
     @FXML
     private TextField loginField;
 
     @FXML
-    private TextField passwField;
+    private PasswordField passwField;
+
+    @FXML
+    private Button btnOK;
 
     @FXML
     private void initialize() {
-        btnOK.setOnAction(event -> LoginButtonPress());
+        btnOK.setOnAction(event -> onOK());
     }
 
-    protected void LoginButtonPress() {
+    protected void onOK() {
         HttpClient client = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost("http://167.99.138.88:8000/acc/login");
 
@@ -49,15 +55,19 @@ public class LoginController {
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(EntityUtils.toString(response.getEntity()));
             if((boolean) json.get("auth") && json.get("error") == null){
-//                    JOptionPane.showMessageDialog(null, "Auth success!");
-//                Accounts dialog = new Accounts((String) json.get("token"));
-//                dialog.pack();
-//                dialog.setVisible(true);
-//                    setVisible(false);
-//                this.dispose();
+                Stage accountStage = new Stage();
+                Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("accounts.fxml")));
+                accountStage.setTitle("DFteam - Accounts");
+                accountStage.getIcons().add(new Image("/images/DF.png"));
+                accountStage.setScene(new Scene(root));
+                accountStage.show();
                 System.out.println(json.get("token"));
             }else{
-//                JOptionPane.showMessageDialog(null, "Auth Error!!!");
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Auth Error");
+                alert.setHeaderText(null);
+                alert.setContentText("Wrong login or password");
+                alert.showAndWait();
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
