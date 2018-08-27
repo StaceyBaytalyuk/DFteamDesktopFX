@@ -52,7 +52,6 @@ public class AccountController {
             e.printStackTrace();
         }
 
-
         HttpClient client = HttpClientBuilder.create().build();
         HttpGet get = new HttpGet("http://167.99.138.88:8000/accountlist");
         get.addHeader("Authorization", token);
