@@ -12,7 +12,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="DFteamDesktopFX" options="--add-modules=javafx.graphics,javafx.base,javafx.controls,javafx.fxml" />
+      <module name="DFteamDesktopFX" options="--add-modules=javafx.graphics,javafx.base,javafx.controls,javafx.fxml,jdk.deploy.controlpanel --add-exports=jdk.deploy.controlpanel/com.sun.deploy.jcp=ALL-UNNAMED" />
     </option>
   </component>
 </project>
