@@ -2,6 +2,7 @@ package com.dfteam.desktop.controller;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -26,6 +27,9 @@ public class AccountController {
 
     @FXML
     private VBox googPanel;
+
+    @FXML
+    private ScrollPane scroll;
 
     @FXML
     private VBox oceanPanel;
@@ -95,6 +99,7 @@ public class AccountController {
                     }
                 });*/
             }
+            scroll.setFitToHeight(true);
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         }
