@@ -1,5 +1,6 @@
 package com.dfteam.desktop.controller;
 
+import javafx.scene.control.Button;
 import org.json.simple.JSONObject;
 
 public class VM {
@@ -7,7 +8,6 @@ public class VM {
     private String id, name, type, accName, ip="", zone, status;
 
     public VM(JSONObject vm, String type, String accName) {
-        id=(String) vm.get("id");
         name=(String) vm.get("name");
         status=(String) vm.get("status");
         zone=(String) vm.get("zone");
@@ -15,6 +15,11 @@ public class VM {
             ip=(String) vm.get("ip");
         }
         this.type=type;
+        if(type.equals("do")) {
+            id = new StringBuilder().append(vm.get("id")).toString();
+        }else{
+            id = (String) vm.get("id");
+        }
         this.accName=accName;
     }
 
@@ -44,5 +49,9 @@ public class VM {
 
     public String getStatus() {
         return status;
+    }
+
+    public Button getInfo() {
+        return new Button("More info");
     }
 }

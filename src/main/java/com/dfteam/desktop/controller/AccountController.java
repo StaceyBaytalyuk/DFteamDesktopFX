@@ -13,17 +13,12 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
 public class AccountController {
-    private String token;
-
-    public void setToken(String token) {
-        this.token = token;
-    }
+    public static String token;
 
     @FXML
     private VBox googPanel;
@@ -69,11 +64,7 @@ public class AccountController {
                 System.out.println(arr.get(i));
                 Button b = new Button((String) arr.get(i));
                 oceanPanel.getChildren().add(b);
-                /*b.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        openVMs(token, "do", b.getText());
-                    }
-                });*/
+                b.setOnAction(event -> openVMs("do", b.getText()));
             }
 
             arr = (JSONArray)json.get("ec2");
@@ -81,11 +72,7 @@ public class AccountController {
                 System.out.println(arr.get(i));
                 Button b = new Button((String) arr.get(i));
                 amazPanel.getChildren().add(b);
-                /*b.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        openVMs(token, "ec2", b.getText());
-                    }
-                });*/
+                b.setOnAction(event -> openVMs("ec2", b.getText()));
             }
 
             arr = (JSONArray)json.get("gce");
@@ -93,11 +80,7 @@ public class AccountController {
                 System.out.println(arr.get(i));
                 Button b = new Button((String) arr.get(i));
                 googPanel.getChildren().add(b);
-                /*b.addActionListener(new ActionListener() {
-                    public void actionPerformed(ActionEvent e) {
-                        openVMs(token, "gce", b.getText());
-                    }
-                });*/
+                b.setOnAction(event -> openVMs("gce", b.getText()));
             }
             scroll.setFitToHeight(true);
         } catch (IOException | ParseException e) {
@@ -105,7 +88,15 @@ public class AccountController {
         }
     }
 
-    protected void openVMs() {
+    private void openVMs(String type, String accName) {
+        VMsController.setType(type);
+        VMsController.setAccName(accName);
+        VMsController vMsController = new VMsController();
 
+        try {
+            vMsController.VMsTableWindow();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
