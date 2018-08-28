@@ -1,5 +1,6 @@
 package com.dfteam.desktop.controller;
 
+import com.dfteam.desktop.Login;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -56,7 +57,7 @@ public class LoginController {
         btnOK.setOnAction(event -> onOK());
     }
 
-    private boolean validToken(){
+    public boolean validToken(){
         JSONObject json;
         JSONParser parser = new JSONParser();
         if(ConfigFile.exists()){
@@ -126,6 +127,7 @@ public class LoginController {
     }
 
     private void accountWindow() throws IOException {
+        Login.mainLoginScene.hide();
         Stage accountStage = new Stage();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("accounts.fxml")));
         accountStage.setTitle("DFteam - Accounts");
