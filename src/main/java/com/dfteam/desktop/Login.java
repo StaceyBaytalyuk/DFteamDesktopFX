@@ -10,7 +10,6 @@ import javafx.fxml.FXMLLoader;
 import java.io.IOException;
 import java.util.Objects;
 
-
 public class Login extends Application {
 
     public static Stage mainLoginScene;

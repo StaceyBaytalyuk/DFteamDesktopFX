@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMinfoController">
+   <children>
+      <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" wrappingWidth="300.5806655883789" />
+      <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="Status: " wrappingWidth="301.81331634521484" />
+      <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" text="IP: " wrappingWidth="302.0883960723877" />
+      <Button fx:id="OnOffBtn" mnemonicParsing="false" text="ON VM" />
+      <Button fx:id="deleteBtn" mnemonicParsing="false" text="Delete VM" />
+      <Button fx:id="loadBtn" mnemonicParsing="false" text="VM Load" />
+      <Button fx:id="consoleBtn" mnemonicParsing="false" text="Console" />
+   </children>
+</VBox>
