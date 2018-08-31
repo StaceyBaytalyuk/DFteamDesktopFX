@@ -45,9 +45,7 @@ public class AccountController {
             JSONObject json = (JSONObject) parser.parse(tmp);
             tmp.close();
             token = (String) json.get("token");
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
