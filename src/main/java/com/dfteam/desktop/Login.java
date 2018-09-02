@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.fxml.FXMLLoader;
+import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -21,8 +22,21 @@ public class Login extends Application {
         primaryStage.setTitle("DFteam - Login");
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
-        if(!new LoginController().validToken())
+        if(!new LoginController().validToken()) {
             primaryStage.show();
+            if (SystemTray.isSupported()) {
+                SystemTray tray = SystemTray.getSystemTray();
+                java.awt.Image image = Toolkit.getDefaultToolkit().getImage("images/DF.png");
+                TrayIcon trayIcon = new TrayIcon(image);
+                try {
+                    tray.add(trayIcon);
+                } catch (AWTException e) {
+                    e.printStackTrace();
+                }
+                trayIcon.displayMessage("Authorization",
+                        "Enter your login and password", TrayIcon.MessageType.INFO);
+            }
+        }
     }
 
     public static void main(String[] args) {

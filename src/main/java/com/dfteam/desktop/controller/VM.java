@@ -2,7 +2,6 @@ package com.dfteam.desktop.controller;
 
 import javafx.scene.control.Button;
 import org.json.simple.JSONObject;
-
 import java.io.IOException;
 
 public class VM {
