@@ -1,5 +1,7 @@
-package com.dfteam.desktop.controller;
+package com.dfteam.desktop;
 
+import com.dfteam.desktop.controller.AccountController;
+import com.dfteam.desktop.controller.VMinfoController;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;

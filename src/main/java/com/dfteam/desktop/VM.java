@@ -1,5 +1,6 @@
-package com.dfteam.desktop.controller;
+package com.dfteam.desktop;
 
+import com.dfteam.desktop.controller.VMinfoController;
 import javafx.scene.control.Button;
 import org.json.simple.JSONObject;
 import java.io.IOException;
@@ -57,9 +58,9 @@ public class VM {
     }
 
     public Button getInfo() {
-        Button tmp = new Button("More info");
-        tmp.setOnAction(event -> OpenInfoWindow());
-        return tmp;
+        Button b = new Button("More info");
+        b.setOnAction(event -> OpenInfoWindow());
+        return b;
     }
 
     private void OpenInfoWindow(){
