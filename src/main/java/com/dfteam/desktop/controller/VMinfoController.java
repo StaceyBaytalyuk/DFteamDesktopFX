@@ -14,8 +14,6 @@ import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
-import static java.lang.Thread.sleep;
-
 public class VMinfoController {
 
     private VMAction vmAction = new VMAction();
@@ -48,100 +46,13 @@ public class VMinfoController {
     @FXML
     private Button consoleBtn;
 
-    private Thread updateThread;
+    @FXML
+    private Button updateBtn;
 
     @FXML
     public void initialize(){
         vmAction = new VMAction();
-
-        /*Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        //Background work
-                        final CountDownLatch latch = new CountDownLatch(1);
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                try{
-                                    while (true) {
-                                        updateInfo();
-                                        System.out.println("i");
-                                        try {
-                                            sleep(2500);
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
-                                    }
-                                }finally{
-                                    latch.countDown();
-                                }
-                            }
-                        });
-                        latch.await();
-                        //Keep with the background work
-                        return null;
-                    }
-                };
-            }
-        };
-        service.start();*/
-
-
-        /*
-        Platform.runLater(new Runnable(){
-            @Override
-            public void run() {
-                *//*for(int i = 0; i<100; i++){
-                    updateInfo();
-                    System.out.println(i);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }*/
-
-        /*
-                while (true) {
-                    updateInfo();
-                    System.out.println("i");
-                    try {
-                        sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });*/
-
-
-        /*updateThread = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                *//*for(int i = 0; i<100; i++){
-                    updateInfo();
-                    System.out.println(i);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }*//*
-                while (!updateThread.isInterrupted()) {
-                    updateInfo();
-                    System.out.println("i");
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        updateThread.start();*/
+        updateInfo();
     }
 
     private void updateInfo(){
@@ -164,7 +75,6 @@ public class VMinfoController {
                 showNotification("VM is OFF");
                 updateInfo();
             });
-
         } else {
             OnOffBtn.setText("ON VM");
             OnOffBtn.setOnAction(event->{
@@ -179,16 +89,9 @@ public class VMinfoController {
             showNotification("VM is successfully deleted");
             updateInfo();
         });
-        consoleBtn.setOnAction(event->updateInfo());
+        
+        updateBtn.setOnAction(event->updateInfo());
     }
-
-/*    private void closeButtonAction(){
-        // get a handle to the stage
-        Stage stage = (Stage) consoleBtn.getScene().getWindow();
-        // do what you have to do
-        stage.close();
-        updateThread.interrupt();
-    }*/
 
     private void showNotification(String head) {
         if (SystemTray.isSupported()) {

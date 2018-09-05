@@ -4,15 +4,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMinfoController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="300.0" spacing="10.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMinfoController">
    <children>
-      <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" wrappingWidth="300.5806655883789" />
-      <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="Status: " wrappingWidth="301.81331634521484" />
-      <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" text="IP: " wrappingWidth="302.0883960723877" />
-      <Button fx:id="OnOffBtn" mnemonicParsing="false" text="ON VM" />
-      <Button fx:id="deleteBtn" mnemonicParsing="false" text="Delete VM" />
-      <Button fx:id="loadBtn" mnemonicParsing="false" text="VM Load" />
-      <Button fx:id="consoleBtn" mnemonicParsing="false" text="Console" />
+      <Text fx:id="nameText" strokeType="OUTSIDE" strokeWidth="0.0" text="Name:" wrappingWidth="169.15207815170288" />
+      <Text fx:id="statusText" strokeType="OUTSIDE" strokeWidth="0.0" text="Status:" wrappingWidth="169.15207815170288" />
+      <Text fx:id="ipText" strokeType="OUTSIDE" strokeWidth="0.0" text="IP:" wrappingWidth="169.15207815170288" />
+      <Button fx:id="OnOffBtn" minWidth="100.0" mnemonicParsing="false" text="ON VM" />
+      <Button fx:id="deleteBtn" minWidth="100.0" mnemonicParsing="false" text="Delete VM" />
+      <Button fx:id="loadBtn" minWidth="100.0" mnemonicParsing="false" text="VM Load" />
+      <Button fx:id="consoleBtn" minWidth="100.0" mnemonicParsing="false" text="Console" />
+      <Button fx:id="updateBtn" minWidth="100.0" mnemonicParsing="false" text="Update info" />
    </children>
 </VBox>
