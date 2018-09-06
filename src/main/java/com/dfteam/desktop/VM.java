@@ -2,6 +2,8 @@ package com.dfteam.desktop;
 
 import com.dfteam.desktop.controller.VMinfoController;
 import javafx.scene.control.Button;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import org.json.simple.JSONObject;
 import java.io.IOException;
 
@@ -51,6 +53,16 @@ public class VM {
 
     public String getStatus() {
         return status;
+    }
+
+    public Circle getStatus_circle(){
+        Circle test = new Circle();
+        test.setRadius(8);
+        if(!isOn())
+            test.setFill(Color.RED);
+        else
+            test.setFill(Color.GREEN);
+        return test;
     }
 
     public boolean isOn(){

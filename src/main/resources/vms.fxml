@@ -3,10 +3,10 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 
-<TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/10.0.1" fx:controller="com.dfteam.desktop.controller.VMsController">
+<TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMsController">
   <columns>
-    <TableColumn fx:id="status" prefWidth="23.428589165210724" text="Status" />
-    <TableColumn fx:id="name" prefWidth="118.85714912414551" text="Name" />
+    <TableColumn fx:id="status" prefWidth="31.4285586476326" />
+    <TableColumn fx:id="name" prefWidth="112.00003242492676" text="Name" />
       <TableColumn fx:id="ip" prefWidth="165.71424865722656" text="IP" />
       <TableColumn fx:id="zone" minWidth="0.0" prefWidth="185.71429443359375" text="Zone" />
       <TableColumn fx:id="info" prefWidth="106.85711669921875" text="Info" />

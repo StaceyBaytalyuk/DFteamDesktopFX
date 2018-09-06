@@ -1,5 +1,6 @@
 package com.dfteam.desktop.controller;
 
+import com.dfteam.desktop.Request;
 import com.dfteam.desktop.VM;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,12 +13,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -45,7 +42,7 @@ public class VMsController {
     private TableView<VM> table;
 
     @FXML
-    private TableColumn<VM, String> status;
+    private TableColumn<VM, Circle> status;
 
     @FXML
     private TableColumn<VM, String> name;
@@ -65,7 +62,7 @@ public class VMsController {
         initData();
 
         // устанавливаем тип и значение которое должно хранится в колонке
-        status.setCellValueFactory(new PropertyValueFactory<VM, String>("status"));
+        status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
         name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
         ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
         zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
@@ -78,21 +75,15 @@ public class VMsController {
     // подготавливаем данные для таблицы
     // вы можете получать их с базы данных
     private void initData() {
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpGet get = new HttpGet("http://167.99.138.88:8000/"+type+"/"+accName+"/allvms");
-        get.addHeader("Authorization", AccountController.token);
         try {
-            HttpResponse response = client.execute(get);
             JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(EntityUtils.toString(response.getEntity()));
-            System.out.println(json.toString());
+            JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/"+type+"/"+accName+"/allvms"));
             for (int i = 0; i < json.size(); i++) {
                 VMsList.add(new VM((JSONObject) json.get(i), type, accName));
             }
-        } catch (IOException | ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
-
     }
 
     public void VMsTableWindow() throws IOException {

@@ -1,14 +1,10 @@
 package com.dfteam.desktop.controller;
 
+import com.dfteam.desktop.Request;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -49,17 +45,10 @@ public class AccountController {
             e.printStackTrace();
         }
 
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpGet get = new HttpGet("http://167.99.138.88:8000/accountlist");
-        get.addHeader("Authorization", token);
-
         try {
-            HttpResponse response = client.execute(get);
-            JSONObject json = (JSONObject) parser.parse(EntityUtils.toString(response.getEntity()));
-            System.out.println(json.toString());
+            JSONObject json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/accountlist"));
             JSONArray arr = (JSONArray)json.get("do");
             for(int i =0; i<arr.size(); i++){
-                System.out.println(arr.get(i));
                 Button b = new Button((String) arr.get(i));
                 oceanPanel.getChildren().add(b);
                 b.setOnAction(event -> openVMs("do", b.getText()));
@@ -67,7 +56,6 @@ public class AccountController {
 
             arr = (JSONArray)json.get("ec2");
             for(int i =0; i<arr.size(); i++){
-                System.out.println(arr.get(i));
                 Button b = new Button((String) arr.get(i));
                 amazPanel.getChildren().add(b);
                 b.setOnAction(event -> openVMs("ec2", b.getText()));
@@ -75,13 +63,12 @@ public class AccountController {
 
             arr = (JSONArray)json.get("gce");
             for(int i =0; i<arr.size(); i++){
-                System.out.println(arr.get(i));
                 Button b = new Button((String) arr.get(i));
                 googPanel.getChildren().add(b);
                 b.setOnAction(event -> openVMs("gce", b.getText()));
             }
             scroll.setFitToHeight(true);
-        } catch (IOException | ParseException e) {
+        } catch (ParseException e) {
             e.printStackTrace();
         }
     }
