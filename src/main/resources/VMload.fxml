@@ -14,7 +14,7 @@
          <children>
             <LineChart fx:id="CPUchart" title="CPU">
                <xAxis>
-                  <CategoryAxis side="BOTTOM" />
+                  <NumberAxis side="BOTTOM" />
                </xAxis>
                <yAxis>
                   <NumberAxis side="LEFT" />
@@ -22,7 +22,7 @@
             </LineChart>
             <LineChart fx:id="RAMchart" title="RAM">
               <xAxis>
-                <CategoryAxis side="BOTTOM" />
+                <NumberAxis side="BOTTOM" />
               </xAxis>
               <yAxis>
                 <NumberAxis side="LEFT" />

@@ -91,6 +91,21 @@ public class VMinfoController {
         });
         
         updateBtn.setOnAction(event->updateInfo());
+
+        loadBtn.setOnAction(event -> {
+            VMLoadController.setIp(vm.getIp());
+            Stage loadStage = new Stage();
+            Parent root = null;
+            try {
+                root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("VMload.fxml")));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            loadStage.setTitle("DFteam - Load");
+            loadStage.getIcons().add(new Image("/images/DF.png"));
+            loadStage.setScene(new Scene(root));
+            loadStage.show();
+        });
     }
 
     private void showNotification(String head) {
