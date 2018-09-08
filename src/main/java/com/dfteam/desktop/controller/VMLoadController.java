@@ -15,10 +15,10 @@ public class VMLoadController {
     private LineChart<Integer, Double> CPUchart;
 
     @FXML
-    private Text discLoadText;
+    private Text diskLoadText;
 
     @FXML
-    private Text discUsedText;
+    private Text diskUsedText;
 
     @FXML
     public void initialize(){
