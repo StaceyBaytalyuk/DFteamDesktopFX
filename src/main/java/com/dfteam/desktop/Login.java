@@ -30,7 +30,7 @@ public class Login extends Application {
         primaryStage.setTitle("DFteam - Login");
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
-        if(!new LoginController().validToken()) {
+        if( !LoginController.validToken() ) {
             primaryStage.show();
             if (SystemTray.isSupported()) {
                 SystemTray tray = SystemTray.getSystemTray();

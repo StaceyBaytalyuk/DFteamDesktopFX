@@ -28,10 +28,6 @@ public class AccountController {
     @FXML
     private VBox amazPanel;
 
-    public AccountController(){
-
-    }
-
     @FXML
     private void initialize() {
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
@@ -46,28 +42,31 @@ public class AccountController {
         }
 
         try {
-            JSONObject json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/accountlist"));
-            JSONArray arr = (JSONArray)json.get("do");
-            for(int i =0; i<arr.size(); i++){
-                Button b = new Button((String) arr.get(i));
-                oceanPanel.getChildren().add(b);
-                b.setOnAction(event -> openVMs("do", b.getText()));
-            }
+            if ( LoginController.validToken() ) {
+                JSONObject json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/accountlist"));
+                JSONArray arr = (JSONArray) json.get("do");
+                for (int i = 0; i < arr.size(); i++) {
+                    Button b = new Button((String) arr.get(i));
+                    oceanPanel.getChildren().add(b);
+                    b.setOnAction(event -> openVMs("do", b.getText()));
+                }
 
-            arr = (JSONArray)json.get("ec2");
-            for(int i =0; i<arr.size(); i++){
-                Button b = new Button((String) arr.get(i));
-                amazPanel.getChildren().add(b);
-                b.setOnAction(event -> openVMs("ec2", b.getText()));
-            }
+                arr = (JSONArray) json.get("ec2");
+                for (int i = 0; i < arr.size(); i++) {
+                    Button b = new Button((String) arr.get(i));
+                    amazPanel.getChildren().add(b);
+                    b.setOnAction(event -> openVMs("ec2", b.getText()));
+                }
 
-            arr = (JSONArray)json.get("gce");
-            for(int i =0; i<arr.size(); i++){
-                Button b = new Button((String) arr.get(i));
-                googPanel.getChildren().add(b);
-                b.setOnAction(event -> openVMs("gce", b.getText()));
-            }
-            scroll.setFitToHeight(true);
+                arr = (JSONArray) json.get("gce");
+                for (int i = 0; i < arr.size(); i++) {
+                    Button b = new Button((String) arr.get(i));
+                    googPanel.getChildren().add(b);
+                    b.setOnAction(event -> openVMs("gce", b.getText()));
+                }
+                scroll.setFitToHeight(true);
+            } else LoginController.notValidMessage();
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

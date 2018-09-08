@@ -1,17 +1,19 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.Login;
+import com.dfteam.desktop.Request;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
@@ -20,6 +22,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import javafx.fxml.FXML;
+
+import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,9 +31,9 @@ import java.util.Objects;
 
 public class LoginController {
 
-    private File HomeDir = new File(System.getProperty("user.home")+File.separator+".dfteam");
+    private static File HomeDir = new File(System.getProperty("user.home")+File.separator+".dfteam");
 
-    private File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
+    private static File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
 
     @FXML
     private TextField loginField;
@@ -57,7 +61,7 @@ public class LoginController {
         btnOK.setOnAction(event -> onOK());
     }
 
-    public boolean validToken(){
+    public static boolean validToken(){
         JSONObject json;
         JSONParser parser = new JSONParser();
         if(ConfigFile.exists()){
@@ -66,15 +70,10 @@ public class LoginController {
                 json = (JSONObject) parser.parse(fileReader);
                 fileReader.close();
 
-                HttpClient client = HttpClientBuilder.create().build();
-                HttpGet get = new HttpGet("http://167.99.138.88:8000/authcheck");
-                get.addHeader("Authorization", (String)json.get("token"));
-
                 try {
-                    HttpResponse response = client.execute(get);
                     parser = new JSONParser();
-                    json = (JSONObject) parser.parse(EntityUtils.toString(response.getEntity()));
-                } catch (IOException | ParseException e) {
+                    json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/authcheck"));
+                } catch (ParseException e) {
                     e.printStackTrace();
                 }
                 return (boolean)json.get("valid");
