@@ -63,15 +63,15 @@ public class VMLoad {
     }
 
     public double ProcLoadStat(){
-        return Double.parseDouble(Command("top -d 0.5 -b -n2 | grep \"Cpu(s)\"|tail -n 1 | awk '{print $2 + $4}'"));
+        return 100 - Double.parseDouble(Command("top -d 0.5 -b -n2 | grep \"Cpu(s)\"|tail -n 1 | awk '{print $8}'"));
     }
 
     public double MemFreeStat(){
-        return (MemTotalStat() - Double.parseDouble(Command("cat /proc/meminfo | grep 'MemAvailable' | awk '{print $2/1024}'")));
+        return Double.parseDouble(Command("free -m | awk '{print ($3+$5)}'").split("\n")[1]);
     }
 
     public double MemTotalStat(){
-        return Double.parseDouble(Command("cat /proc/meminfo | grep 'MemTotal' | awk '{print $2/1024}'"));
+        return Double.parseDouble(Command("free -m | awk '{print ($2)}'").split("\n")[1]);
     }
 
     private DecimalFormat df = new DecimalFormat("#.##");
@@ -97,9 +97,12 @@ public class VMLoad {
     public VMLoad(String ip, String login, String password) {
         try {
             JSch jsch = new JSch();
+
             session = jsch.getSession(login, ip);
             session.setPassword(password);
+
             session.connect();
+
         } catch(Exception e){
             e.printStackTrace();
         }

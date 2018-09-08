@@ -17,6 +17,14 @@ public class Login extends Application {
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        ConnectCheck.check();
+        /*Thread connectionThread = new Thread(new Runnable(){
+            @Override
+            public void run() {
+                ConnectCheck.check();
+            }
+        });
+        connectionThread.start();*/
         mainLoginScene = primaryStage;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("login.fxml")));
         primaryStage.setTitle("DFteam - Login");

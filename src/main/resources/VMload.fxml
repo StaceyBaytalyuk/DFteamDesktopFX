@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
-<?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.layout.HBox?>
@@ -14,10 +13,10 @@
          <children>
             <LineChart fx:id="CPUchart" title="CPU">
                <xAxis>
-                  <NumberAxis side="BOTTOM" />
+                  <NumberAxis side="BOTTOM" fx:id="xCPU" />
                </xAxis>
                <yAxis>
-                  <NumberAxis side="LEFT" />
+                  <NumberAxis fx:id="yCPU" side="LEFT" />
                </yAxis>
             </LineChart>
             <LineChart fx:id="RAMchart" title="RAM">
