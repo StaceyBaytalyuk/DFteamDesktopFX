@@ -1,7 +1,9 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.VM;
-import com.dfteam.desktop.VMAction;
+import com.dfteam.desktop.util.TokenChecker;
+import com.dfteam.desktop.util.TrayNotification;
+import com.dfteam.desktop.util.VMAction;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import java.awt.*;
 import java.io.IOException;
 import java.util.Objects;
 
@@ -56,69 +57,61 @@ public class VMinfoController {
     }
 
     private void updateInfo(){
-        vm = vmAction.getAllInfo();
-        nameText.setText("Name: " + vm.getName());
-
-        if(vm.isOn()){
-            ipText.setText("IP: " + vm.getIp());
-            ipText.setVisible(true);
-        } else {
-            ipText.setVisible(false);
+        if(!TokenChecker.isValid()) {
+            TokenChecker.notValidMessage();
+            //TODO Login
         }
+        else{
+            vm = vmAction.getAllInfo();
+            nameText.setText("Name: " + vm.getName());
 
-        statusText.setText("Status: " + vm.getStatus());
+            if(vm.isOn()){
+                ipText.setText("IP: " + vm.getIp());
+                ipText.setVisible(true);
+            } else {
+                ipText.setVisible(false);
+            }
 
-        if(vm.isOn()){
-            OnOffBtn.setText("OFF VM");
-            OnOffBtn.setOnAction(event->{
-                vmAction.OffVM();
-                showNotification("VM is OFF");
+            statusText.setText("Status: " + vm.getStatus());
+
+            if(vm.isOn()){
+                OnOffBtn.setText("OFF VM");
+                OnOffBtn.setOnAction(event->{
+                    vmAction.OffVM();
+                    TrayNotification.showNotification("VM is OFF");
+                    updateInfo();
+                });
+            } else {
+                OnOffBtn.setText("ON VM");
+                OnOffBtn.setOnAction(event->{
+                    vmAction.OnVM();
+                    TrayNotification.showNotification("VM is ON");
+                    updateInfo();
+                });
+            }
+
+            deleteBtn.setOnAction(event -> {
+                vmAction.DeleteVM();
+                TrayNotification.showNotification("VM is successfully deleted");
                 updateInfo();
             });
-        } else {
-            OnOffBtn.setText("ON VM");
-            OnOffBtn.setOnAction(event->{
-                vmAction.OnVM();
-                showNotification("VM is ON");
-                updateInfo();
+
+            updateBtn.setOnAction(event->updateInfo());
+
+            loadBtn.setOnAction(event -> {
+                VMLoadController.setIp(vm.getIp());
+                Stage loadStage = new Stage();
+                Parent root = null;
+                try {
+                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("VMload.fxml")));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                loadStage.setTitle("DFteam - Load");
+                loadStage.getIcons().add(new Image("/images/DF.png"));
+                loadStage.setScene(new Scene(root));
+                loadStage.show();
             });
-        }
-
-        deleteBtn.setOnAction(event -> {
-            vmAction.DeleteVM();
-            showNotification("VM is successfully deleted");
-            updateInfo();
-        });
-        
-        updateBtn.setOnAction(event->updateInfo());
-
-        loadBtn.setOnAction(event -> {
-            VMLoadController.setIp(vm.getIp());
-            Stage loadStage = new Stage();
-            Parent root = null;
-            try {
-                root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("VMload.fxml")));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            loadStage.setTitle("DFteam - Load");
-            loadStage.getIcons().add(new Image("/images/DF.png"));
-            loadStage.setScene(new Scene(root));
-            loadStage.show();
-        });
-    }
-
-    private void showNotification(String head) {
-        if (SystemTray.isSupported()) {
-            SystemTray tray = SystemTray.getSystemTray();
-            java.awt.Image image = Toolkit.getDefaultToolkit().getImage("images/DF.png");
-            TrayIcon trayIcon = new TrayIcon(image);
-            try {
-                tray.add(trayIcon);
-            } catch (AWTException e) {
-                e.printStackTrace();
-            }
-            trayIcon.displayMessage(head, "", TrayIcon.MessageType.INFO);
         }
     }
 

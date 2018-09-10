@@ -1,4 +1,4 @@
-package com.dfteam.desktop;
+package com.dfteam.desktop.util;
 
 import com.dfteam.desktop.controller.AccountController;
 import org.apache.http.HttpResponse;

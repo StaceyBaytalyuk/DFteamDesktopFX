@@ -13,7 +13,7 @@
          <children>
             <LineChart fx:id="CPUchart" title="CPU">
                <xAxis>
-                  <NumberAxis side="BOTTOM" fx:id="xCPU" />
+                  <NumberAxis side="BOTTOM" tickUnit="1.0" fx:id="xCPU" />
                </xAxis>
                <yAxis>
                   <NumberAxis fx:id="yCPU" side="LEFT" />

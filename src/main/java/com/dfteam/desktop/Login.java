@@ -1,6 +1,7 @@
 package com.dfteam.desktop;
 
-import com.dfteam.desktop.controller.LoginController;
+import com.dfteam.desktop.util.ConnectCheck;
+import com.dfteam.desktop.util.TokenChecker;
 import javafx.application.Application;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,19 +19,12 @@ public class Login extends Application {
     @Override
     public void start(Stage primaryStage) throws IOException {
         ConnectCheck.check();
-        /*Thread connectionThread = new Thread(new Runnable(){
-            @Override
-            public void run() {
-                ConnectCheck.check();
-            }
-        });
-        connectionThread.start();*/
         mainLoginScene = primaryStage;
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("login.fxml")));
         primaryStage.setTitle("DFteam - Login");
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
-        if( !LoginController.validToken() ) {
+        if( !TokenChecker.isValid()) {
             primaryStage.show();
             if (SystemTray.isSupported()) {
                 SystemTray tray = SystemTray.getSystemTray();

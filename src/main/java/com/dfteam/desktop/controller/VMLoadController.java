@@ -1,6 +1,6 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.VMLoad;
+import com.dfteam.desktop.util.VMLoad;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;

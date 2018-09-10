@@ -1,6 +1,5 @@
-package com.dfteam.desktop;
+package com.dfteam.desktop.util;
 
-import java.awt.*;
 import java.io.IOException;
 import java.net.*;
 
@@ -9,12 +8,12 @@ public class ConnectCheck {
     private static String url = "http://167.99.138.88:8000";
 
     public static void check(){
-        /*if (!internet()) {
-            showNotification("Internet connection failed");
+        if (!internet()) {
+            TrayNotification.showNotification("Internet connection failed");
             System.exit(0);
         }
-        else*/ if(!server()){
-            showNotification("Can't connect to server");
+        else if(!server()){
+            TrayNotification.showNotification("Can't connect to server");
             System.exit(0);
         }
     }
@@ -117,19 +116,5 @@ public class ConnectCheck {
         }
         return result;
 
-    }
-
-    private static void showNotification(String head) {
-        if (SystemTray.isSupported()) {
-            SystemTray tray = SystemTray.getSystemTray();
-            java.awt.Image image = Toolkit.getDefaultToolkit().getImage("images/DF.png");
-            TrayIcon trayIcon = new TrayIcon(image);
-            try {
-                tray.add(trayIcon);
-            } catch (AWTException e) {
-                e.printStackTrace();
-            }
-            trayIcon.displayMessage(head, "", TrayIcon.MessageType.INFO);
-        }
     }
 }

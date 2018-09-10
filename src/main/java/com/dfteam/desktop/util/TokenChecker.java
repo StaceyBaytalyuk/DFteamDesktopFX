@@ -1,4 +1,4 @@
-package com.dfteam.desktop;
+package com.dfteam.desktop.util;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -15,6 +15,7 @@ public class TokenChecker {
     private static File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
 
     public static boolean isValid(){
+        ConnectCheck.check();
         JSONObject json;
         JSONParser parser = new JSONParser();
         if(ConfigFile.exists()){

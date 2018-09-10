@@ -1,5 +1,6 @@
-package com.dfteam.desktop;
+package com.dfteam.desktop.util;
 
+import com.dfteam.desktop.VM;
 import com.dfteam.desktop.controller.VMinfoController;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

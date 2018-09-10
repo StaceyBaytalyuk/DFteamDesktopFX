@@ -1,6 +1,7 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.Request;
+import com.dfteam.desktop.util.Request;
+import com.dfteam.desktop.util.TokenChecker;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -42,7 +43,7 @@ public class AccountController {
         }
 
         try {
-            if ( LoginController.validToken() ) {
+            if ( TokenChecker.isValid() ) {
                 JSONObject json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/accountlist"));
                 JSONArray arr = (JSONArray) json.get("do");
                 for (int i = 0; i < arr.size(); i++) {
@@ -65,7 +66,10 @@ public class AccountController {
                     b.setOnAction(event -> openVMs("gce", b.getText()));
                 }
                 scroll.setFitToHeight(true);
-            } else LoginController.notValidMessage();
+            } else {
+                TokenChecker.notValidMessage();
+                //TODO
+            }
 
         } catch (ParseException e) {
             e.printStackTrace();
@@ -76,7 +80,6 @@ public class AccountController {
         VMsController.setType(type);
         VMsController.setAccName(accName);
         VMsController vMsController = new VMsController();
-
         try {
             vMsController.VMsTableWindow();
         } catch (IOException e) {

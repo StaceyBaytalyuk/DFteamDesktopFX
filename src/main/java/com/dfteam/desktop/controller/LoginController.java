@@ -1,7 +1,7 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.Login;
-import com.dfteam.desktop.Request;
+import com.dfteam.desktop.util.TokenChecker;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -22,8 +22,6 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import javafx.fxml.FXML;
-
-import java.awt.*;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +45,7 @@ public class LoginController {
     @FXML
     private void initialize() {
         if(HomeDir.exists()){
-            if(validToken()){
+            if(TokenChecker.isValid()){
                 try {
                     accountWindow();
                     return;
@@ -59,29 +57,6 @@ public class LoginController {
             HomeDir.mkdir();
         }
         btnOK.setOnAction(event -> onOK());
-    }
-
-    public static boolean validToken(){
-        JSONObject json;
-        JSONParser parser = new JSONParser();
-        if(ConfigFile.exists()){
-            try {
-                FileReader fileReader = new FileReader(ConfigFile);
-                json = (JSONObject) parser.parse(fileReader);
-                fileReader.close();
-
-                try {
-                    parser = new JSONParser();
-                    json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/authcheck"));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                return (boolean)json.get("valid");
-            } catch (ParseException | IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
     }
 
     protected void onOK() {
@@ -97,7 +72,6 @@ public class LoginController {
             JSONObject json = (JSONObject) parser.parse(EntityUtils.toString(response.getEntity()));
             if((boolean) json.get("auth") && json.get("error") == null){
                 AddFile((String) json.get("token"));
-                System.out.println(json.get("token"));
                 accountWindow();
             }else{
                 authError();

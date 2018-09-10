@@ -1,7 +1,8 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.Request;
+import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.VM;
+import com.dfteam.desktop.util.TokenChecker;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -58,17 +59,20 @@ public class VMsController {
     // инициализируем форму данными
     @FXML
     private void initialize() {
-        initData();
-
-        // устанавливаем тип и значение которое должно хранится в колонке
-        status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
-        name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
-        ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
-        zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
-        info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
-
-        // заполняем таблицу данными
-        table.setItems(VMsList);
+        if(TokenChecker.isValid()) {
+            initData();
+            // устанавливаем тип и значение которое должно хранится в колонке
+            status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
+            name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
+            ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
+            zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
+            info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
+            // заполняем таблицу данными
+            table.setItems(VMsList);
+        } else {
+            TokenChecker.notValidMessage();
+            //TODO
+        }
     }
 
     // подготавливаем данные для таблицы
