@@ -3,9 +3,14 @@ package com.dfteam.desktop.controller;
 import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.util.TokenChecker;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -13,6 +18,7 @@ import org.json.simple.parser.ParseException;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Objects;
 
 public class AccountController {
     public static String token;
@@ -28,6 +34,9 @@ public class AccountController {
 
     @FXML
     private VBox amazPanel;
+
+    @FXML
+    private Button otherVMsBtn;
 
     @FXML
     private void initialize() {
@@ -65,6 +74,19 @@ public class AccountController {
                     googPanel.getChildren().add(b);
                     b.setOnAction(event -> openVMs("gce", b.getText()));
                 }
+                otherVMsBtn.setOnAction(event -> {
+                        Stage otherVMsWindow = new Stage();
+                    Parent root = null;
+                    try {
+                        root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("othervms.fxml")));
+                        otherVMsWindow.setTitle("DFteam - Other VMs");
+                        otherVMsWindow.getIcons().add(new Image("/images/DF.png"));
+                        otherVMsWindow.setScene(new Scene(root));
+                        otherVMsWindow.show();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                });
                 scroll.setFitToHeight(true);
             } else {
                 TokenChecker.notValidMessage();

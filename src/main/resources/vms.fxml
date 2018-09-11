@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
 
-<TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMsController">
-  <columns>
-    <TableColumn fx:id="status" prefWidth="31.4285586476326" />
-    <TableColumn fx:id="name" prefWidth="112.00003242492676" text="Name" />
-      <TableColumn fx:id="ip" prefWidth="165.71424865722656" text="IP" />
-      <TableColumn fx:id="zone" minWidth="0.0" prefWidth="185.71429443359375" text="Zone" />
-      <TableColumn fx:id="info" prefWidth="106.85711669921875" text="Info" />
-  </columns>
-</TableView>
+
+<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.createVMController">
+   <children>
+      <TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="600.0">
+         <columns>
+            <TableColumn fx:id="status" prefWidth="31.4285586476326" />
+            <TableColumn fx:id="name" prefWidth="112.00003242492676" text="Name" />
+            <TableColumn fx:id="ip" prefWidth="165.71424865722656" text="IP" />
+            <TableColumn fx:id="zone" minWidth="0.0" prefWidth="185.71429443359375" text="Zone" />
+            <TableColumn fx:id="info" prefWidth="106.85711669921875" text="Info" />
+         </columns>
+      </TableView>
+      <Button fx:id="createVMbtn" mnemonicParsing="false" text="Create VM" />
+   </children>
+</VBox>
