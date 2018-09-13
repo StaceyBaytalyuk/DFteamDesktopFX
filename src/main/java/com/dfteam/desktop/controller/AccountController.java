@@ -74,19 +74,7 @@ public class AccountController {
                     googPanel.getChildren().add(b);
                     b.setOnAction(event -> openVMs("gce", b.getText()));
                 }
-                otherVMsBtn.setOnAction(event -> {
-                        Stage otherVMsWindow = new Stage();
-                    Parent root = null;
-                    try {
-                        root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("othervms.fxml")));
-                        otherVMsWindow.setTitle("DFteam - Other VMs");
-                        otherVMsWindow.getIcons().add(new Image("/images/DF.png"));
-                        otherVMsWindow.setScene(new Scene(root));
-                        otherVMsWindow.show();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                });
+                otherVMsBtn.setOnAction(event -> otherVMs());
                 scroll.setFitToHeight(true);
             } else {
                 TokenChecker.notValidMessage();
@@ -106,6 +94,20 @@ public class AccountController {
             vMsController.VMsTableWindow();
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private void otherVMs() {
+        Stage otherVMsWindow = new Stage();
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("othervms.fxml")));
+            otherVMsWindow.setTitle("DFteam - Other VMs");
+            otherVMsWindow.getIcons().add(new Image("/images/DF.png"));
+            otherVMsWindow.setScene(new Scene(root));
+            otherVMsWindow.show();
+        } catch (IOException e1) {
+            e1.printStackTrace();
         }
     }
 }

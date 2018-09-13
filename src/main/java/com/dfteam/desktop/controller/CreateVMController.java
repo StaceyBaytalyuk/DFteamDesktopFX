@@ -1,4 +1,5 @@
 package com.dfteam.desktop.controller;
 
-public class createVMController {
+public class CreateVMController {
+
 }

@@ -99,7 +99,7 @@ public class LoginController {
         }
     }
 
-    private void accountWindow() throws IOException {
+    private void    accountWindow() throws IOException {
         Login.mainLoginScene.hide();
         Stage accountStage = new Stage();
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("accounts.fxml")));

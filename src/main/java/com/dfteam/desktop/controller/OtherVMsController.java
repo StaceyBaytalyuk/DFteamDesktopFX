@@ -1,7 +1,7 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.VM;
+import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.collections.FXCollections;
@@ -15,7 +15,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -23,35 +22,22 @@ import org.json.simple.parser.JSONParser;
 import java.io.IOException;
 import java.util.Objects;
 
-public class VMsController {
+public class OtherVMsController {
 
-    private static String type;
-    private static String accName;
-
-    public static void setType(String type2) {
-        type = type2;
-    }
-
-    public static void setAccName(String accName2) {
-        accName = accName2;
-    }
 
     private ObservableList<VM> VMsList = FXCollections.observableArrayList();
 
     @FXML
-    private TableView<VM> table;
+    private Button addVMbtn;
 
     @FXML
-    private TableColumn<VM, Circle> status;
+    private TableView<VM> table;
 
     @FXML
     private TableColumn<VM, String> name;
 
     @FXML
     private TableColumn<VM, String> ip;
-
-    @FXML
-    private TableColumn<VM, String> zone;
 
     @FXML
     private TableColumn<VM, Button> info;
@@ -61,41 +47,43 @@ public class VMsController {
     private void initialize() {
         if(TokenChecker.isValid()) {
             initData();
-            // устанавливаем тип и значение которое должно хранится в колонке
-            status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
             name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
             ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
-            zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
-            // заполняем таблицу данными
+
             table.setItems(VMsList);
+            addVMbtn.setOnAction(event -> openAddVM());
         } else {
             TokenChecker.notValidMessage();
             //TODO
         }
     }
 
-    // подготавливаем данные для таблицы
-    // вы можете получать их с базы данных
     private void initData() {
         try {
             JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/"+type+"/"+accName+"/allvms"));
+            JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/oth/allvms"));
             for (int i = 0; i < json.size(); i++) {
-                VMsList.add(new VM((JSONObject) json.get(i), type, accName));
+                VMsList.add(new VM((JSONObject) json.get(i), "oth", null));
             }
         } catch (Exception e) {
-            //            e.printStackTrace();
+//            e.printStackTrace();
             TrayNotification.showNotification("VMs not found!");
         }
     }
 
-    public void VMsTableWindow() throws IOException {
-        Stage VMTableStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("vms.fxml")));
-        VMTableStage.setTitle("DFteam - VMs");
-        VMTableStage.getIcons().add(new Image("/images/DF.png"));
-        VMTableStage.setScene(new Scene(root));
-        VMTableStage.show();
+    public void openAddVM()  {
+        Stage addVMStage = new Stage();
+        Parent root = null;
+        try {
+            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("vms.fxml")));
+            addVMStage.setTitle("DFteam - VMs");
+            addVMStage.getIcons().add(new Image("/images/DF.png"));
+            addVMStage.setScene(new Scene(root));
+            addVMStage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

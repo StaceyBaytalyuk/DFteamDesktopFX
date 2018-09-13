@@ -9,22 +9,26 @@ import java.io.IOException;
 
 public class VM {
 
-    private String id, name, type, accName, ip="", zone, status;
+    private String id, name, type, accName="", ip="", zone="", status="";
 
     public VM(JSONObject vm, String type, String accName) {
         name=(String) vm.get("name");
-        status=(String) vm.get("status");
-        zone=(String) vm.get("zone");
-        if(status.equals("active") || status.equals("running")) {
-            ip=(String) vm.get("ip");
-        }
         this.type=type;
-        if(type.equals("do")) {
-            id = new StringBuilder().append(vm.get("id")).toString();
-        }else{
-            id = (String) vm.get("id");
-        }
-        this.accName=accName;
+
+        if( !type.equals("oth") ) {
+            status = (String) vm.get("status");
+            zone = (String) vm.get("zone");
+            if (status.equals("active") || status.equals("running")) {
+                ip = (String) vm.get("ip");
+            }
+
+            if (type.equals("do")) {
+                id = new StringBuilder().append(vm.get("id")).toString();
+            } else {
+                id = (String) vm.get("id");
+            }
+            this.accName = accName;
+        } else ip = (String) vm.get("ip");
     }
 
     public String getId() {

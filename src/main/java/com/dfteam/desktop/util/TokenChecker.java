@@ -1,5 +1,6 @@
 package com.dfteam.desktop.util;
 
+import com.dfteam.desktop.controller.AccountController;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -25,6 +26,7 @@ public class TokenChecker {
                 fileReader.close();
 
                 try {
+                    AccountController.token = (String) json.get("token");
                     parser = new JSONParser();
                     json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/authcheck"));
                 } catch (ParseException e) {
