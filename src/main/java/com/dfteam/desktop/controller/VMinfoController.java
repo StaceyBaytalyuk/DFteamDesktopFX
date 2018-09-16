@@ -1,19 +1,14 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.VM;
+import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
 import com.dfteam.desktop.util.VMAction;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.text.Text;
-import javafx.stage.Stage;
 import java.io.IOException;
-import java.util.Objects;
 
 public class VMinfoController {
 
@@ -100,28 +95,13 @@ public class VMinfoController {
 
             loadBtn.setOnAction(event -> {
                 VMLoadController.setIp(vm.getIp());
-                Stage loadStage = new Stage();
-                Parent root = null;
                 try {
-                    root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("VMload.fxml")));
+                    StageManager.LoadStage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                loadStage.setTitle("DFteam - Load");
-                loadStage.getIcons().add(new Image("/images/DF.png"));
-                loadStage.setScene(new Scene(root));
-                loadStage.show();
             });
         }
-    }
-
-    public void show() throws IOException {
-        Stage vmStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("vminfo.fxml")));
-        vmStage.setTitle("DFteam - VMs");
-        vmStage.getIcons().add(new Image("/images/DF.png"));
-        vmStage.setScene(new Scene(root));
-        vmStage.show();
     }
 
     public static void setType(String type2){

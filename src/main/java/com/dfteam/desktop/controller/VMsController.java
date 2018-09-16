@@ -7,21 +7,14 @@ import com.dfteam.desktop.util.TrayNotification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import java.io.IOException;
-import java.util.Objects;
 
 public class VMsController {
 
@@ -56,18 +49,15 @@ public class VMsController {
     @FXML
     private TableColumn<VM, Button> info;
 
-    // инициализируем форму данными
     @FXML
     private void initialize() {
         if(TokenChecker.isValid()) {
             initData();
-            // устанавливаем тип и значение которое должно хранится в колонке
             status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
             name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
             ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
             zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
-            // заполняем таблицу данными
             table.setItems(VMsList);
         } else {
             TokenChecker.notValidMessage();
@@ -75,8 +65,6 @@ public class VMsController {
         }
     }
 
-    // подготавливаем данные для таблицы
-    // вы можете получать их с базы данных
     private void initData() {
         try {
             JSONParser parser = new JSONParser();
@@ -85,17 +73,7 @@ public class VMsController {
                 VMsList.add(new VM((JSONObject) json.get(i), type, accName));
             }
         } catch (Exception e) {
-            //            e.printStackTrace();
             TrayNotification.showNotification("VMs not found!");
         }
-    }
-
-    public void VMsTableWindow() throws IOException {
-        Stage VMTableStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("vms.fxml")));
-        VMTableStage.setTitle("DFteam - VMs");
-        VMTableStage.getIcons().add(new Image("/images/DF.png"));
-        VMTableStage.setScene(new Scene(root));
-        VMTableStage.show();
     }
 }

@@ -1,15 +1,10 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.Login;
 import com.dfteam.desktop.util.TokenChecker;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import com.dfteam.desktop.util.StageManager;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -25,7 +20,6 @@ import javafx.fxml.FXML;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class LoginController {
 
@@ -99,14 +93,9 @@ public class LoginController {
         }
     }
 
-    private void    accountWindow() throws IOException {
-        Login.mainLoginScene.hide();
-        Stage accountStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("accounts.fxml")));
-        accountStage.setTitle("DFteam - Accounts");
-        accountStage.getIcons().add(new Image("/images/DF.png"));
-        accountStage.setScene(new Scene(root));
-        accountStage.show();
+    private void accountWindow() throws IOException {
+        StageManager.hideLogin();
+        StageManager.AccountStage();
     }
 
     private void authError() {

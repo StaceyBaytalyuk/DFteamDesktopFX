@@ -1,6 +1,7 @@
 package com.dfteam.desktop;
 
 import com.dfteam.desktop.controller.VMinfoController;
+import com.dfteam.desktop.util.StageManager;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -83,9 +84,8 @@ public class VM {
         VMinfoController.setType(type);
         VMinfoController.setAccName(accName);
         VMinfoController.setId(id);
-        VMinfoController vMinfoController = new VMinfoController();
         try {
-            vMinfoController.show();
+            StageManager.MoreInfoStage();
         } catch (IOException e) {
             e.printStackTrace();
         }
