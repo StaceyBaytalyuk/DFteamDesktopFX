@@ -2,27 +2,22 @@ package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.Request;
+import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.image.Image;
-import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.IOException;
-import java.util.Objects;
 
-public class OtherVMsController {
+public class OtherVMController {
 
 
     private ObservableList<VM> VMsList = FXCollections.observableArrayList();
@@ -52,7 +47,13 @@ public class OtherVMsController {
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
 
             table.setItems(VMsList);
-            addVMbtn.setOnAction(event -> openAddVM());
+            addVMbtn.setOnAction(event -> {
+                try {
+                    StageManager.AddVMsStage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } else {
             TokenChecker.notValidMessage();
             //TODO
@@ -67,23 +68,7 @@ public class OtherVMsController {
                 VMsList.add(new VM((JSONObject) json.get(i), "oth", null));
             }
         } catch (Exception e) {
-//            e.printStackTrace();
             TrayNotification.showNotification("VMs not found!");
         }
-    }
-
-    public void openAddVM()  {
-        Stage addVMStage = new Stage();
-        Parent root = null;
-        try {
-            root = FXMLLoader.load(Objects.requireNonNull(getClass().getClassLoader().getResource("vms.fxml")));
-            addVMStage.setTitle("DFteam - VMs");
-            addVMStage.getIcons().add(new Image("/images/DF.png"));
-            addVMStage.setScene(new Scene(root));
-            addVMStage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
     }
 }
