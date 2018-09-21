@@ -1,5 +1,6 @@
 package com.dfteam.desktop.controller;
 
+import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.VMLoad;
 import javafx.fxml.FXML;
 import javafx.scene.chart.LineChart;
@@ -37,24 +38,24 @@ public class VMLoadController {
     public void initialize(){
         XYChart.Series<Integer, Double> series1 = new XYChart.Series<>();
         XYChart.Series<Integer, Double> series2 = new XYChart.Series<>();
-        VMLoad test = new VMLoad(ip, "root");
+        VMLoad vmLoad = new VMLoad(ip, "root");
         /*yCPU.setAutoRanging(false);
         xCPU.setAutoRanging(true);
         xCPU.setTickUnit(7);
         yCPU.setLowerBound(0);
         yCPU.setUpperBound(100);*/
 
-        if(test.isConnected())
-            diskLoadText.setText("Disk load: \n"+test.DiskUsedPersent());
-        if(test.isConnected())
-            diskUsedText.setText("Disk usage: \n"+test.DiskUsedSize()+"GB/"+test.DiskTotalSize()+"GB");
+        if(vmLoad.isConnected())
+            diskLoadText.setText("Disk load: \n"+vmLoad.DiskUsedPersent());
+        if(vmLoad.isConnected())
+            diskUsedText.setText("Disk usage: \n"+vmLoad.DiskUsedSize()+"GB/"+vmLoad.DiskTotalSize()+"GB");
 
         new Thread(() -> {
             try {
                 int i = 1;
-                while (true) {
-                    series1.getData().add(new XYChart.Data<Integer, Double>(i, test.ProcLoadStat()));
-                    series2.getData().add(new XYChart.Data<Integer, Double>(i, test.MemFreeStat()));
+                while (StageManager.isOpenLoad()) {
+                    series1.getData().add(new XYChart.Data<Integer, Double>(i, vmLoad.ProcLoadStat()));
+                    series2.getData().add(new XYChart.Data<Integer, Double>(i, vmLoad.MemFreeStat()));
                     CPUchart.getData().add(series1);
                     RAMchart.getData().add(series2);
                     i++;

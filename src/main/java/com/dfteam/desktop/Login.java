@@ -7,8 +7,6 @@ import java.io.IOException;
 
 public class Login extends Application {
 
-    public static Stage mainLoginScene;
-
     @Override
     public void start(Stage primaryStage) throws IOException {
         StageManager.LoginStage(primaryStage);

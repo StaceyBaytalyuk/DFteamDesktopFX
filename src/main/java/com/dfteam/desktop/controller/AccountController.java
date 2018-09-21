@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -79,7 +80,12 @@ public class AccountController {
                 scroll.setFitToHeight(true);
             } else {
                 TokenChecker.notValidMessage();
-                //TODO
+                StageManager.closeAllWindows();
+                try {
+                    StageManager.LoginStage(new Stage());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
 
         } catch (ParseException e) {

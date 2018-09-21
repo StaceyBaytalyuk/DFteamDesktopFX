@@ -8,6 +8,8 @@ import com.dfteam.desktop.util.VMAction;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
+
 import java.io.IOException;
 
 public class VMinfoController {
@@ -54,7 +56,12 @@ public class VMinfoController {
     private void updateInfo(){
         if(!TokenChecker.isValid()) {
             TokenChecker.notValidMessage();
-            //TODO Login
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage(new Stage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         else{
             vm = vmAction.getAllInfo();

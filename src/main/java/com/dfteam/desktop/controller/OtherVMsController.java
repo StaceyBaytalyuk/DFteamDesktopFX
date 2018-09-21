@@ -12,6 +12,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -56,7 +57,19 @@ public class OtherVMsController {
             });
         } else {
             TokenChecker.notValidMessage();
-            //TODO
+            //StageManager.closeAllWindows();
+            /*StageManager.hideMoreInfo();
+            StageManager.hideAccounts();
+            StageManager.hideVMTable();
+            StageManager.hideAddVM();
+            StageManager.hideLoad();*/
+
+            try {
+                StageManager.LoginStage(new Stage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            StageManager.hideOtherVMs();
         }
     }
 

@@ -11,7 +11,7 @@ import java.util.Objects;
 
 public class StageManager {
 
-    private static Stage mainLoginScene;
+    private static Stage loginStage;
     private static Stage accountStage;
     private static Stage vmTableStage;
     private static Stage otherVMsStage;
@@ -21,7 +21,7 @@ public class StageManager {
 
     public static void LoginStage(Stage primaryStage) throws IOException {
         ConnectCheck.check();
-        mainLoginScene = primaryStage;
+        loginStage = primaryStage;
         Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("login.fxml")));
         primaryStage.setTitle("DFteam - Login");
         primaryStage.getIcons().add(new Image("/images/DF.png"));
@@ -105,8 +105,19 @@ public class StageManager {
         }
     }
 
+    public static void closeAllWindows(){
+        hideAccounts();
+        hideVMTable();
+        hideOtherVMs();
+        hideAddVM();
+        hideLoad();
+        hideMoreInfo();
+    }
+
+    public static boolean isOpenLoad(){ return loadStage.isShowing(); }
+
     public static void hideLogin(){
-        closeWindow(mainLoginScene);
+        closeWindow(loginStage);
     }
 
     public static void hideAccounts(){

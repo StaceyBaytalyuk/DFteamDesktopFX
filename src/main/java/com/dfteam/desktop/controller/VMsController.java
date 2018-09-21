@@ -2,6 +2,7 @@ package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.VM;
+import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.collections.FXCollections;
@@ -12,9 +13,12 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+
+import java.io.IOException;
 
 public class VMsController {
 
@@ -61,7 +65,12 @@ public class VMsController {
             table.setItems(VMsList);
         } else {
             TokenChecker.notValidMessage();
-            //TODO
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage(new Stage());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
