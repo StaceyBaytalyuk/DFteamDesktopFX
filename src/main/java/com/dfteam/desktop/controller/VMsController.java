@@ -54,6 +54,9 @@ public class VMsController {
     private TableColumn<VM, Button> info;
 
     @FXML
+    private Button refreshBtn;
+
+    @FXML
     private void initialize() {
         if(TokenChecker.isValid()) {
             initData();
@@ -63,6 +66,8 @@ public class VMsController {
             zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
             table.setItems(VMsList);
+
+            refreshBtn.setOnAction(event -> initData());
         } else {
             TokenChecker.notValidMessage();
             StageManager.closeAllWindows();
@@ -75,6 +80,7 @@ public class VMsController {
     }
 
     private void initData() {
+        VMsList.clear();
         try {
             JSONParser parser = new JSONParser();
             JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/"+type+"/"+accName+"/allvms"));

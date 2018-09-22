@@ -3,10 +3,10 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-
-<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMsController">
+<VBox alignment="TOP_RIGHT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="420.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMsController">
    <children>
       <TableView fx:id="table" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="373.0" prefWidth="600.0">
          <columns>
@@ -17,6 +17,11 @@
             <TableColumn fx:id="info" prefWidth="106.85711669921875" text="Info" />
          </columns>
       </TableView>
-      <Button fx:id="createVMbtn" mnemonicParsing="false" text="Create VM" />
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="30.0">
+         <children>
+            <Button fx:id="refreshBtn" mnemonicParsing="false" text="Refresh table" />
+            <Button fx:id="createVMbtn" mnemonicParsing="false" text="Create VM" />
+         </children>
+      </HBox>
    </children>
 </VBox>

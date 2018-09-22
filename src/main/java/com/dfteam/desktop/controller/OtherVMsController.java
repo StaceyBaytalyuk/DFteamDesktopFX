@@ -38,7 +38,9 @@ public class OtherVMsController {
     @FXML
     private TableColumn<VM, Button> info;
 
-    // инициализируем форму данными
+    @FXML
+    private Button refreshBtn;
+
     @FXML
     private void initialize() {
         if(TokenChecker.isValid()) {
@@ -46,8 +48,9 @@ public class OtherVMsController {
             name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
             ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
-
             table.setItems(VMsList);
+
+            refreshBtn.setOnAction(event -> initData());
             addVMbtn.setOnAction(event -> {
                 try {
                     StageManager.AddVMsStage();
@@ -57,13 +60,7 @@ public class OtherVMsController {
             });
         } else {
             TokenChecker.notValidMessage();
-            //StageManager.closeAllWindows();
-            /*StageManager.hideMoreInfo();
-            StageManager.hideAccounts();
-            StageManager.hideVMTable();
-            StageManager.hideAddVM();
-            StageManager.hideLoad();*/
-
+            StageManager.closeAllWindows();
             try {
                 StageManager.LoginStage(new Stage());
             } catch (IOException e) {
@@ -74,6 +71,7 @@ public class OtherVMsController {
     }
 
     private void initData() {
+        VMsList.clear();
         try {
             JSONParser parser = new JSONParser();
             JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/oth/allvms"));

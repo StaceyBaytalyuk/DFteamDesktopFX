@@ -29,7 +29,10 @@ public class VM {
                 id = (String) vm.get("id");
             }
             this.accName = accName;
-        } else ip = (String) vm.get("ip");
+        } else {
+            ip = (String) vm.get("ip");
+            id = name;
+        }
     }
 
     public String getId() {

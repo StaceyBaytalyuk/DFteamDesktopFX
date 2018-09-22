@@ -34,6 +34,8 @@ public class AccountController {
     @FXML
     private Button otherVMsBtn;
 
+    private long othClickTime = 0;
+
     @FXML
     private void initialize() {
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
@@ -71,11 +73,15 @@ public class AccountController {
                     b.setOnAction(event -> openVMs("gce", b.getText()));
                 }
                 otherVMsBtn.setOnAction(event -> {
-                    try {
-                        StageManager.OtherVMsStage();
-                    } catch (IOException e) {
-                        e.printStackTrace();
+                    if (othClickTime == 0 || (System.currentTimeMillis() - othClickTime > 2000)) {
+                        othClickTime = System.currentTimeMillis();
+                        try {
+                            StageManager.OtherVMsStage();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
                     }
+
                 });
                 scroll.setFitToHeight(true);
             } else {

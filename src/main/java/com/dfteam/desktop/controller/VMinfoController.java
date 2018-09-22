@@ -53,8 +53,8 @@ public class VMinfoController {
     private long deleteClickTime = 0;
     private long loadClickTime = 0;
 
-    private void updateInfo(){
-        if(!TokenChecker.isValid()) {
+    private void updateInfo() {
+        if (!TokenChecker.isValid()) {
             TokenChecker.notValidMessage();
             StageManager.closeAllWindows();
             try {
@@ -62,24 +62,26 @@ public class VMinfoController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }
-        else{
+        } else {
             vm = vmAction.getAllInfo();
             nameText.setText("Name: " + vm.getName());
 
-            if(vm.isOn()){
+            if (vm.isOn() || type.equals("oth")) {
                 ipText.setText("IP: " + vm.getIp());
                 ipText.setVisible(true);
             } else {
                 ipText.setVisible(false);
             }
 
-            statusText.setText("Status: " + vm.getStatus());
+            if (vm.getType().equals("oth")) statusText.setVisible(false);
+            else statusText.setText("Status: " + vm.getStatus());
 
-                if(vm.isOn()){
+            if(vm.getType().equals("oth")) OnOffBtn.setVisible(false);
+            else {
+                if (vm.isOn()) {
                     OnOffBtn.setText("OFF VM");
-                    OnOffBtn.setOnAction(event->{
-                        if ( ConfirmationDialog.showConfirmation("OFF VM", "Are you sure want to OFF VM?") ) {
+                    OnOffBtn.setOnAction(event -> {
+                        if (ConfirmationDialog.showConfirmation("OFF VM", "Are you sure want to OFF VM?")) {
                             if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
                                 OnOffClickTime = System.currentTimeMillis();
                                 vmAction.OffVM();
@@ -90,8 +92,8 @@ public class VMinfoController {
                     });
                 } else {
                     OnOffBtn.setText("ON VM");
-                    OnOffBtn.setOnAction(event->{
-                        if ( ConfirmationDialog.showConfirmation("ON VM", "Are you sure want to ON VM?") ) {
+                    OnOffBtn.setOnAction(event -> {
+                        if (ConfirmationDialog.showConfirmation("ON VM", "Are you sure want to ON VM?")) {
                             if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
                                 OnOffClickTime = System.currentTimeMillis();
                                 vmAction.OnVM();
@@ -100,23 +102,24 @@ public class VMinfoController {
                             }
                         }
                     });
+                }
             }
 
             deleteBtn.setOnAction(event -> {
-                if ( ConfirmationDialog.showConfirmation("Delete VM", "Are you sure want to delete VM?") ) {
+                if (ConfirmationDialog.showConfirmation("Delete VM", "Are you sure want to delete VM?")) {
                     if (deleteClickTime == 0 || (System.currentTimeMillis() - deleteClickTime > 2000)) {
                         deleteClickTime = System.currentTimeMillis();
                         vmAction.DeleteVM();
                         TrayNotification.showNotification("VM is successfully deleted");
-                        updateInfo();
+                        StageManager.hideMoreInfo();
                     }
                 }
             });
 
-            updateBtn.setOnAction(event->updateInfo());
+            updateBtn.setOnAction(event -> updateInfo());
 
             loadBtn.setOnAction(event -> {
-                if( loadClickTime==0 || (System.currentTimeMillis()-loadClickTime>2000) ){
+                if (loadClickTime == 0 || (System.currentTimeMillis() - loadClickTime > 2000)) {
                     loadClickTime = System.currentTimeMillis();
                     VMLoadController.setIp(vm.getIp());
                     try {

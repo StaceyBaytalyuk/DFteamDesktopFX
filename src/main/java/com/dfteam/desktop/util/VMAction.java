@@ -16,7 +16,8 @@ public class VMAction {
     public VMAction(){
         this.type = VMinfoController.getType();
         this.accName = VMinfoController.getAccName();
-        this.URL = "http://167.99.138.88:8000/"+this.type+"/"+this.accName+"/vm/"+VMinfoController.getId();
+        if (type.equals("oth")) this.URL = "http://167.99.138.88:8000/"+this.type+"/vm/"+VMinfoController.getId();
+        else this.URL = "http://167.99.138.88:8000/"+this.type+"/"+this.accName+"/vm/"+VMinfoController.getId();
     }
 
     public VM getAllInfo(){
