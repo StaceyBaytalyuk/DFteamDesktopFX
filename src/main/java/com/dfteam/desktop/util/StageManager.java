@@ -15,6 +15,7 @@ public class StageManager {
     private static Stage accountStage;
     private static Stage vmTableStage;
     private static Stage otherVMsStage;
+    private static Stage createVMStage;
     private static Stage addVMStage;
     private static Stage loadStage;
     private static Stage moreInfoStage;
@@ -70,7 +71,16 @@ public class StageManager {
         otherVMsStage.show();
     }
 
-    public static void AddVMsStage() throws IOException {
+    public static void CreateVMStage() throws IOException {
+        createVMStage = new Stage();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("createVM.fxml")));
+        createVMStage.setTitle("DFteam - Create VM");
+        createVMStage.getIcons().add(new Image("/images/DF.png"));
+        createVMStage.setScene(new Scene(root));
+        createVMStage.show();
+    }
+
+    public static void AddVMStage() throws IOException {
         addVMStage = new Stage();
         Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("addVM.fxml")));//TODO addVM.fxml
         addVMStage.setTitle("DFteam - Add VM");
@@ -109,12 +119,13 @@ public class StageManager {
         hideAccounts();
         hideVMTable();
         hideOtherVMs();
+        hideCreateVM();
         hideAddVM();
         hideLoad();
         hideMoreInfo();
     }
 
-    public static boolean isOpenLoad(){ return loadStage.isShowing(); }
+    public static boolean isOpenLoad(){ return /*loadStage.isShowing()*/true; }
 
     public static void hideLogin(){
         closeWindow(loginStage);
@@ -130,6 +141,10 @@ public class StageManager {
 
     public static void hideOtherVMs(){
         closeWindow(otherVMsStage);
+    }
+
+    public static void hideCreateVM(){
+        closeWindow(createVMStage);
     }
 
     public static void hideAddVM(){

@@ -41,9 +41,9 @@ public class AccountController {
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
         JSONParser parser = new JSONParser();
         try {
-            FileReader tmp = new FileReader(file2);
-            JSONObject json = (JSONObject) parser.parse(tmp);
-            tmp.close();
+            FileReader fileReader = new FileReader(file2);
+            JSONObject json = (JSONObject) parser.parse(fileReader);
+            fileReader.close();
             token = (String) json.get("token");
         } catch (Exception e) {
             e.printStackTrace();

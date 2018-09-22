@@ -51,19 +51,24 @@ public class VMLoadController {
             diskUsedText.setText("Disk usage: \n"+vmLoad.DiskUsedSize()+"GB/"+vmLoad.DiskTotalSize()+"GB");
 
         new Thread(() -> {
-            try {
+            //try {
                 int i = 1;
-                while (StageManager.isOpenLoad()) {
+                System.out.println("Test!!");
+            System.out.println(StageManager.isOpenLoad());
+            while (true) { //TODO не обновляется график
                     series1.getData().add(new XYChart.Data<Integer, Double>(i, vmLoad.ProcLoadStat()));
                     series2.getData().add(new XYChart.Data<Integer, Double>(i, vmLoad.MemFreeStat()));
                     CPUchart.getData().add(series1);
                     RAMchart.getData().add(series2);
                     i++;
-                    Thread.sleep(1000);
+                                        System.out.println(i);
+                                        System.out.println(StageManager.isOpenLoad());
+                    if(!StageManager.isOpenLoad()) break;
+                    //Thread.sleep(1000);
                 }
-            } catch (InterruptedException e) {
+            /*} catch (InterruptedException e) {
                 e.printStackTrace();
-            }
+            }*/
         }).start();
     }
 }

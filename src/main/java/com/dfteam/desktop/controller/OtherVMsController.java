@@ -53,7 +53,7 @@ public class OtherVMsController {
             refreshBtn.setOnAction(event -> initData());
             addVMbtn.setOnAction(event -> {
                 try {
-                    StageManager.AddVMsStage();
+                    StageManager.AddVMStage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

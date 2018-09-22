@@ -22,6 +22,14 @@ import java.io.IOException;
 
 public class VMsController {
 
+    public static String getType() {
+        return type;
+    }
+
+    public static String getAccName() {
+        return accName;
+    }
+
     private static String type;
     private static String accName;
 
@@ -57,6 +65,9 @@ public class VMsController {
     private Button refreshBtn;
 
     @FXML
+    public Button createVMbtn;
+
+    @FXML
     private void initialize() {
         if(TokenChecker.isValid()) {
             initData();
@@ -68,6 +79,13 @@ public class VMsController {
             table.setItems(VMsList);
 
             refreshBtn.setOnAction(event -> initData());
+            createVMbtn.setOnAction(event -> {
+                try {
+                    StageManager.CreateVMStage();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         } else {
             TokenChecker.notValidMessage();
             StageManager.closeAllWindows();

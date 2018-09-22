@@ -43,7 +43,7 @@ public class ConnectCheck {
         InetAddress in = null;
         try {
             in = InetAddress.getByName("google.com");
-            return (in.isReachable(1000));
+            return (in.isReachable(3000));
         } catch (IOException e) {
 //            e.printStackTrace();
         }
