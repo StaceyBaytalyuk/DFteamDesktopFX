@@ -1,15 +1,11 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.VM;
-import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TokenChecker;
-import com.dfteam.desktop.util.TrayNotification;
-import com.dfteam.desktop.util.VMAction;
+import com.dfteam.desktop.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 
 public class VMinfoController {
@@ -53,6 +49,10 @@ public class VMinfoController {
         updateInfo();
     }
 
+    private long OnOffClickTime = 0;
+    private long deleteClickTime = 0;
+    private long loadClickTime = 0;
+
     private void updateInfo(){
         if(!TokenChecker.isValid()) {
             TokenChecker.notValidMessage();
@@ -76,36 +76,54 @@ public class VMinfoController {
 
             statusText.setText("Status: " + vm.getStatus());
 
-            if(vm.isOn()){
-                OnOffBtn.setText("OFF VM");
-                OnOffBtn.setOnAction(event->{
-                    vmAction.OffVM();
-                    TrayNotification.showNotification("VM is OFF");
-                    updateInfo();
-                });
-            } else {
-                OnOffBtn.setText("ON VM");
-                OnOffBtn.setOnAction(event->{
-                    vmAction.OnVM();
-                    TrayNotification.showNotification("VM is ON");
-                    updateInfo();
-                });
+                if(vm.isOn()){
+                    OnOffBtn.setText("OFF VM");
+                    OnOffBtn.setOnAction(event->{
+                        if ( ConfirmationDialog.showConfirmation("OFF VM", "Are you sure want to OFF VM?") ) {
+                            if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
+                                OnOffClickTime = System.currentTimeMillis();
+                                vmAction.OffVM();
+                                TrayNotification.showNotification("VM is OFF");
+                                updateInfo();
+                            }
+                        }
+                    });
+                } else {
+                    OnOffBtn.setText("ON VM");
+                    OnOffBtn.setOnAction(event->{
+                        if ( ConfirmationDialog.showConfirmation("ON VM", "Are you sure want to ON VM?") ) {
+                            if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
+                                OnOffClickTime = System.currentTimeMillis();
+                                vmAction.OnVM();
+                                TrayNotification.showNotification("VM is ON");
+                                updateInfo();
+                            }
+                        }
+                    });
             }
 
             deleteBtn.setOnAction(event -> {
-                vmAction.DeleteVM();
-                TrayNotification.showNotification("VM is successfully deleted");
-                updateInfo();
+                if ( ConfirmationDialog.showConfirmation("Delete VM", "Are you sure want to delete VM?") ) {
+                    if (deleteClickTime == 0 || (System.currentTimeMillis() - deleteClickTime > 2000)) {
+                        deleteClickTime = System.currentTimeMillis();
+                        vmAction.DeleteVM();
+                        TrayNotification.showNotification("VM is successfully deleted");
+                        updateInfo();
+                    }
+                }
             });
 
             updateBtn.setOnAction(event->updateInfo());
 
             loadBtn.setOnAction(event -> {
-                VMLoadController.setIp(vm.getIp());
-                try {
-                    StageManager.LoadStage();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if( loadClickTime==0 || (System.currentTimeMillis()-loadClickTime>2000) ){
+                    loadClickTime = System.currentTimeMillis();
+                    VMLoadController.setIp(vm.getIp());
+                    try {
+                        StageManager.LoadStage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
