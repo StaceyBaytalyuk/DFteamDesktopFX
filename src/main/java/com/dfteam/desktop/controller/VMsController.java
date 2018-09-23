@@ -102,9 +102,13 @@ public class VMsController {
         try {
             JSONParser parser = new JSONParser();
             JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/"+type+"/"+accName+"/allvms"));
-            for (int i = 0; i < json.size(); i++) {
-                VMsList.add(new VM((JSONObject) json.get(i), type, accName));
-            }
+            //Check VMs count
+            if(json.size()==0)
+                TrayNotification.showNotification("VMs not found!");
+            else
+                for (int i = 0; i < json.size(); i++)
+                    VMsList.add(new VM((JSONObject) json.get(i), type, accName));
+
         } catch (Exception e) {
             TrayNotification.showNotification("VMs not found!");
         }

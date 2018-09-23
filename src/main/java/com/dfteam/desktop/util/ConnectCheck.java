@@ -19,6 +19,13 @@ public class ConnectCheck {
     }
 
     private static boolean internet(){
+        //0 способ
+        try (Socket socket = new Socket()) {
+            socket.connect(new InetSocketAddress("google.com", 80), 1500);
+            return true;
+        } catch (IOException e) {
+            return false; // Either timeout or unreachable or failed DNS lookup.
+        }
         //1 способ
         /*boolean result = false;
         HttpURLConnection con = null;
@@ -40,7 +47,7 @@ public class ConnectCheck {
         return result;*/
 
         //2 способ
-        InetAddress in = null;
+        /*InetAddress in = null;
         try {
             in = InetAddress.getByName("google.com");
             return (in.isReachable(3000));
@@ -48,7 +55,7 @@ public class ConnectCheck {
 //            e.printStackTrace();
         }
 
-        return false;
+        return false;*/
         //3 способ
         /*Process proc = Runtime.getRuntime().exec("ping -n 1 " + url);
         boolean reachable = (proc.waitFor()==0);
@@ -105,12 +112,12 @@ public class ConnectCheck {
             con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestMethod("GET");
             result = (con.getResponseCode() == HttpURLConnection.HTTP_OK);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         } finally {
             if (con != null) {
                 try {
                     con.disconnect();
-                } catch (Exception e) {
+                } catch (Exception ignored) {
                 }
             }
         }

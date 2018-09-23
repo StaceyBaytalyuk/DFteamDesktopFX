@@ -100,7 +100,7 @@ public class StageManager {
 
     public static void MoreInfoStage() throws IOException {
         moreInfoStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("vminfo.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("vmInfo.fxml")));
         moreInfoStage.setTitle("DFteam - More Info");
         moreInfoStage.getIcons().add(new Image("/images/DF.png"));
         moreInfoStage.setScene(new Scene(root));
