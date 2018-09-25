@@ -1,6 +1,8 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.util.Request;
+import com.dfteam.desktop.util.StageManager;
+import com.dfteam.desktop.util.TrayNotification;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -10,6 +12,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class CreateVMController {
@@ -55,6 +59,29 @@ public class CreateVMController {
 
             osSelect.setPromptText("No selection");
             osSelect.setEditable(true);
+
+            createBtn.setOnAction(event -> {
+//                if ( nameField.getText().isEmpty() && )
+                System.out.println(nameField.getText().isEmpty());
+                //nameField.getText().isEmpty();
+                Map<String, String> hashMap = new HashMap<String, String>();
+                String request = "http://167.99.138.88:8000/";
+                request += VMsController.getType() + "/" + VMsController.getAccName() + "/vm/create";
+
+                    hashMap.put("name", nameField.getText());
+                    hashMap.put("region", regionSelect.getValue().toString());
+                    hashMap.put("type", typeSelect.getValue().toString());
+                    hashMap.put("os", osSelect.getValue().toString());
+                System.out.println(hashMap.toString());
+                JSONObject response = Request.post(request, hashMap);
+                System.out.println(response.toString());
+                if ( response.size()>2){
+                    TrayNotification.showNotification("VM is successfully created!");
+                    StageManager.hideCreateVM();
+                } else {
+                    TrayNotification.showNotification("Error\nCan't create VM!\n"+response.get("error"));
+                }
+            });
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -70,6 +97,7 @@ public class CreateVMController {
         try {
             JSONObject tmp = (JSONObject) parser.parse(typeResponse);
             JSONArray typeArr = (JSONArray) tmp.get("type");
+            typeSelect.getItems().clear();
             for (int i=0; i<typeArr.size(); i++) {
                 tmp = (JSONObject)typeArr.get(i);
                 typeSelect.getItems().add(tmp.get("name"));
@@ -100,6 +128,7 @@ public class CreateVMController {
         try {
             JSONObject tmp;
             JSONArray typeArr = (JSONArray) parser.parse(typeResponse);
+            osSelect.getItems().clear();
             for (int i=0; i<typeArr.size(); i++) {
                 tmp = (JSONObject)typeArr.get(i);
                 osSelect.getItems().add(tmp.get("name"));

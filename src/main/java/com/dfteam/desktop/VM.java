@@ -86,7 +86,10 @@ public class VM {
     private void OpenInfoWindow(){
         VMinfoController.setType(type);
         VMinfoController.setAccName(accName);
-        VMinfoController.setId(id);
+        if(type.equals("oth"))
+            VMinfoController.setId(name);
+        else
+            VMinfoController.setId(id);
         try {
             StageManager.MoreInfoStage();
         } catch (IOException e) {

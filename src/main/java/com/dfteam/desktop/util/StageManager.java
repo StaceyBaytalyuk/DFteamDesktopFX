@@ -82,7 +82,7 @@ public class StageManager {
 
     public static void AddVMStage() throws IOException {
         addVMStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("addVM.fxml")));//TODO addVM.fxml
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("addVM.fxml")));
         addVMStage.setTitle("DFteam - Add VM");
         addVMStage.getIcons().add(new Image("/images/DF.png"));
         addVMStage.setScene(new Scene(root));

@@ -22,7 +22,9 @@ public class VMAction {
 
     public VM getAllInfo(){
         try {
+            System.out.println(URL);
             JSONObject json = (JSONObject) parser.parse(Request.get(URL));
+            System.out.println(json.toString());
             return new VM(json, type, accName);
         } catch (ParseException e) {
             e.printStackTrace();
