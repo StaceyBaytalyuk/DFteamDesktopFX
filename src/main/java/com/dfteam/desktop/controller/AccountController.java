@@ -19,6 +19,11 @@ import java.io.IOException;
 public class AccountController {
     public static String token;
 
+    private static File HomeDir = new File(System.getProperty("user.home")+File.separator+".dfteam");
+
+    private static File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
+
+
     @FXML
     private VBox googPanel;
 
@@ -33,6 +38,9 @@ public class AccountController {
 
     @FXML
     private Button otherVMsBtn;
+
+    @FXML
+    private Button logoutBtn;
 
     private long othClickTime = 0;
 
@@ -93,6 +101,20 @@ public class AccountController {
                     }
 
                 });
+
+                logoutBtn.setOnAction(event -> {
+                    if(HomeDir.exists()){
+                        ConfigFile.delete();
+                    }
+                    StageManager.closeAllWindows();
+                    try {
+                        StageManager.LoginStage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    StageManager.hideAccounts();
+                });
+
                 scroll.setFitToHeight(true);
             } else {
                 StageManager.closeAllWindows();
