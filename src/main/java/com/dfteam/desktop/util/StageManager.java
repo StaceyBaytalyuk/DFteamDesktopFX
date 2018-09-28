@@ -20,37 +20,27 @@ public class StageManager {
     private static Stage loadStage;
     private static Stage moreInfoStage;
 
-    public static void LoginStage(Stage primaryStage) throws IOException {
-        ConnectCheck.check();
-        loginStage = primaryStage;
+    public static void LoginStage() throws IOException {
+//        ConnectCheck.check();
+        loginStage = new Stage();
         Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("login.fxml")));
-        primaryStage.setTitle("DFteam - Login");
+        loginStage.setTitle("DFteam - Login");
+        loginStage.getIcons().add(new Image("/images/DF.png"));
+        loginStage.setScene(new Scene(root));
+        loginStage.show();
+    }
+
+    public static void AccountStage(Stage primaryStage) throws IOException {
+        accountStage = primaryStage;
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("accounts.fxml")));
+        primaryStage.setTitle("DFteam - Accounts");
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
         if( !TokenChecker.isValid()) {
-            primaryStage.show();
-            if (SystemTray.isSupported()) {
-                SystemTray tray = SystemTray.getSystemTray();
-                java.awt.Image image = Toolkit.getDefaultToolkit().getImage("images/DF.png");
-                TrayIcon trayIcon = new TrayIcon(image);
-                try {
-                    tray.add(trayIcon);
-                } catch (AWTException e) {
-                    e.printStackTrace();
-                }
-                trayIcon.displayMessage("Authorization",
-                        "Enter your login and password", TrayIcon.MessageType.INFO);
-            }
-        }
-    }
-
-    public static void AccountStage() throws IOException {
-        accountStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("accounts.fxml")));
-        accountStage.setTitle("DFteam - Accounts");
-        accountStage.getIcons().add(new Image("/images/DF.png"));
-        accountStage.setScene(new Scene(root));
-        accountStage.show();
+//            LoginStage();
+            hideAccounts();
+            TrayNotification.showNotification("Enter your login and password");
+        } else primaryStage.show();
     }
 
     public static void VMTableStage() throws IOException {

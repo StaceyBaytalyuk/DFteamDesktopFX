@@ -10,8 +10,8 @@ public class TrayNotification {
         int ver = Integer.parseInt(version);
         if(ver>8) {
             Notifications.create()
-                    .title(head)
-                    .text("                  ") //for good look
+                    .text("     "+head)
+                    .title("                  ") //for good look
                     .showWarning();
         }else {
             System.out.println("Tray not support!");

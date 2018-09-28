@@ -39,19 +39,4 @@ public class TokenChecker {
         }
         return false;
     }
-
-    public static void notValidMessage(){
-        if (SystemTray.isSupported()) {
-            SystemTray tray = SystemTray.getSystemTray();
-            java.awt.Image image = Toolkit.getDefaultToolkit().getImage("images/DF.png");
-            TrayIcon trayIcon = new TrayIcon(image);
-            try {
-                tray.add(trayIcon);
-            } catch (AWTException e) {
-                e.printStackTrace();
-            }
-            trayIcon.displayMessage("Token is not valid",
-                    "", TrayIcon.MessageType.INFO);
-        }
-    }
 }

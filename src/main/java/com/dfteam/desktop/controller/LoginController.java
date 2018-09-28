@@ -5,6 +5,7 @@ import com.dfteam.desktop.util.StageManager;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
@@ -95,7 +96,7 @@ public class LoginController {
 
     private void accountWindow() throws IOException {
         StageManager.hideLogin();
-        StageManager.AccountStage();
+        StageManager.AccountStage(new Stage());
     }
 
     private void authError() {

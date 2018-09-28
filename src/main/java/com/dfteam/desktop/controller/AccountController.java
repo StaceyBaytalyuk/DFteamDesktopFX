@@ -40,13 +40,23 @@ public class AccountController {
     private void initialize() {
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
         JSONParser parser = new JSONParser();
-        try {
-            FileReader fileReader = new FileReader(file2);
-            JSONObject json = (JSONObject) parser.parse(fileReader);
-            fileReader.close();
-            token = (String) json.get("token");
-        } catch (Exception e) {
-            e.printStackTrace();
+        if(file2.exists()) {
+            try {
+                FileReader fileReader = new FileReader(file2);
+                JSONObject json = (JSONObject) parser.parse(fileReader);
+                fileReader.close();
+                token = (String) json.get("token");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }else{
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
 
         try {
@@ -85,10 +95,9 @@ public class AccountController {
                 });
                 scroll.setFitToHeight(true);
             } else {
-                TokenChecker.notValidMessage();
                 StageManager.closeAllWindows();
                 try {
-                    StageManager.LoginStage(new Stage());
+                    StageManager.LoginStage();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

@@ -59,10 +59,9 @@ public class OtherVMsController {
                 }
             });
         } else {
-            TokenChecker.notValidMessage();
             StageManager.closeAllWindows();
             try {
-                StageManager.LoginStage(new Stage());
+                StageManager.LoginStage();
             } catch (IOException e) {
                 e.printStackTrace();
             }
