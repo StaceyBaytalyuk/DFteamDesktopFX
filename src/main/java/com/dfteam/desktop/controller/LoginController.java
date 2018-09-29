@@ -52,6 +52,7 @@ public class LoginController {
             HomeDir.mkdir();
         }
         btnOK.setOnAction(event -> onOK());
+        btnOK.setDefaultButton(true);
     }
 
     protected void onOK() {

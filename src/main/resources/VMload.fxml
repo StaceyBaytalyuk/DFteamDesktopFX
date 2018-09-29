@@ -21,10 +21,10 @@
             </LineChart>
             <LineChart fx:id="RAMchart" title="RAM">
               <xAxis>
-                <NumberAxis side="BOTTOM" />
+                <NumberAxis side="BOTTOM" fx:id="xRAM"/>
               </xAxis>
               <yAxis>
-                <NumberAxis side="LEFT" />
+                <NumberAxis side="LEFT" fx:id="yRAM"/>
               </yAxis>
             </LineChart>
          </children>

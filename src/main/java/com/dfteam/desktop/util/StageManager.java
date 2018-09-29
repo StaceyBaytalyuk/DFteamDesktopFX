@@ -1,5 +1,6 @@
 package com.dfteam.desktop.util;
 
+import com.dfteam.desktop.controller.VMLoadController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -80,10 +81,13 @@ public class StageManager {
 
     public static void LoadStage() throws IOException {
         loadStage = new Stage();
-        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("VMload.fxml")));
+        FXMLLoader loader = new FXMLLoader(StageManager.class.getClassLoader().getResource("VMload.fxml"));
+        Parent root = loader.load();
         loadStage.setTitle("DFteam - VM Load");
         loadStage.getIcons().add(new Image("/images/DF.png"));
         loadStage.setScene(new Scene(root));
+        VMLoadController controller = loader.getController();
+        loadStage.setOnHidden(e -> controller.stop());
         loadStage.show();
     }
 

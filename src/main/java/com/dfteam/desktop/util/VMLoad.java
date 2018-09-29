@@ -20,7 +20,7 @@ public class VMLoad {
             config.put("StrictHostKeyChecking", "no");
             session.setConfig(config);
 
-            session.connect(5000);
+            session.connect(3000);
         } catch(Exception e){
             e.printStackTrace();
         }
@@ -63,7 +63,12 @@ public class VMLoad {
     }
 
     public double ProcLoadStat(){
-        return 100 - Double.parseDouble(Command("top -d 0.5 -b -n2 | grep \"Cpu(s)\"|tail -n 1 | awk '{print $8}'"));
+        try{
+            double tmp = Double.parseDouble(Command("top -d 0.5 -b -n2 | grep \"Cpu(s)\"|tail -n 1 | awk '{print $8}'"));
+            return 100 - tmp;
+        }catch (NumberFormatException e){
+            return 0;
+        }
     }
 
     public double MemFreeStat(){
@@ -106,6 +111,10 @@ public class VMLoad {
         } catch(Exception e){
             e.printStackTrace();
         }
+    }
+
+    public void disconnect(){
+        session.disconnect();
     }
 
     private byte[] privKey() {

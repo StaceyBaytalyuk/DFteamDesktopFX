@@ -61,7 +61,6 @@ public class VMinfoController {
                 e.printStackTrace();
             }
         } else {
-            vm = vmAction.getAllInfo();
             nameText.setText("Name: " + vm.getName());
 
             if (vm.isOn() || type.equals("oth")) {

@@ -9,10 +9,14 @@ public class TrayNotification {
         String version = System.getProperties().get("javafx.runtime.version").toString().split("\\.")[0];
         int ver = Integer.parseInt(version);
         if(ver>8) {
-            Notifications.create()
-                    .text("     "+head)
-                    .title("                  ") //for good look
-                    .showWarning();
+            try {
+                Notifications.create()
+                        .text("     " + head)
+                        .title("                  \n") //for good look
+                        .showWarning();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }else {
             System.out.println("Tray not support!");
         }
