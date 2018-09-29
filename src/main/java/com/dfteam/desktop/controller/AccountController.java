@@ -1,13 +1,10 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.Request;
-import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TokenChecker;
+import com.dfteam.desktop.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -99,20 +96,21 @@ public class AccountController {
                             e.printStackTrace();
                         }
                     }
-
                 });
 
                 logoutBtn.setOnAction(event -> {
-                    if(HomeDir.exists()){
-                        ConfigFile.delete();
+                    if (ConfirmationDialog.showConfirmation("Log Out", "Are you sure want to log out?")) {
+                        if(HomeDir.exists()){
+                            ConfigFile.delete();
+                        }
+                        StageManager.closeAllWindows();
+                        try {
+                            StageManager.LoginStage();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        StageManager.hideAccounts();
                     }
-                    StageManager.closeAllWindows();
-                    try {
-                        StageManager.LoginStage();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    StageManager.hideAccounts();
                 });
 
                 scroll.setFitToHeight(true);

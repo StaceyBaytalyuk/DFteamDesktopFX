@@ -12,7 +12,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -40,6 +39,7 @@ public class OtherVMsController {
 
     @FXML
     private Button refreshBtn;
+    private long addVMClickTime;
 
     @FXML
     private void initialize() {
@@ -52,10 +52,13 @@ public class OtherVMsController {
 
             refreshBtn.setOnAction(event -> initData());
             addVMbtn.setOnAction(event -> {
-                try {
-                    StageManager.AddVMStage();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (addVMClickTime == 0 || (System.currentTimeMillis() - addVMClickTime > 2000)) {
+                    addVMClickTime = System.currentTimeMillis();
+                    try {
+                        StageManager.AddVMStage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         } else {

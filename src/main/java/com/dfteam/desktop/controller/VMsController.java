@@ -13,7 +13,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -21,6 +20,8 @@ import org.json.simple.parser.JSONParser;
 import java.io.IOException;
 
 public class VMsController {
+
+    private long createVMClickTime;
 
     public static String getType() {
         return type;
@@ -80,12 +81,16 @@ public class VMsController {
 
             refreshBtn.setOnAction(event -> initData());
             createVMbtn.setOnAction(event -> {
-                try {
-                    StageManager.CreateVMStage();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (createVMClickTime == 0 || (System.currentTimeMillis() - createVMClickTime > 3000)) {
+                    createVMClickTime = System.currentTimeMillis();
+                    try {
+                        StageManager.CreateVMStage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
+
         } else {
             StageManager.closeAllWindows();
             try {

@@ -11,6 +11,7 @@ import java.io.IOException;
 public class VM {
 
     private String id, name, type, accName="", ip="", zone="", status="";
+    private long infoClickTime;
 
     public VM(JSONObject vm, String type, String accName) {
         name=(String) vm.get("name");
@@ -79,7 +80,12 @@ public class VM {
 
     public Button getInfo() {
         Button b = new Button("More info");
-        b.setOnAction(event -> OpenInfoWindow());
+        b.setOnAction(event -> {
+            if (infoClickTime == 0 || (System.currentTimeMillis() - infoClickTime > 2000)) {
+                infoClickTime = System.currentTimeMillis();
+                OpenInfoWindow();
+            }
+        });
         return b;
     }
 

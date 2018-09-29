@@ -7,7 +7,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import org.json.simple.JSONObject;
-
 import java.util.HashMap;
 import java.util.Map;
 
