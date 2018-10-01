@@ -3,32 +3,27 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" spacing="30.0" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMLoadController">
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="500.0" spacing="30.0" xmlns="http://javafx.com/javafx/10.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dfteam.desktop.controller.VMLoadController">
    <children>
-      <HBox prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <LineChart fx:id="CPUchart" title="CPU">
-               <xAxis>
-                  <NumberAxis side="BOTTOM" tickUnit="1.0" fx:id="xCPU" />
-               </xAxis>
-               <yAxis>
-                  <NumberAxis fx:id="yCPU" side="LEFT" />
-               </yAxis>
-            </LineChart>
-            <LineChart fx:id="RAMchart" title="RAM">
-              <xAxis>
-                <NumberAxis side="BOTTOM" fx:id="xRAM"/>
-              </xAxis>
-              <yAxis>
-                <NumberAxis side="LEFT" fx:id="yRAM"/>
-              </yAxis>
-            </LineChart>
-         </children>
-      </HBox>
+       <LineChart fx:id="CPUchart" title="CPU">
+           <xAxis>
+               <NumberAxis side="BOTTOM" tickUnit="1.0" fx:id="xCPU" />
+           </xAxis>
+           <yAxis>
+               <NumberAxis fx:id="yCPU" side="LEFT" />
+           </yAxis>
+       </LineChart>
+       <LineChart fx:id="RAMchart" title="RAM">
+           <xAxis>
+               <NumberAxis side="BOTTOM" fx:id="xRAM" />
+           </xAxis>
+           <yAxis>
+               <NumberAxis fx:id="yRAM" side="LEFT" />
+           </yAxis>
+       </LineChart>
       <Text fx:id="diskLoadText" strokeType="OUTSIDE" strokeWidth="0.0" text="Disk load:" wrappingWidth="378.8036308288574" />
       <Text fx:id="diskUsedText" strokeType="OUTSIDE" strokeWidth="0.0" text="Disk used:" wrappingWidth="378.8036308288574" />
    </children>

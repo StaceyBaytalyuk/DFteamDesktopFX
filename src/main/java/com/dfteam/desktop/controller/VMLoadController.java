@@ -82,10 +82,10 @@ public class VMLoadController {
         yRAM.setUpperBound(vmLoad.MemTotalStat());
         ////////////////////////////
 
-        if(vmLoad.isConnected())
-            diskLoadText.setText("Disk load: \n"+vmLoad.DiskUsedPersent());
-        if(vmLoad.isConnected())
-            diskUsedText.setText("Disk usage: \n"+vmLoad.DiskUsedSize()+"GB/"+vmLoad.DiskTotalSize()+"GB");
+        if(vmLoad.isConnected()) {
+            diskLoadText.setText("Disk load: \n" + vmLoad.DiskUsedPersent());
+            diskUsedText.setText("Disk usage: \n" + vmLoad.DiskUsedSize() + "GB/" + vmLoad.DiskTotalSize() + "GB");
+        }
 
         CPUchart.getData().add(series1);
         RAMchart.getData().add(series2);
