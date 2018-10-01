@@ -57,7 +57,7 @@ public class LoginController {
 
     protected void onOK() {
         HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost("http://167.99.138.88:8000/acc/login");
+        HttpPost post = new HttpPost("http://34.202.9.91:8000/acc/login");
         List<NameValuePair> arguments = new ArrayList<>(2);
         arguments.add(new BasicNameValuePair("login", loginField.getText()));
         arguments.add(new BasicNameValuePair("password", passwField.getText()));

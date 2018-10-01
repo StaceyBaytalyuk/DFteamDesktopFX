@@ -27,7 +27,7 @@ public class TokenChecker {
                 try {
                     AccountController.token = (String) json.get("token");
                     parser = new JSONParser();
-                    json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/authcheck"));
+                    json = (JSONObject) parser.parse(Request.get("http://34.202.9.91:8000/authcheck"));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }

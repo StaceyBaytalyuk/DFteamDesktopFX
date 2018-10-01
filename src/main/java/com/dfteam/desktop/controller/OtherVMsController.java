@@ -76,7 +76,7 @@ public class OtherVMsController {
         VMsList.clear();
         try {
             JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/oth/allvms"));
+            JSONArray json = (JSONArray) parser.parse(Request.get("http://34.202.9.91:8000/oth/allvms"));
             for (int i = 0; i < json.size(); i++) {
                 VMsList.add(new VM((JSONObject) json.get(i), "oth", null));
             }

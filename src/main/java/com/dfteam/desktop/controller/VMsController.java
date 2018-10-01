@@ -105,7 +105,7 @@ public class VMsController {
         VMsList.clear();
         try {
             JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(Request.get("http://167.99.138.88:8000/"+type+"/"+accName+"/allvms"));
+            JSONArray json = (JSONArray) parser.parse(Request.get("http://34.202.9.91:8000/"+type+"/"+accName+"/allvms"));
             //Check VMs count
             if(json.size()==0)
                 TrayNotification.showNotification("VMs not found!");

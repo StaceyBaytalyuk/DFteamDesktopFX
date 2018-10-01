@@ -37,7 +37,7 @@ public class CreateVMController {
 
     @FXML
     private void initialize() {
-        String regionResponse = Request.get("http://167.99.138.88:8000/"
+        String regionResponse = Request.get("http://34.202.9.91:8000/"
                 +VMsController.getType()+"/"+VMsController.getAccName()+"/allregion" );
         System.out.println(regionResponse);
 
@@ -65,7 +65,7 @@ public class CreateVMController {
                 System.out.println(nameField.getText().isEmpty());
                 //nameField.getText().isEmpty();
                 Map<String, String> hashMap = new HashMap<String, String>();
-                String request = "http://167.99.138.88:8000/";
+                String request = "http://34.202.9.91:8000/";
                 request += VMsController.getType() + "/" + VMsController.getAccName() + "/vm/create";
 
                     hashMap.put("name", nameField.getText());
@@ -89,7 +89,7 @@ public class CreateVMController {
 
     private void getType(){
         String region = regionSelect.getSelectionModel().getSelectedItem().toString();
-        String typeResponse = Request.get("http://167.99.138.88:8000/"
+        String typeResponse = Request.get("http://34.202.9.91:8000/"
                 +VMsController.getType()+"/"+VMsController.getAccName()+"/region/"
                 +region+"/gettypes" );
         System.out.println(typeResponse);
@@ -112,13 +112,13 @@ public class CreateVMController {
         String region = regionSelect.getSelectionModel().getSelectedItem().toString();
         String request;
         if(VMsController.getType().equals("ec2"))
-            request = "http://167.99.138.88:8000/"
+            request = "http://34.202.9.91:8000/"
                     +VMsController.getType()+"/"
                     +VMsController.getAccName()
                     +"/allimages/"
                     +region;
         else
-            request = "http://167.99.138.88:8000/"
+            request = "http://34.202.9.91:8000/"
                     +VMsController.getType()+"/"
                     +VMsController.getAccName()
                     +"/allimages";

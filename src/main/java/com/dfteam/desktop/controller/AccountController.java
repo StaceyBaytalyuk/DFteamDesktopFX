@@ -66,7 +66,7 @@ public class AccountController {
 
         try {
             if ( TokenChecker.isValid() ) {
-                JSONObject json = (JSONObject) parser.parse(Request.get("http://167.99.138.88:8000/accountlist"));
+                JSONObject json = (JSONObject) parser.parse(Request.get("http://34.202.9.91:8000/accountlist"));
                 JSONArray arr = (JSONArray) json.get("do");
                 for (int i = 0; i < arr.size(); i++) {
                     Button b = new Button((String) arr.get(i));

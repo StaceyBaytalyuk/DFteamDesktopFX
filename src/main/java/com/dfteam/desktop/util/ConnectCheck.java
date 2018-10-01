@@ -5,7 +5,7 @@ import java.net.*;
 
 public class ConnectCheck {
 
-    private static String url = "http://167.99.138.88:8000";
+    private static String url = "http://34.202.9.91:8000";
 
     public static void check(){
         if (!internet()) {

@@ -27,7 +27,7 @@ public class AddVMController {
                 TrayNotification.showNotification("Please fill all the fields");
             else {
                 Map<String, String> hashMap = new HashMap<String, String>();
-                String request = "http://167.99.138.88:8000/oth/vm/create";
+                String request = "http://34.202.9.91:8000/oth/vm/create";
 
                 hashMap.put("name", nameField.getText());
                 hashMap.put("ip", ipField.getText());
