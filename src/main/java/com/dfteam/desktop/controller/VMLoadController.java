@@ -15,6 +15,9 @@ import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Timer;
 
+/**
+ * Class controller of loadStage
+ */
 public class VMLoadController {
 
     private static String ip;

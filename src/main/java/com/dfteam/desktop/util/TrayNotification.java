@@ -4,7 +4,14 @@ package com.dfteam.desktop.util;
 
 import org.controlsfx.control.Notifications;
 
+/**
+ * Class for notifications in tray
+ */
 public class TrayNotification {
+
+    /**
+     * @param head text of notification
+     */
     public static void showNotification(String head) {
         String version = System.getProperties().get("javafx.runtime.version").toString().split("\\.")[0];
         int ver = Integer.parseInt(version);
@@ -18,7 +25,7 @@ public class TrayNotification {
                 e.printStackTrace();
             }
         }else {
-            System.out.println("Tray not support!");
+            System.out.println("Tray is not supported!");
         }
 //        if (SystemTray.isSupported()) {
 //            SystemTray tray = SystemTray.getSystemTray();

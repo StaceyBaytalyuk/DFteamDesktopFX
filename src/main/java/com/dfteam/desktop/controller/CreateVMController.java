@@ -15,7 +15,9 @@ import org.json.simple.parser.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
-
+/**
+ * Class controller of createVMStage
+ */
 public class CreateVMController {
 
     private JSONParser parser = new JSONParser();
@@ -87,6 +89,9 @@ public class CreateVMController {
         }
     }
 
+    /**
+     * Get list of VM types available in selected region
+     */
     private void getType(){
         String region = regionSelect.getSelectionModel().getSelectedItem().toString();
         String typeResponse = Request.get("http://34.202.9.91:8000/"
@@ -108,6 +113,9 @@ public class CreateVMController {
         }
     }
 
+    /**
+     * Get list of OS available in selected region and type
+     */
     private void getOS() {
         String region = regionSelect.getSelectionModel().getSelectedItem().toString();
         String request;

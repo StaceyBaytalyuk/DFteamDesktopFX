@@ -1,5 +1,9 @@
 package com.dfteam.desktop.controller;
 
+import com.dfteam.apisdk.ApiSDK;
+import com.dfteam.apisdk.GoogleCloud;
+import com.dfteam.apisdk.Other;
+import com.dfteam.apisdk.util.vm.VM;
 import com.dfteam.desktop.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -13,6 +17,9 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Class controller of accountStage
+ */
 public class AccountController {
     public static String token;
 
@@ -41,6 +48,9 @@ public class AccountController {
 
     private long othClickTime = 0;
 
+    /**
+     * Set content of accountStage
+     */
     @FXML
     private void initialize() {
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
@@ -51,6 +61,10 @@ public class AccountController {
                 JSONObject json = (JSONObject) parser.parse(fileReader);
                 fileReader.close();
                 token = (String) json.get("token");
+//                ApiSDK.setServer("http://34.202.9.91:8000");
+//                ApiSDK.Auth(token);
+//                for (VM select : Other.getVMList())
+//                    System.out.println(select);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -62,6 +76,7 @@ public class AccountController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            StageManager.hideAccounts();
         }
 
         try {
@@ -121,6 +136,7 @@ public class AccountController {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+                StageManager.hideAccounts();
             }
 
         } catch (ParseException e) {
@@ -128,6 +144,9 @@ public class AccountController {
         }
     }
 
+    /**
+     * Open table with VMs when you press a button with account name
+     */
     private void openVMs(String type, String accName) {
         VMsController.setType(type);
         VMsController.setAccName(accName);

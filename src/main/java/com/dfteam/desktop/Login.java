@@ -4,7 +4,10 @@ import com.dfteam.desktop.util.StageManager;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import java.io.IOException;
-
+/**
+ * Main class
+ * Try to open accountStage
+ */
 public class Login extends Application {
 
     @Override

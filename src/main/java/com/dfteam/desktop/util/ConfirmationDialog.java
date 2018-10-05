@@ -5,7 +5,13 @@ import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
+/**
+ * Class for asking user "Are you sure?" before important actions
+ */
 public class ConfirmationDialog {
+    /**
+     * @return true if OK is pressed
+     */
     public static boolean showConfirmation(String title, String text) {
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle(title);

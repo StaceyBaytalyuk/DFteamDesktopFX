@@ -9,7 +9,9 @@ import javafx.scene.control.TextField;
 import org.json.simple.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
-
+/**
+ * Class controller of addVMStage
+ */
 public class AddVMController {
     @FXML
     private TextField nameField;

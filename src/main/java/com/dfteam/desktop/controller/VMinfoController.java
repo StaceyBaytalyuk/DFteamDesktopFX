@@ -7,6 +7,9 @@ import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import java.io.IOException;
 
+/**
+ * Class controller of moreInfoStage
+ */
 public class VMinfoController {
 
     private VMAction vmAction = new VMAction();
@@ -52,6 +55,9 @@ public class VMinfoController {
     private long deleteClickTime = 0;
     private long loadClickTime = 0;
 
+    /**
+     * Update More Info window
+     */
     private void updateInfo() {
         if (!TokenChecker.isValid()) {
             StageManager.closeAllWindows();
@@ -60,6 +66,7 @@ public class VMinfoController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            StageManager.hideMoreInfo();
         } else {
             nameText.setText("Name: " + vm.getName());
 

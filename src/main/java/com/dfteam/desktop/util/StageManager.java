@@ -9,6 +9,9 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.Objects;
 
+/**
+ * Class that creates, shows and closes all windows
+ */
 public class StageManager {
 
     private static Stage loginStage;

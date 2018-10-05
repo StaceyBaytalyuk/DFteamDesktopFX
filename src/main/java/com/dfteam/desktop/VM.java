@@ -8,10 +8,19 @@ import javafx.scene.shape.Circle;
 import org.json.simple.JSONObject;
 import java.io.IOException;
 
+/**
+ * Class that contains info about VM
+ */
 public class VM {
 
     private String id, name, type, accName="", ip="", zone="", status="";
     private long infoClickTime;
+
+    /**
+     * @param vm JSONObject parsed from server response
+     * @param type Type of account
+     * @param accName Account name
+     */
 
     public VM(JSONObject vm, String type, String accName) {
         name=(String) vm.get("name");
@@ -64,6 +73,10 @@ public class VM {
         return status;
     }
 
+    /**
+     * Displays status of VM like a red or green circle
+     * @return Circle for table
+     */
     public Circle getStatus_circle(){
         Circle test = new Circle();
         test.setRadius(8);
@@ -78,6 +91,10 @@ public class VM {
         return status.equals("active") || status.equals("running");
     }
 
+    /**
+     * Return info about VM
+     * @return Button for table
+     */
     public Button getInfo() {
         Button b = new Button("More info");
         b.setOnAction(event -> {

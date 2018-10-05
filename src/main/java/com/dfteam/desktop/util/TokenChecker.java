@@ -8,12 +8,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+/**
+ * Class for checking if token is valid
+ */
 public class TokenChecker {
 
     private static File HomeDir = new File(System.getProperty("user.home")+File.separator+".dfteam");
 
     private static File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
 
+    /**
+     * Get token from the file in HomeDir and send it to server in order to check it
+     * @return true if token is valid, false if token is not valid or does`t exit
+     */
     public static boolean isValid(){
         ConnectCheck.check();
         JSONObject json;

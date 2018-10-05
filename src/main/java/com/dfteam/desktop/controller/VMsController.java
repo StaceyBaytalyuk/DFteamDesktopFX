@@ -16,9 +16,11 @@ import javafx.scene.shape.Circle;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import java.io.IOException;
 
+/**
+ * Class controller of vmTableStage
+ */
 public class VMsController {
 
     private long createVMClickTime;
@@ -98,9 +100,13 @@ public class VMsController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+            StageManager.hideVMTable();
         }
     }
 
+    /**
+     * Get data for table
+     */
     private void initData() {
         VMsList.clear();
         try {

@@ -2,11 +2,17 @@ package com.dfteam.desktop.util;
 
 import java.io.IOException;
 import java.net.*;
-
+/**
+ * Class for checking connection to the Internet and server.
+ * Is used before something that needs to work with server
+ */
 public class ConnectCheck {
 
     private static String url = "http://34.202.9.91:8000";
 
+    /**
+     * Exit program if connection to the Internet or server is failed
+     */
     public static void check(){
         if (!internet()) {
             TrayNotification.showNotification("Internet connection failed");
@@ -18,6 +24,9 @@ public class ConnectCheck {
         }
     }
 
+    /**
+     * Check Internet connection
+     */
     private static boolean internet(){
         //0 способ
         try (Socket socket = new Socket()) {
@@ -75,6 +84,9 @@ public class ConnectCheck {
         }*/
     }
 
+    /**
+     * Check connection to server
+     */
     private static boolean server(){
         //1
         /*final String host = url;

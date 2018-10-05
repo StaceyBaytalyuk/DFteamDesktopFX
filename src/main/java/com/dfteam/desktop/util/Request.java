@@ -19,7 +19,9 @@ import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+/**
+ * Class for sending requests to server
+ */
 public class Request {
     private static JSONParser parser = new JSONParser();
 

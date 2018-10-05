@@ -22,6 +22,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class controller of loginStage
+ */
 public class LoginController {
 
     private static File HomeDir = new File(System.getProperty("user.home")+File.separator+".dfteam");
@@ -77,6 +80,9 @@ public class LoginController {
         }
     }
 
+    /**
+     * Create file with token
+     */
     private void AddFile(String token){
         JSONObject json = new JSONObject();
         try {

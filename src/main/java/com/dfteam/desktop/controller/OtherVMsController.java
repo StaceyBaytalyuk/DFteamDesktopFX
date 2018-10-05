@@ -17,6 +17,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import java.io.IOException;
 
+/**
+ * Class controller of otherVMStage
+ */
 public class OtherVMsController {
 
 
@@ -72,6 +75,9 @@ public class OtherVMsController {
         }
     }
 
+    /**
+     * Get data for table
+     */
     private void initData() {
         VMsList.clear();
         try {

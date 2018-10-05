@@ -6,6 +6,9 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+/**
+ * Class that allow to on/off, delete and get full info about particular VM
+ */
 public class VMAction {
 
     private JSONParser parser = new JSONParser();
@@ -19,7 +22,9 @@ public class VMAction {
         if (type.equals("oth")) this.URL = "http://34.202.9.91:8000/"+this.type+"/vm/"+VMinfoController.getId();
         else this.URL = "http://34.202.9.91:8000/"+this.type+"/"+this.accName+"/vm/"+VMinfoController.getId();
     }
-
+    /**
+     * Get full info about particular VM
+     */
     public VM getAllInfo(){
         try {
             System.out.println(URL);
