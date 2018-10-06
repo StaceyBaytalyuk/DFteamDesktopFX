@@ -7,7 +7,6 @@ import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
@@ -71,36 +70,25 @@ public class VMsController {
 
     @FXML
     private void initialize() {
-        if(TokenChecker.isValid()) {
-            initData();
-            status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
-            name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
-            ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
-            zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
-            info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
-            table.setItems(VMsList);
+        initData();
+        status.setCellValueFactory(new PropertyValueFactory<VM, Circle>("status_circle"));
+        name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
+        ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
+        zone.setCellValueFactory(new PropertyValueFactory<VM, String>("zone"));
+        info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
+        table.setItems(VMsList);
 
-            refreshBtn.setOnAction(event -> initData());
-            createVMbtn.setOnAction(event -> {
-                if (createVMClickTime == 0 || (System.currentTimeMillis() - createVMClickTime > 3000)) {
-                    createVMClickTime = System.currentTimeMillis();
-                    try {
-                        StageManager.CreateVMStage();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+        refreshBtn.setOnAction(event -> initData());
+        createVMbtn.setOnAction(event -> {
+            if (createVMClickTime == 0 || (System.currentTimeMillis() - createVMClickTime > 3000)) {
+                createVMClickTime = System.currentTimeMillis();
+                try {
+                    StageManager.CreateVMStage();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-            });
-
-        } else {
-            StageManager.closeAllWindows();
-            try {
-                StageManager.LoginStage();
-            } catch (IOException e) {
-                e.printStackTrace();
             }
-            Platform.runLater(() ->  StageManager.hideVMTable());
-        }
+        });
     }
 
     /**
@@ -123,7 +111,6 @@ public class VMsController {
             }
         }
 
-
         catch (ServerNotSetException e) {
             System.exit(1);
         }
@@ -135,7 +122,7 @@ public class VMsController {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            StageManager.hideOtherVMs();
+            Platform.runLater(() ->  StageManager.hideVMTable());
         }
 
         catch (VMErrorException | AccountErrorException e) {

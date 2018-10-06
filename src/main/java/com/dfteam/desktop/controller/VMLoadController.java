@@ -1,19 +1,13 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.VMLoad;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.chart.Axis;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.text.Text;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
-import java.util.Timer;
 
 /**
  * Class controller of loadStage

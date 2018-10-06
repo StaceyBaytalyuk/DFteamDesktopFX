@@ -24,7 +24,6 @@ public class StageManager {
     private static Stage moreInfoStage;
 
     public static void LoginStage() throws IOException {
-//        ConnectCheck.check();
         loginStage = new Stage();
         Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("login.fxml")));
         loginStage.setTitle("DFteam - Login");
@@ -40,7 +39,6 @@ public class StageManager {
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
         if( !TokenChecker.isValid()) {
-//            LoginStage();
             hideAccounts();
             TrayNotification.showNotification("Enter your login and password");
         } else primaryStage.show();

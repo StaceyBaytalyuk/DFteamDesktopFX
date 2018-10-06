@@ -7,6 +7,7 @@ import com.dfteam.apisdk.exceptions.InvalidTokenException;
 import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.apisdk.util.account.AccountList;
 import com.dfteam.desktop.util.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -78,79 +79,76 @@ public class AccountController {
         }
 
         try {
-            if ( ApiSDK.CheckToken() ) {
-                AccountList GC = GoogleCloud.getAccountList();
-                for (int i = 0; i < GC.size(); i++) {
-                    Button b = new Button( GC.get(i).getName() );
-                    googPanel.getChildren().add(b);
-                    b.setOnAction(event -> openVMs("gce", b.getText()));
-                }
-
-                AccountList DO = DigitalOcean.getAccountList();
-                for (int i = 0; i < DO.size(); i++) {
-                    Button b = new Button( DO.get(i).getName() );
-                    oceanPanel.getChildren().add(b);
-                    b.setOnAction(event -> openVMs("do", b.getText()));
-                }
-
-                AccountList AWS = AWSEC2.getAccountList();
-                for (int i = 0; i < AWS.size(); i++) {
-                    Button b = new Button( AWS.get(i).getName() );
-                    amazPanel.getChildren().add(b);
-                    b.setOnAction(event -> openVMs("ec2", b.getText()));
-                }
-
-                otherVMsBtn.setOnAction(event -> {
-                    if (othClickTime == 0 || (System.currentTimeMillis() - othClickTime > 2000)) {
-                        othClickTime = System.currentTimeMillis();
-                        try {
-                            StageManager.OtherVMsStage();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-
-                logoutBtn.setOnAction(event -> {
-                    if (ConfirmationDialog.showConfirmation("Log Out", "Are you sure want to log out?")) {
-                        if(HomeDir.exists()){
-                            ConfigFile.delete();
-                        }
-                        StageManager.closeAllWindows();
-                        try {
-                            StageManager.LoginStage();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-                        StageManager.hideAccounts();
-                    }
-                });
-
-                scroll.setFitToHeight(true);
-            } else {
-                StageManager.closeAllWindows();
-                StageManager.LoginStage();
-                StageManager.hideAccounts();
+            AccountList GC = GoogleCloud.getAccountList();
+            for (int i = 0; i < GC.size(); i++) {
+                Button b = new Button( GC.get(i).getName() );
+                googPanel.getChildren().add(b);
+                b.setOnAction(event -> openVMs("gce", b.getText()));
             }
 
-        } catch (ParseException e) {
-            e.printStackTrace();
-        } catch (AuthFailException e) {
-            TrayNotification.showNotification("Error\n" + e.getMessage());
-        } catch (ServerNotSetException e) {
+            AccountList DO = DigitalOcean.getAccountList();
+            for (int i = 0; i < DO.size(); i++) {
+                Button b = new Button( DO.get(i).getName() );
+                oceanPanel.getChildren().add(b);
+                b.setOnAction(event -> openVMs("do", b.getText()));
+            }
+
+            AccountList AWS = AWSEC2.getAccountList();
+            for (int i = 0; i < AWS.size(); i++) {
+                Button b = new Button( AWS.get(i).getName() );
+                amazPanel.getChildren().add(b);
+                b.setOnAction(event -> openVMs("ec2", b.getText()));
+            }
+
+            otherVMsBtn.setOnAction(event -> {
+                if (othClickTime == 0 || (System.currentTimeMillis() - othClickTime > 2000)) {
+                    othClickTime = System.currentTimeMillis();
+                    try {
+                        StageManager.OtherVMsStage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
+            logoutBtn.setOnAction(event -> {
+                if (ConfirmationDialog.showConfirmation("Log Out", "Are you sure want to log out?")) {
+                    if(HomeDir.exists()){
+                        ConfigFile.delete();
+                    }
+                    StageManager.closeAllWindows();
+                    try {
+                        StageManager.LoginStage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    StageManager.hideAccounts();
+                }
+            });
+
+            scroll.setFitToHeight(true);
+        }
+
+        catch (ServerNotSetException e) {
             System.out.println("Server is not set");
             System.exit(1);
-        } catch (InvalidTokenException e) {
+        }
+
+        catch (InvalidTokenException e) {
+            StageManager.closeAllWindows();
             try {
                 StageManager.LoginStage();
-                return;
             } catch (IOException e1) {
-                StageManager.closeAllWindows();
+                e1.printStackTrace();
             }
-            StageManager.hideAccounts();//возможно понадобится добавить Platform ->
-        } catch (AccountErrorException e) {
+            Platform.runLater(() ->  StageManager.hideVMTable());
+        }
+
+        catch (AuthFailException | AccountErrorException e) {
             TrayNotification.showNotification("Error\n" + e.getMessage());
-        } catch (IOException e) {
+        }
+
+        catch (ParseException e) {
             e.printStackTrace();
         }
     }
