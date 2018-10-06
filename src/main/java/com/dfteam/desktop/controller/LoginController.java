@@ -1,26 +1,17 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.TokenChecker;
+import com.dfteam.apisdk.ApiSDK;
+import com.dfteam.apisdk.exceptions.AuthFailException;
+import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.desktop.util.StageManager;
+import com.dfteam.desktop.util.TrayNotification;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import javafx.fxml.FXML;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class controller of loginStage
@@ -43,14 +34,17 @@ public class LoginController {
     @FXML
     private void initialize() {
         if(HomeDir.exists()){
-            if(TokenChecker.isValid()){
-                try {
-                    accountWindow();
-                    return;
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            try {
+                ApiSDK.CheckToken();
+                accountWindow();
+            } catch (ServerNotSetException e) {
+                System.exit(1);
+            } catch (AuthFailException e) {
+                TrayNotification.showNotification("Error\n" + e.getMessage());
+            } catch (IOException e) {
+                e.printStackTrace();
             }
+            return;
         }else{
             HomeDir.mkdir();
         }
@@ -59,23 +53,15 @@ public class LoginController {
     }
 
     protected void onOK() {
-        HttpClient client = HttpClientBuilder.create().build();
-        HttpPost post = new HttpPost("http://34.202.9.91:8000/acc/login");
-        List<NameValuePair> arguments = new ArrayList<>(2);
-        arguments.add(new BasicNameValuePair("login", loginField.getText()));
-        arguments.add(new BasicNameValuePair("password", passwField.getText()));
         try {
-            post.setEntity(new UrlEncodedFormEntity(arguments));
-            HttpResponse response = client.execute(post);
-            JSONParser parser = new JSONParser();
-            JSONObject json = (JSONObject) parser.parse(EntityUtils.toString(response.getEntity()));
-            if((boolean) json.get("auth") && json.get("error") == null){
-                AddFile((String) json.get("token"));
-                accountWindow();
-            }else{
-                authError();
-            }
-        } catch (IOException | ParseException e) {
+            ApiSDK.Auth(loginField.getText(), passwField.getText());
+            AddFile(ApiSDK.getToken());
+            accountWindow();
+        } catch (AuthFailException e) {
+            authError();
+        } catch (ServerNotSetException e) {
+            System.exit(1);
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

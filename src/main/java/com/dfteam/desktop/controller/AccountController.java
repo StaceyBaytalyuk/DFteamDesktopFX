@@ -1,15 +1,16 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.ApiSDK;
-import com.dfteam.apisdk.GoogleCloud;
-import com.dfteam.apisdk.Other;
-import com.dfteam.apisdk.util.vm.VM;
+import com.dfteam.apisdk.*;
+import com.dfteam.apisdk.exceptions.AccountErrorException;
+import com.dfteam.apisdk.exceptions.AuthFailException;
+import com.dfteam.apisdk.exceptions.InvalidTokenException;
+import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.apisdk.util.account.AccountList;
 import com.dfteam.desktop.util.*;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -53,6 +54,7 @@ public class AccountController {
      */
     @FXML
     private void initialize() {
+        ApiSDK.setServer("http://34.202.9.91:8000");
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
         JSONParser parser = new JSONParser();
         if(file2.exists()) {
@@ -61,15 +63,11 @@ public class AccountController {
                 JSONObject json = (JSONObject) parser.parse(fileReader);
                 fileReader.close();
                 token = (String) json.get("token");
-//                ApiSDK.setServer("http://34.202.9.91:8000");
-//                ApiSDK.Auth(token);
-//                for (VM select : Other.getVMList())
-//                    System.out.println(select);
+                ApiSDK.Auth(token);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }else{
-            StageManager.closeAllWindows();
             try {
                 StageManager.LoginStage();
                 return;
@@ -80,28 +78,28 @@ public class AccountController {
         }
 
         try {
-            if ( TokenChecker.isValid() ) {
-                JSONObject json = (JSONObject) parser.parse(Request.get("http://34.202.9.91:8000/accountlist"));
-                JSONArray arr = (JSONArray) json.get("do");
-                for (int i = 0; i < arr.size(); i++) {
-                    Button b = new Button((String) arr.get(i));
+            if ( ApiSDK.CheckToken() ) {
+                AccountList GC = GoogleCloud.getAccountList();
+                for (int i = 0; i < GC.size(); i++) {
+                    Button b = new Button( GC.get(i).getName() );
+                    googPanel.getChildren().add(b);
+                    b.setOnAction(event -> openVMs("gce", b.getText()));
+                }
+
+                AccountList DO = DigitalOcean.getAccountList();
+                for (int i = 0; i < DO.size(); i++) {
+                    Button b = new Button( DO.get(i).getName() );
                     oceanPanel.getChildren().add(b);
                     b.setOnAction(event -> openVMs("do", b.getText()));
                 }
 
-                arr = (JSONArray) json.get("ec2");
-                for (int i = 0; i < arr.size(); i++) {
-                    Button b = new Button((String) arr.get(i));
+                AccountList AWS = AWSEC2.getAccountList();
+                for (int i = 0; i < AWS.size(); i++) {
+                    Button b = new Button( AWS.get(i).getName() );
                     amazPanel.getChildren().add(b);
                     b.setOnAction(event -> openVMs("ec2", b.getText()));
                 }
 
-                arr = (JSONArray) json.get("gce");
-                for (int i = 0; i < arr.size(); i++) {
-                    Button b = new Button((String) arr.get(i));
-                    googPanel.getChildren().add(b);
-                    b.setOnAction(event -> openVMs("gce", b.getText()));
-                }
                 otherVMsBtn.setOnAction(event -> {
                     if (othClickTime == 0 || (System.currentTimeMillis() - othClickTime > 2000)) {
                         othClickTime = System.currentTimeMillis();
@@ -131,15 +129,28 @@ public class AccountController {
                 scroll.setFitToHeight(true);
             } else {
                 StageManager.closeAllWindows();
-                try {
-                    StageManager.LoginStage();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                StageManager.LoginStage();
                 StageManager.hideAccounts();
             }
 
         } catch (ParseException e) {
+            e.printStackTrace();
+        } catch (AuthFailException e) {
+            TrayNotification.showNotification("Error\n" + e.getMessage());
+        } catch (ServerNotSetException e) {
+            System.out.println("Server is not set");
+            System.exit(1);
+        } catch (InvalidTokenException e) {
+            try {
+                StageManager.LoginStage();
+                return;
+            } catch (IOException e1) {
+                StageManager.closeAllWindows();
+            }
+            StageManager.hideAccounts();//возможно понадобится добавить Platform ->
+        } catch (AccountErrorException e) {
+            TrayNotification.showNotification("Error\n" + e.getMessage());
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

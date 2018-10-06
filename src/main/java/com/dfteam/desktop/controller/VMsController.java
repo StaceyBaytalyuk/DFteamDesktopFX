@@ -1,10 +1,15 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.Request;
+import com.dfteam.apisdk.AWSEC2;
+import com.dfteam.apisdk.DigitalOcean;
+import com.dfteam.apisdk.GoogleCloud;
+import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,9 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import java.io.IOException;
 
 /**
@@ -25,21 +28,17 @@ public class VMsController {
 
     private long createVMClickTime;
 
+    private static String type;
+    private static String accName;
     public static String getType() {
         return type;
     }
-
     public static String getAccName() {
         return accName;
     }
-
-    private static String type;
-    private static String accName;
-
     public static void setType(String type2) {
         type = type2;
     }
-
     public static void setAccName(String accName2) {
         accName = accName2;
     }
@@ -100,7 +99,7 @@ public class VMsController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            StageManager.hideVMTable();
+            Platform.runLater(() ->  StageManager.hideVMTable());
         }
     }
 
@@ -109,18 +108,42 @@ public class VMsController {
      */
     private void initData() {
         VMsList.clear();
+        VMList vm = null;
         try {
-            JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(Request.get("http://34.202.9.91:8000/"+type+"/"+accName+"/allvms"));
-            //Check VMs count
-            if(json.size()==0)
-                TrayNotification.showNotification("VMs not found!");
-            else
-                for (int i = 0; i < json.size(); i++)
-                    VMsList.add(new VM((JSONObject) json.get(i), type, accName));
+            if ( type.equals("gce") ) vm = GoogleCloud.getVMList(accName);
+            else if ( type.equals("do") ) vm = DigitalOcean.getVMList(accName);
+            else if ( type.equals("ec2") ) vm = AWSEC2.getVMList(accName);
 
-        } catch (Exception e) {
-            TrayNotification.showNotification("VMs not found!");
+            if (vm.size() > 0) {
+                for (int i = 0; i < vm.size(); i++) {
+                    VMsList.add(new VM(vm.get(i)));
+                }
+            } else {
+                TrayNotification.showNotification("VMs not found!");
+            }
+        }
+
+
+        catch (ServerNotSetException e) {
+            System.exit(1);
+        }
+
+        catch (InvalidTokenException e) {
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            StageManager.hideOtherVMs();
+        }
+
+        catch (VMErrorException | AccountErrorException e) {
+            TrayNotification.showNotification("Error:\n" + e.getMessage() );
+        }
+
+        catch (AuthFailException | ParseException e) {
+            e.printStackTrace();
         }
     }
 }

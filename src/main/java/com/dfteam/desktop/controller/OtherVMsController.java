@@ -1,9 +1,10 @@
 package com.dfteam.desktop.controller;
 
+import com.dfteam.apisdk.Other;
+import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.VM;
-import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TokenChecker;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -12,16 +13,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 
 /**
  * Class controller of otherVMStage
  */
 public class OtherVMsController {
-
 
     private ObservableList<VM> VMsList = FXCollections.observableArrayList();
 
@@ -46,14 +45,39 @@ public class OtherVMsController {
 
     @FXML
     private void initialize() {
-        if(TokenChecker.isValid()) {
+        try {
             initData();
             name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
             ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
             table.setItems(VMsList);
 
-            refreshBtn.setOnAction(event -> initData());
+            refreshBtn.setOnAction(event -> {
+                try {
+                    initData();
+                } catch (ServerNotSetException e) {
+                    System.exit(1);
+                }
+
+                catch (InvalidTokenException e) {
+                    StageManager.closeAllWindows();
+                    try {
+                        StageManager.LoginStage();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    StageManager.hideOtherVMs();
+                }
+
+                catch (VMErrorException | AccountErrorException e) {
+                    TrayNotification.showNotification("Error:\n" + e.getMessage() );
+                }
+
+                catch (AuthFailException | ParseException e) {
+                    e.printStackTrace();
+                }
+            });
+
             addVMbtn.setOnAction(event -> {
                 if (addVMClickTime == 0 || (System.currentTimeMillis() - addVMClickTime > 2000)) {
                     addVMClickTime = System.currentTimeMillis();
@@ -64,29 +88,41 @@ public class OtherVMsController {
                     }
                 }
             });
-        } else {
+        }
+        catch (ServerNotSetException e) {
+            System.exit(1);
+        }
+
+        catch (InvalidTokenException e) {
             StageManager.closeAllWindows();
             try {
                 StageManager.LoginStage();
-            } catch (IOException e) {
-                e.printStackTrace();
+            } catch (IOException e1) {
+                e1.printStackTrace();
             }
             StageManager.hideOtherVMs();
+        }
+
+        catch (VMErrorException | AccountErrorException e) {
+            TrayNotification.showNotification("Error:\n" + e.getMessage() );
+        }
+
+        catch (AuthFailException | ParseException e) {
+            e.printStackTrace();
         }
     }
 
     /**
      * Get data for table
      */
-    private void initData() {
+    private void initData() throws AuthFailException, VMErrorException, ParseException, InvalidTokenException, AccountErrorException, ServerNotSetException {
         VMsList.clear();
-        try {
-            JSONParser parser = new JSONParser();
-            JSONArray json = (JSONArray) parser.parse(Request.get("http://34.202.9.91:8000/oth/allvms"));
-            for (int i = 0; i < json.size(); i++) {
-                VMsList.add(new VM((JSONObject) json.get(i), "oth", null));
+        VMList vm = Other.getVMList();
+        if(vm.size()>0) {
+            for (int i = 0; i < vm.size(); i++) {
+                VMsList.add(new VM(vm.get(i)));
             }
-        } catch (Exception e) {
+        }else{
             TrayNotification.showNotification("VMs not found!");
         }
     }

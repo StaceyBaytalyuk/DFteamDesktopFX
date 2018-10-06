@@ -55,6 +55,20 @@ public class VM {
         }
     }
 
+    public VM(com.dfteam.apisdk.util.vm.VM vm) {
+        try {
+            this.status = vm.getStatus();
+            this.name = vm.getName();
+            this.id = vm.getId();
+            this.zone = vm.getZone();
+            this.ip = vm.getIp();
+            this.type = vm.getAccountType();
+            this.accName = vm.getAccountName();
+        } catch (Exception e){
+            Platform.runLater(() -> TrayNotification.showNotification("Error: \n"+e.getMessage()));
+        }
+    }
+
     public String getId() {
         return id;
     }
