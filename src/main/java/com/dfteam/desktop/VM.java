@@ -2,6 +2,8 @@ package com.dfteam.desktop;
 
 import com.dfteam.desktop.controller.VMinfoController;
 import com.dfteam.desktop.util.StageManager;
+import com.dfteam.desktop.util.TrayNotification;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -23,25 +25,33 @@ public class VM {
      */
 
     public VM(JSONObject vm, String type, String accName) {
-        name=(String) vm.get("name");
-        this.type=type;
+        try {
+            if(vm.get("error")==null) {
+                name = (String) vm.get("name");
+                this.type = type;
 
-        if( !type.equals("oth") ) {
-            status = (String) vm.get("status");
-            zone = (String) vm.get("zone");
-            if (status.equals("active") || status.equals("running")) {
-                ip = (String) vm.get("ip");
-            }
+                if (!type.equals("oth")) {
+                    status = (String) vm.get("status");
+                    zone = (String) vm.get("zone");
+                    if (status.equals("active") || status.equals("running")) {
+                        ip = (String) vm.get("ip");
+                    }
 
-            if (type.equals("do")) {
-                id = new StringBuilder().append(vm.get("id")).toString();
-            } else {
-                id = (String) vm.get("id");
+                    if (type.equals("do")) {
+                        id = new StringBuilder().append(vm.get("id")).toString();
+                    } else {
+                        id = (String) vm.get("id");
+                    }
+                    this.accName = accName;
+                } else {
+                    ip = (String) vm.get("ip");
+                    id = name;
+                }
+            }else{
+                Platform.runLater(() -> TrayNotification.showNotification("Error: \n"+vm.get("error")));
             }
-            this.accName = accName;
-        } else {
-            ip = (String) vm.get("ip");
-            id = name;
+        }catch (Exception e){
+            Platform.runLater(() -> TrayNotification.showNotification("Error: \n"+e.getMessage()));
         }
     }
 

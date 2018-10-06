@@ -2,6 +2,7 @@ package com.dfteam.desktop.controller;
 
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.*;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
@@ -68,6 +69,7 @@ public class VMinfoController {
             }
             StageManager.hideMoreInfo();
         } else {
+            System.out.println(vm.getName());
             nameText.setText("Name: " + vm.getName());
 
             if (vm.isOn() || type.equals("oth")) {
@@ -88,9 +90,11 @@ public class VMinfoController {
                         if (ConfirmationDialog.showConfirmation("OFF VM", "Are you sure want to OFF VM?")) {
                             if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
                                 OnOffClickTime = System.currentTimeMillis();
-                                vmAction.OffVM();
-                                TrayNotification.showNotification("VM is OFF");
-                                updateInfo();
+                                if ( vmAction.OffVM().get("error")==null ) {
+                                    TrayNotification.showNotification("VM is OFF");
+                                    updateInfo();
+                                }
+                                else TrayNotification.showNotification("Can`t turn off VM");
                             }
                         }
                     });
@@ -100,9 +104,11 @@ public class VMinfoController {
                         if (ConfirmationDialog.showConfirmation("ON VM", "Are you sure want to ON VM?")) {
                             if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
                                 OnOffClickTime = System.currentTimeMillis();
-                                vmAction.OnVM();
-                                TrayNotification.showNotification("VM is ON");
-                                updateInfo();
+                                if( vmAction.OnVM().get("error")==null ) {
+                                    TrayNotification.showNotification("VM is ON");
+                                    updateInfo();
+                                }
+                                else TrayNotification.showNotification("Can`t turn on VM");
                             }
                         }
                     });
@@ -113,9 +119,11 @@ public class VMinfoController {
                 if (ConfirmationDialog.showConfirmation("Delete VM", "Are you sure want to delete VM?")) {
                     if (deleteClickTime == 0 || (System.currentTimeMillis() - deleteClickTime > 2000)) {
                         deleteClickTime = System.currentTimeMillis();
-                        vmAction.DeleteVM();
-                        TrayNotification.showNotification("VM is successfully deleted");
-                        StageManager.hideMoreInfo();
+                        if (vmAction.DeleteVM().get("error") == null) {
+                            Platform.runLater(() -> TrayNotification.showNotification("VM is successfully deleted!"));
+                            StageManager.hideMoreInfo();
+                        } else
+                            TrayNotification.showNotification("VM delete error");
                     }
                 }
             });

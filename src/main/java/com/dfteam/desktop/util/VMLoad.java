@@ -4,7 +4,7 @@ import com.jcraft.jsch.*;
 import java.io.InputStream;
 import java.text.DecimalFormat;
 
-public class VMLoad { //TODO docs - DIMKA
+public class VMLoad { //TODO docs
 
     private Session session;
 

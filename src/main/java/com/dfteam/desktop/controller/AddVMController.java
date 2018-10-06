@@ -3,6 +3,7 @@ package com.dfteam.desktop.controller;
 import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TrayNotification;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -36,7 +37,7 @@ public class AddVMController {
                 JSONObject response = Request.post(request, hashMap);
                 System.out.println(response.toString());
                 if ( response.size()>2){
-                    TrayNotification.showNotification("VM is successfully added!");
+                    Platform.runLater(() -> TrayNotification.showNotification("VM is successfully added!"));
                     StageManager.hideAddVM();
                 } else {
                     TrayNotification.showNotification("Error\nCan't add VM!\n"+response.get("error"));

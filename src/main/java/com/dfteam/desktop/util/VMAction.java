@@ -37,15 +37,15 @@ public class VMAction {
         return null;
     }
 
-    public void OnVM(){
-        Request.post(URL+"/on", null);
+    public JSONObject OnVM(){
+        return Request.post(URL+"/on", null);
     }
 
-    public void OffVM(){
-        Request.post(URL+"/off", null);
+    public JSONObject OffVM(){
+        return Request.post(URL+"/off", null);
     }
 
-    public void DeleteVM(){
-        Request.delete(URL);
+    public JSONObject DeleteVM(){
+        return Request.delete(URL);
     }
 }

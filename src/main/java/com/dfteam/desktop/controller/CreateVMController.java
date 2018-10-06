@@ -3,6 +3,7 @@ package com.dfteam.desktop.controller;
 import com.dfteam.desktop.util.Request;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TrayNotification;
+import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -62,30 +63,46 @@ public class CreateVMController {
             osSelect.setPromptText("No selection");
             osSelect.setEditable(true);
 
-            createBtn.setOnAction(event -> {
-//                if ( nameField.getText().isEmpty() && )
-                System.out.println(nameField.getText().isEmpty());
-                //nameField.getText().isEmpty();
-                Map<String, String> hashMap = new HashMap<String, String>();
-                String request = "http://34.202.9.91:8000/";
-                request += VMsController.getType() + "/" + VMsController.getAccName() + "/vm/create";
-
-                    hashMap.put("name", nameField.getText());
-                    hashMap.put("region", regionSelect.getValue().toString());
-                    hashMap.put("type", typeSelect.getValue().toString());
-                    hashMap.put("os", osSelect.getValue().toString());
-                System.out.println(hashMap.toString());
-                JSONObject response = Request.post(request, hashMap);
-                System.out.println(response.toString());
-                if ( response.size()>2){
-                    TrayNotification.showNotification("VM is successfully created!");
-                    StageManager.hideCreateVM();
-                } else {
-                    TrayNotification.showNotification("Error\nCan't create VM!\n"+response.get("error"));
-                }
-            });
+            createBtn.setOnAction(event -> onCreate());
         } catch (ParseException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * createBtn handler.
+     * Check if all the fields are filled.
+     * If you fill and then delete - it will also warn you.
+     */
+    private void onCreate() {
+        if (nameField.getText().isEmpty() || regionSelect.getValue() == null ||
+                typeSelect.getValue() == null || osSelect.getValue() == null)
+            TrayNotification.showNotification("Enter all fields");
+
+        else if (regionSelect.getValue().toString().isEmpty() ||
+                typeSelect.getValue().toString().isEmpty() || osSelect.getValue().toString().isEmpty())
+            TrayNotification.showNotification("Enter all fields");
+
+        else {
+            Map<String, String> hashMap = new HashMap<String, String>();
+            String request = "http://34.202.9.91:8000/";
+            request += VMsController.getType() + "/" + VMsController.getAccName() + "/vm/create";
+
+            hashMap.put("name", nameField.getText());
+            hashMap.put("region", regionSelect.getValue().toString());
+            hashMap.put("type", typeSelect.getValue().toString());
+            hashMap.put("os", osSelect.getValue().toString());
+            System.out.println(hashMap.toString());
+            JSONObject response = Request.post(request, hashMap);
+
+            System.out.println(response.toString());
+            if (response.size() > 2) {
+                Platform.runLater(() -> TrayNotification.showNotification("VM is successfully created!"));
+
+                StageManager.hideCreateVM();
+            } else {
+                TrayNotification.showNotification("Error\nCan't create VM!\n" + response.get("error"));
+            }
         }
     }
 
@@ -93,23 +110,27 @@ public class CreateVMController {
      * Get list of VM types available in selected region
      */
     private void getType(){
-        String region = regionSelect.getSelectionModel().getSelectedItem().toString();
-        String typeResponse = Request.get("http://34.202.9.91:8000/"
-                +VMsController.getType()+"/"+VMsController.getAccName()+"/region/"
-                +region+"/gettypes" );
-        System.out.println(typeResponse);
+        if(!regionSelect.getSelectionModel().getSelectedItem().toString().isEmpty()) {
+            String region = regionSelect.getSelectionModel().getSelectedItem().toString();
+            String typeResponse = Request.get("http://34.202.9.91:8000/"
+                    + VMsController.getType() + "/" + VMsController.getAccName() + "/region/"
+                    + region + "/gettypes");
+            System.out.println(typeResponse);
 
-        try {
-            JSONObject tmp = (JSONObject) parser.parse(typeResponse);
-            JSONArray typeArr = (JSONArray) tmp.get("type");
-            typeSelect.getItems().clear();
-            for (int i=0; i<typeArr.size(); i++) {
-                tmp = (JSONObject)typeArr.get(i);
-                typeSelect.getItems().add(tmp.get("name"));
+            try {
+                JSONObject tmp = (JSONObject) parser.parse(typeResponse);
+                JSONArray typeArr = (JSONArray) tmp.get("type");
+                typeSelect.getItems().clear();
+                for (int i = 0; i < typeArr.size(); i++) {
+                    tmp = (JSONObject) typeArr.get(i);
+                    typeSelect.getItems().add(tmp.get("name"));
+                }
+                typeSelect.setOnAction((Event ev) -> getOS());
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-            typeSelect.setOnAction((Event ev) ->getOS());
-        } catch (ParseException e) {
-            e.printStackTrace();
+        }else{
+            typeSelect.getItems().clear();
         }
     }
 
@@ -117,34 +138,37 @@ public class CreateVMController {
      * Get list of OS available in selected region and type
      */
     private void getOS() {
-        String region = regionSelect.getSelectionModel().getSelectedItem().toString();
-        String request;
-        if(VMsController.getType().equals("ec2"))
-            request = "http://34.202.9.91:8000/"
-                    +VMsController.getType()+"/"
-                    +VMsController.getAccName()
-                    +"/allimages/"
-                    +region;
-        else
-            request = "http://34.202.9.91:8000/"
-                    +VMsController.getType()+"/"
-                    +VMsController.getAccName()
-                    +"/allimages";
-        String typeResponse = Request.get(request);
-        System.out.println(typeResponse);
+        if(!regionSelect.getSelectionModel().getSelectedItem().toString().isEmpty()) {
+            String region = regionSelect.getSelectionModel().getSelectedItem().toString();
+            String request;
+            if (VMsController.getType().equals("ec2"))
+                request = "http://34.202.9.91:8000/"
+                        + VMsController.getType() + "/"
+                        + VMsController.getAccName()
+                        + "/allimages/"
+                        + region;
+            else
+                request = "http://34.202.9.91:8000/"
+                        + VMsController.getType() + "/"
+                        + VMsController.getAccName()
+                        + "/allimages";
+            String typeResponse = Request.get(request);
+            System.out.println(typeResponse);
 
-        try {
-            JSONObject tmp;
-            JSONArray typeArr = (JSONArray) parser.parse(typeResponse);
-            osSelect.getItems().clear();
-            for (int i=0; i<typeArr.size(); i++) {
-                tmp = (JSONObject)typeArr.get(i);
-                osSelect.getItems().add(tmp.get("name"));
+            try {
+                JSONObject tmp;
+                JSONArray typeArr = (JSONArray) parser.parse(typeResponse);
+                osSelect.getItems().clear();
+                for (int i = 0; i < typeArr.size(); i++) {
+                    tmp = (JSONObject) typeArr.get(i);
+                    osSelect.getItems().add(tmp.get("name"));
+                }
+            } catch (ParseException e) {
+                e.printStackTrace();
             }
-        } catch (ParseException e) {
-            e.printStackTrace();
+        }else{
+            osSelect.getItems().clear();
         }
     }
-
 
 }
