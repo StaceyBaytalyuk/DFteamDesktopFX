@@ -1,11 +1,18 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.VM;
+import com.dfteam.apisdk.AWSEC2;
+import com.dfteam.apisdk.DigitalOcean;
+import com.dfteam.apisdk.GoogleCloud;
+import com.dfteam.apisdk.Other;
+import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.util.vm.VMAction;
 import com.dfteam.desktop.util.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 
 /**
@@ -13,8 +20,7 @@ import java.io.IOException;
  */
 public class VMinfoController {
 
-    private VMAction vmAction = new VMAction();
-    private VM vm = vmAction.getAllInfo();
+    private VMAction vmAction;
 
     private static String type;
 
@@ -48,7 +54,6 @@ public class VMinfoController {
 
     @FXML
     public void initialize(){
-        vmAction = new VMAction();
         updateInfo();
     }
 
@@ -60,15 +65,15 @@ public class VMinfoController {
      * Update More Info window
      */
     private void updateInfo() {
-        if (!TokenChecker.isValid()) {
-            StageManager.closeAllWindows();
-            try {
-                StageManager.LoginStage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            StageManager.hideMoreInfo();
-        } else {
+        com.dfteam.apisdk.util.vm.VM vm = null;
+        try {
+            if ( type.equals("gce") ) vm = GoogleCloud.getVMInfo(accName, id);
+            else if ( type.equals("do") ) vm = DigitalOcean.getVMInfo(accName, id);
+            else if ( type.equals("ec2") ) vm = AWSEC2.getVMInfo(accName, id);
+            else if ( type.equals("oth") ) vm = Other.getVMInfo(id);
+
+            vmAction = vm.getAction();
+
             System.out.println(vm.getName());
             nameText.setText("Name: " + vm.getName());
 
@@ -79,10 +84,10 @@ public class VMinfoController {
                 ipText.setVisible(false);
             }
 
-            if (vm.getType().equals("oth")) statusText.setVisible(false);
+            if (vm.getAccountType().equals("oth")) statusText.setVisible(false);
             else statusText.setText("Status: " + vm.getStatus());
 
-            if(vm.getType().equals("oth")) OnOffBtn.setVisible(false);
+            if(vm.getAccountType().equals("oth")) OnOffBtn.setVisible(false);
             else {
                 if (vm.isOn()) {
                     OnOffBtn.setText("OFF VM");
@@ -90,11 +95,28 @@ public class VMinfoController {
                         if (ConfirmationDialog.showConfirmation("OFF VM", "Are you sure want to OFF VM?")) {
                             if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
                                 OnOffClickTime = System.currentTimeMillis();
-                                if ( vmAction.OffVM().get("error")==null ) {
+                                try {
+                                    vmAction.TurnOff();
                                     TrayNotification.showNotification("VM is OFF");
                                     updateInfo();
+                                } catch (AuthFailException e) {
+                                    e.printStackTrace();
+                                } catch (ServerNotSetException e) {
+                                    System.out.println("Server is not set");
+                                    System.exit(1);
                                 }
-                                else TrayNotification.showNotification("Can`t turn off VM");
+                                catch (InvalidTokenException e) {
+                                    StageManager.closeAllWindows();
+                                    try {
+                                        StageManager.LoginStage();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    Platform.runLater(() ->  StageManager.hideVMTable());
+                                }
+                                catch (VMErrorException e) {
+                                    TrayNotification.showNotification("Error\n" + e.getMessage());
+                                }
                             }
                         }
                     });
@@ -104,11 +126,28 @@ public class VMinfoController {
                         if (ConfirmationDialog.showConfirmation("ON VM", "Are you sure want to ON VM?")) {
                             if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
                                 OnOffClickTime = System.currentTimeMillis();
-                                if( vmAction.OnVM().get("error")==null ) {
+                                try {
+                                    vmAction.TurnOn();
                                     TrayNotification.showNotification("VM is ON");
                                     updateInfo();
+                                } catch (AuthFailException e) {
+                                    e.printStackTrace();
+                                } catch (ServerNotSetException e) {
+                                    System.out.println("Server is not set");
+                                    System.exit(1);
                                 }
-                                else TrayNotification.showNotification("Can`t turn on VM");
+                                catch (InvalidTokenException e) {
+                                    StageManager.closeAllWindows();
+                                    try {
+                                        StageManager.LoginStage();
+                                    } catch (IOException e1) {
+                                        e1.printStackTrace();
+                                    }
+                                    Platform.runLater(() ->  StageManager.hideVMTable());
+                                }
+                                catch (VMErrorException e) {
+                                    TrayNotification.showNotification("Error\n" + e.getMessage());
+                                }
                             }
                         }
                     });
@@ -119,21 +158,39 @@ public class VMinfoController {
                 if (ConfirmationDialog.showConfirmation("Delete VM", "Are you sure want to delete VM?")) {
                     if (deleteClickTime == 0 || (System.currentTimeMillis() - deleteClickTime > 2000)) {
                         deleteClickTime = System.currentTimeMillis();
-                        if (vmAction.DeleteVM().get("error") == null) {
+                        try {
+                            vmAction.Delete();
                             Platform.runLater(() -> TrayNotification.showNotification("VM is successfully deleted!"));
                             StageManager.hideMoreInfo();
-                        } else
-                            TrayNotification.showNotification("VM delete error");
+                        } catch (AuthFailException e) {
+                            e.printStackTrace();
+                        } catch (ServerNotSetException e) {
+                            System.out.println("Server is not set");
+                            System.exit(1);
+                        }
+                        catch (InvalidTokenException e) {
+                            StageManager.closeAllWindows();
+                            try {
+                                StageManager.LoginStage();
+                            } catch (IOException e1) {
+                                e1.printStackTrace();
+                            }
+                            Platform.runLater(() ->  StageManager.hideVMTable());
+                        }
+                        catch (VMErrorException e) {
+                            TrayNotification.showNotification("Error\n" + e.getMessage());
+                        }
                     }
                 }
             });
 
             updateBtn.setOnAction(event -> updateInfo());
 
+            com.dfteam.apisdk.util.vm.VM finalVm = vm;
             loadBtn.setOnAction(event -> {
                 if (loadClickTime == 0 || (System.currentTimeMillis() - loadClickTime > 2000)) {
                     loadClickTime = System.currentTimeMillis();
-                    VMLoadController.setIp(vm.getIp());
+                    VMLoadController.setIp(finalVm.getIp());
                     try {
                         StageManager.LoadStage();
                     } catch (IOException e) {
@@ -142,6 +199,31 @@ public class VMinfoController {
                 }
             });
         }
+
+        catch (ServerNotSetException e) {
+            System.out.println("Server is not set");
+            System.exit(1);
+        }
+
+        catch (InvalidTokenException e) {
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            Platform.runLater(() ->  StageManager.hideVMTable());
+        }
+
+        catch (AuthFailException | AccountErrorException | VMErrorException e) {
+            TrayNotification.showNotification("Error\n" + e.getMessage());
+        }
+
+        catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
     public static void setType(String type2){
