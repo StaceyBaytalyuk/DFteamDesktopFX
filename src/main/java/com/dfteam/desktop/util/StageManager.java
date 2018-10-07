@@ -1,11 +1,14 @@
 package com.dfteam.desktop.util;
 
+import com.dfteam.apisdk.ApiSDK;
 import com.dfteam.desktop.controller.VMLoadController;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -32,15 +35,15 @@ public class StageManager {
         loginStage.show();
     }
 
-    public static void AccountStage(Stage primaryStage) throws IOException {
+    public static void AccountStage(Stage primaryStage) throws Exception {
         accountStage = primaryStage;
         Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("accounts.fxml")));
         primaryStage.setTitle("DFteam - Accounts");
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
-        if( !TokenChecker.isValid()) {
+        primaryStage.setOnCloseRequest(event -> Platform.exit());
+        if( !ApiSDK.CheckToken()) {
             hideAccounts();
-            TrayNotification.showNotification("Enter your login and password");
         } else primaryStage.show();
     }
 
@@ -118,8 +121,6 @@ public class StageManager {
         hideLoad();
         hideMoreInfo();
     }
-
-    public static boolean isOpenLoad(){ return /*loadStage.isShowing()*/true; }
 
     public static void hideLogin(){
         closeWindow(loginStage);

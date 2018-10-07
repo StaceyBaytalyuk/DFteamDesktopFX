@@ -1,15 +1,16 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.Request;
+import com.dfteam.apisdk.Other;
+import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import org.json.simple.JSONObject;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.io.IOException;
+
 /**
  * Class controller of addVMStage
  */
@@ -29,18 +30,29 @@ public class AddVMController {
             if(nameField.getText().isEmpty() || ipField.getText().isEmpty())
                 TrayNotification.showNotification("Please fill all the fields");
             else {
-                Map<String, String> hashMap = new HashMap<String, String>();
-                String request = "http://34.202.9.91:8000/oth/vm/create";
-
-                hashMap.put("name", nameField.getText());
-                hashMap.put("ip", ipField.getText());
-                JSONObject response = Request.post(request, hashMap);
-                System.out.println(response.toString());
-                if ( response.size()>2){
-                    Platform.runLater(() -> TrayNotification.showNotification("VM is successfully added!"));
+                try {
+                    Other.createVM(nameField.getText(), ipField.getText());
+                    TrayNotification.showNotification("VM is successfully created!");
                     StageManager.hideAddVM();
-                } else {
-                    TrayNotification.showNotification("Error\nCan't add VM!\n"+response.get("error"));
+                } catch (ServerNotSetException e) {
+                    System.out.println("Server is not set");
+                    System.exit(1);
+                }
+
+                catch (InvalidTokenException e) {
+                    StageManager.closeAllWindows();
+                    try {
+                        StageManager.LoginStage();
+                    } catch (IOException e1) {
+                        e1.printStackTrace();
+                    }
+                    Platform.runLater(StageManager::hideOtherVMs);
+                }
+
+                catch (AuthFailException e) {
+                    TrayNotification.showNotification("Error\n" + e.getMessage());
+                } catch (VMErrorException e) {
+                    TrayNotification.showNotification("Error\nCan't create VM!\n" + e.getMessage());
                 }
             }
         });

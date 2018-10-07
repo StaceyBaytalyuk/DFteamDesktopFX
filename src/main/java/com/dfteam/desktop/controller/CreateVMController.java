@@ -1,71 +1,88 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.desktop.util.Request;
+import com.dfteam.apisdk.AWSEC2;
+import com.dfteam.apisdk.DigitalOcean;
+import com.dfteam.apisdk.GoogleCloud;
+import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.util.account.Account;
+import com.dfteam.apisdk.util.createvm.OS;
+import com.dfteam.apisdk.util.createvm.Region;
+import com.dfteam.apisdk.util.createvm.Type;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TrayNotification;
 import javafx.application.Platform;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
+import javafx.scene.control.*;
 import org.json.simple.parser.ParseException;
-import java.util.HashMap;
-import java.util.Map;
+
+import java.io.IOException;
+import java.util.List;
 
 /**
  * Class controller of createVMStage
  */
 public class CreateVMController {
 
-    private JSONParser parser = new JSONParser();
-
     @FXML
     private TextField nameField;
 
     @FXML
-    private ComboBox regionSelect;
+    private ComboBox<Region> regionSelect;
 
     @FXML
-    private ComboBox typeSelect;
+    private ComboBox<Type> typeSelect;
 
     @FXML
-    private ComboBox osSelect;
+    private ComboBox<OS> osSelect;
 
     @FXML
     private Button createBtn;
 
+    private Account account;
+
     @FXML
     private void initialize() {
-        String regionResponse = Request.get("http://34.202.9.91:8000/"
-                +VMsController.getType()+"/"+VMsController.getAccName()+"/allregion" );
-        System.out.println(regionResponse);
-
         try {
-            JSONArray regionArr = (JSONArray) parser.parse(regionResponse);
-            JSONObject jsonObj;
-            for (int i=0; i<regionArr.size(); i++) {
-                jsonObj = (JSONObject)regionArr.get(i);
-                regionSelect.getItems().add(jsonObj.get("name"));
-            }
+            List<Region> region = null;
+            account = new Account(VMsController.getType(), VMsController.getAccName());
+            if (account.getType().equals("do")) region = DigitalOcean.getRegionList(account);
+            else if (account.getType().equals("gce")) region = GoogleCloud.getRegionList(account);
+            else if (account.getType().equals("ec2")) region = AWSEC2.getRegionList(account);
 
-            regionSelect.setOnAction((Event ev) ->getType());
+            regionSelect.getItems().addAll(region);
+
+            regionSelect.setOnAction(ev -> CreateVMController.this.getType());
 
             regionSelect.setPromptText("No selection");
-            regionSelect.setEditable(true);
+            regionSelect.setEditable(false);
 
             typeSelect.setPromptText("No selection");
-            typeSelect.setEditable(true);
+            typeSelect.setEditable(false);
 
             osSelect.setPromptText("No selection");
-            osSelect.setEditable(true);
+            osSelect.setEditable(false);
+
+            CreateVMController.this.getOS();
 
             createBtn.setOnAction(event -> onCreate());
-        } catch (ParseException e) {
-            e.printStackTrace();
+        }
+        catch (ServerNotSetException e) {
+            System.out.println("Server is not set");
+            System.exit(1);
+        }
+
+        catch (InvalidTokenException e) {
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            Platform.runLater(() ->  StageManager.hideVMTable());
+        }
+
+        catch (Exception e) {
+            TrayNotification.showNotification("Error\n" + e.getMessage());
         }
     }
 
@@ -84,24 +101,53 @@ public class CreateVMController {
             TrayNotification.showNotification("Enter all fields");
 
         else {
-            Map<String, String> hashMap = new HashMap<String, String>();
-            String request = "http://34.202.9.91:8000/";
-            request += VMsController.getType() + "/" + VMsController.getAccName() + "/vm/create";
-
-            hashMap.put("name", nameField.getText());
-            hashMap.put("region", regionSelect.getValue().toString());
-            hashMap.put("type", typeSelect.getValue().toString());
-            hashMap.put("os", osSelect.getValue().toString());
-            System.out.println(hashMap.toString());
-            JSONObject response = Request.post(request, hashMap);
-
-            System.out.println(response.toString());
-            if (response.size() > 2) {
-                Platform.runLater(() -> TrayNotification.showNotification("VM is successfully created!"));
-
+            try {
+                if (account.getType().equals("do"))
+                    DigitalOcean.createVM(
+                            account,
+                            nameField.getText(),
+                            regionSelect.getSelectionModel().getSelectedItem(),
+                            typeSelect.getSelectionModel().getSelectedItem(),
+                            osSelect.getSelectionModel().getSelectedItem());
+                else if (account.getType().equals("gce"))
+                    GoogleCloud.createVM(
+                            account,
+                            nameField.getText(),
+                            regionSelect.getSelectionModel().getSelectedItem(),
+                            typeSelect.getSelectionModel().getSelectedItem(),
+                            osSelect.getSelectionModel().getSelectedItem());
+                else if (account.getType().equals("ec2"))
+                    AWSEC2.createVM(
+                            account,
+                            nameField.getText(),
+                            regionSelect.getSelectionModel().getSelectedItem(),
+                            typeSelect.getSelectionModel().getSelectedItem(),
+                            osSelect.getSelectionModel().getSelectedItem());
+                TrayNotification.showNotification("VM is successfully created!");
                 StageManager.hideCreateVM();
-            } else {
-                TrayNotification.showNotification("Error\nCan't create VM!\n" + response.get("error"));
+            }
+
+            catch (ServerNotSetException e) {
+                System.out.println("Server is not set");
+                System.exit(1);
+            }
+
+            catch (InvalidTokenException e) {
+                StageManager.closeAllWindows();
+                try {
+                    StageManager.LoginStage();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+                Platform.runLater(() ->  StageManager.hideVMTable());
+            }
+
+            catch (VMErrorException e) {
+                TrayNotification.showNotification("Error\nCan't create VM!\n" + e.getMessage());
+            }
+
+            catch (Exception e) {
+                TrayNotification.showNotification("Error\n" + e.getMessage());
             }
         }
     }
@@ -110,24 +156,41 @@ public class CreateVMController {
      * Get list of VM types available in selected region
      */
     private void getType(){
-        if(!regionSelect.getSelectionModel().getSelectedItem().toString().isEmpty()) {
-            String region = regionSelect.getSelectionModel().getSelectedItem().toString();
-            String typeResponse = Request.get("http://34.202.9.91:8000/"
-                    + VMsController.getType() + "/" + VMsController.getAccName() + "/region/"
-                    + region + "/gettypes");
-            System.out.println(typeResponse);
-
+        System.out.println(1);
+        if(regionSelect.getSelectionModel().getSelectedIndex()>0) {
             try {
-                JSONObject tmp = (JSONObject) parser.parse(typeResponse);
-                JSONArray typeArr = (JSONArray) tmp.get("type");
+                Region region = regionSelect.getSelectionModel().getSelectedItem();
+
+                List<Type> type = null;
+
+                if (account.getType().equals("do")) type = DigitalOcean.getTypeList(account, region);
+                else if (account.getType().equals("gce")) type = GoogleCloud.getTypeList(account, region);
+                else if (account.getType().equals("ec2")) type = AWSEC2.getTypeList(account, region);
+
                 typeSelect.getItems().clear();
-                for (int i = 0; i < typeArr.size(); i++) {
-                    tmp = (JSONObject) typeArr.get(i);
-                    typeSelect.getItems().add(tmp.get("name"));
+
+                typeSelect.getItems().addAll(type);
+
+                typeSelect.setOnAction(ev -> CreateVMController.this.getOS());
+            }
+
+            catch (ServerNotSetException e) {
+                System.out.println("Server is not set");
+                System.exit(1);
+            }
+
+            catch (InvalidTokenException e) {
+                StageManager.closeAllWindows();
+                try {
+                    StageManager.LoginStage();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
                 }
-                typeSelect.setOnAction((Event ev) -> getOS());
-            } catch (ParseException e) {
-                e.printStackTrace();
+                Platform.runLater(() ->  StageManager.hideVMTable());
+            }
+
+            catch (Exception e) {
+                TrayNotification.showNotification("Error\n" + e.getMessage());
             }
         }else{
             typeSelect.getItems().clear();
@@ -138,36 +201,35 @@ public class CreateVMController {
      * Get list of OS available in selected region and type
      */
     private void getOS() {
-        if(!regionSelect.getSelectionModel().getSelectedItem().toString().isEmpty()) {
-            String region = regionSelect.getSelectionModel().getSelectedItem().toString();
-            String request;
-            if (VMsController.getType().equals("ec2"))
-                request = "http://34.202.9.91:8000/"
-                        + VMsController.getType() + "/"
-                        + VMsController.getAccName()
-                        + "/allimages/"
-                        + region;
-            else
-                request = "http://34.202.9.91:8000/"
-                        + VMsController.getType() + "/"
-                        + VMsController.getAccName()
-                        + "/allimages";
-            String typeResponse = Request.get(request);
-            System.out.println(typeResponse);
+        try {
 
-            try {
-                JSONObject tmp;
-                JSONArray typeArr = (JSONArray) parser.parse(typeResponse);
-                osSelect.getItems().clear();
-                for (int i = 0; i < typeArr.size(); i++) {
-                    tmp = (JSONObject) typeArr.get(i);
-                    osSelect.getItems().add(tmp.get("name"));
-                }
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }else{
+            List<OS> os = null;
+
+            if (account.getType().equals("do"))
+                os = DigitalOcean.getOSList(account);
+            else if (account.getType().equals("gce"))
+                os = GoogleCloud.getOSList(account);
+            else if (account.getType().equals("ec2"))
+                os = AWSEC2.getOSList(account);
+
             osSelect.getItems().clear();
+
+            osSelect.getItems().addAll(os);
+        }
+        catch (ServerNotSetException e) {
+            System.out.println("Server is not set");
+            System.exit(1);
+        }
+        catch (InvalidTokenException e) {
+            StageManager.closeAllWindows();
+            try {
+                StageManager.LoginStage();
+            } catch (IOException e1) {
+                e1.printStackTrace();
+            }
+            Platform.runLater(() -> StageManager.hideVMTable());
+        }  catch (Exception e) {
+            TrayNotification.showNotification("Error\n" + e.getMessage());
         }
     }
 

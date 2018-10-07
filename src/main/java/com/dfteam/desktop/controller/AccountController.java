@@ -55,29 +55,6 @@ public class AccountController {
      */
     @FXML
     private void initialize() {
-        ApiSDK.setServer("http://34.202.9.91:8000");
-        File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
-        JSONParser parser = new JSONParser();
-        if(file2.exists()) {
-            try {
-                FileReader fileReader = new FileReader(file2);
-                JSONObject json = (JSONObject) parser.parse(fileReader);
-                fileReader.close();
-                token = (String) json.get("token");
-                ApiSDK.Auth(token);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }else{
-            try {
-                StageManager.LoginStage();
-                return;
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            StageManager.hideAccounts();
-        }
-
         try {
             AccountList GC = GoogleCloud.getAccountList();
             for (int i = 0; i < GC.size(); i++) {

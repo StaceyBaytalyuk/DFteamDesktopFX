@@ -3,7 +3,6 @@ package com.dfteam.desktop;
 import com.dfteam.desktop.controller.VMinfoController;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.TrayNotification;
-import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -48,10 +47,10 @@ public class VM {
                     id = name;
                 }
             }else{
-                Platform.runLater(() -> TrayNotification.showNotification("Error: \n"+vm.get("error")));
+                TrayNotification.showNotification("Error: \n"+vm.get("error"));
             }
         }catch (Exception e){
-            Platform.runLater(() -> TrayNotification.showNotification("Error: \n"+e.getMessage()));
+            TrayNotification.showNotification("Error: \n"+e.getMessage());
         }
     }
 
@@ -65,7 +64,7 @@ public class VM {
             this.type = vm.getAccountType();
             this.accName = vm.getAccountName();
         } catch (Exception e){
-            Platform.runLater(() -> TrayNotification.showNotification("Error: \n"+e.getMessage()));
+            TrayNotification.showNotification("Error: \n"+e.getMessage());
         }
     }
 

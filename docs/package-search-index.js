@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"com.dfteam.desktop"},{"l":"com.dfteam.desktop.controller"},{"l":"com.dfteam.desktop.util"}]

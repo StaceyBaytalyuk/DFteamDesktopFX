@@ -17,6 +17,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import java.io.IOException;
 
@@ -125,12 +126,8 @@ public class VMsController {
             Platform.runLater(() ->  StageManager.hideVMTable());
         }
 
-        catch (VMErrorException | AccountErrorException e) {
+        catch (Exception e) {
             TrayNotification.showNotification("Error:\n" + e.getMessage() );
-        }
-
-        catch (AuthFailException | ParseException e) {
-            e.printStackTrace();
         }
     }
 }

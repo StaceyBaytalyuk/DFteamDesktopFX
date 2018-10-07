@@ -41,10 +41,9 @@ public class LoginController {
                 System.exit(1);
             } catch (AuthFailException e) {
                 TrayNotification.showNotification("Error\n" + e.getMessage());
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-            return;
         }else{
             HomeDir.mkdir();
         }
@@ -61,7 +60,7 @@ public class LoginController {
             authError();
         } catch (ServerNotSetException e) {
             System.exit(1);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -87,7 +86,7 @@ public class LoginController {
         }
     }
 
-    private void accountWindow() throws IOException {
+    private void accountWindow() throws Exception {
         StageManager.hideLogin();
         StageManager.AccountStage(new Stage());
     }

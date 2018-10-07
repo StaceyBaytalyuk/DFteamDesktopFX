@@ -1,5 +1,6 @@
 package com.dfteam.desktop.util;
 
+import javafx.application.Platform;
 import org.controlsfx.control.Notifications;
 
 /**
@@ -15,10 +16,12 @@ public class TrayNotification {
         int ver = Integer.parseInt(version);
         if(ver>8) {
             try {
+                Platform.runLater(() ->
                 Notifications.create()
                         .text("     " + head)
                         .title("                  \n") //for good look
-                        .showWarning();
+                        .showWarning()
+                );
             }catch (Exception e){
                 e.printStackTrace();
             }

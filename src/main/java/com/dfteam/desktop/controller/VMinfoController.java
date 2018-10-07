@@ -160,7 +160,7 @@ public class VMinfoController {
                         deleteClickTime = System.currentTimeMillis();
                         try {
                             vmAction.Delete();
-                            Platform.runLater(() -> TrayNotification.showNotification("VM is successfully deleted!"));
+                            TrayNotification.showNotification("VM is successfully deleted!");
                             StageManager.hideMoreInfo();
                         } catch (AuthFailException e) {
                             e.printStackTrace();
