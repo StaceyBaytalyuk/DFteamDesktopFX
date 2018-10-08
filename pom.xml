@@ -97,6 +97,13 @@
             <systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.plushaze.traynotification</groupId>
+            <artifactId>TrayNotification</artifactId>
+            <version>0.3</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/TrayNotification.jar</systemPath>
+        </dependency>
 
         <dependency>
             <groupId>com.dfteam</groupId>

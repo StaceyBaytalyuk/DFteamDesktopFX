@@ -15,11 +15,11 @@ public class ConnectCheck {
      */
     public static void check(){
         if (!internet()) {
-            TrayNotification.showNotification("Internet connection failed");
+            Notification.showWarningNotification("Internet connection failed");
             System.exit(0);
         }
         else if(!server()){
-            TrayNotification.showNotification("Can't connect to server");
+            Notification.showWarningNotification("Can't connect to server");
             System.exit(0);
         }
     }

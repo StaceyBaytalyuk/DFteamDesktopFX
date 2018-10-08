@@ -3,7 +3,7 @@ package com.dfteam.desktop.controller;
 import com.dfteam.apisdk.Other;
 import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TrayNotification;
+import com.dfteam.desktop.util.Notification;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -28,11 +28,11 @@ public class AddVMController {
     private void initialize() {
         addBtn.setOnAction(event -> {
             if(nameField.getText().isEmpty() || ipField.getText().isEmpty())
-                TrayNotification.showNotification("Please fill all the fields");
+                Notification.showWarningNotification("Please fill all the fields");
             else {
                 try {
                     Other.createVM(nameField.getText(), ipField.getText());
-                    TrayNotification.showNotification("VM is successfully created!");
+                    Notification.showSuccessNotification("VM is successfully created!");
                     StageManager.hideAddVM();
                 } catch (ServerNotSetException e) {
                     System.out.println("Server is not set");
@@ -50,9 +50,9 @@ public class AddVMController {
                 }
 
                 catch (AuthFailException e) {
-                    TrayNotification.showNotification("Error\n" + e.getMessage());
+                    Notification.showErrorNotification("Error\n" + e.getMessage());
                 } catch (VMErrorException e) {
-                    TrayNotification.showNotification("Error\nCan't create VM!\n" + e.getMessage());
+                    Notification.showErrorNotification("Error\nCan't create VM!\n" + e.getMessage());
                 }
             }
         });

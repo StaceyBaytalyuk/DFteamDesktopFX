@@ -74,7 +74,6 @@ public class VMinfoController {
 
             vmAction = vm.getAction();
 
-            System.out.println(vm.getName());
             nameText.setText("Name: " + vm.getName());
 
             if (vm.isOn() || type.equals("oth")) {
@@ -97,7 +96,7 @@ public class VMinfoController {
                                 OnOffClickTime = System.currentTimeMillis();
                                 try {
                                     vmAction.TurnOff();
-                                    TrayNotification.showNotification("VM is OFF");
+                                    Notification.showSuccessNotification("VM is OFF");
                                     updateInfo();
                                 } catch (AuthFailException e) {
                                     e.printStackTrace();
@@ -115,7 +114,7 @@ public class VMinfoController {
                                     Platform.runLater(() ->  StageManager.hideVMTable());
                                 }
                                 catch (VMErrorException e) {
-                                    TrayNotification.showNotification("Error\n" + e.getMessage());
+                                    Notification.showErrorNotification("Error\n" + e.getMessage());
                                 }
                             }
                         }
@@ -128,7 +127,7 @@ public class VMinfoController {
                                 OnOffClickTime = System.currentTimeMillis();
                                 try {
                                     vmAction.TurnOn();
-                                    TrayNotification.showNotification("VM is ON");
+                                    Notification.showSuccessNotification("VM is ON");
                                     updateInfo();
                                 } catch (AuthFailException e) {
                                     e.printStackTrace();
@@ -146,7 +145,7 @@ public class VMinfoController {
                                     Platform.runLater(() ->  StageManager.hideVMTable());
                                 }
                                 catch (VMErrorException e) {
-                                    TrayNotification.showNotification("Error\n" + e.getMessage());
+                                    Notification.showErrorNotification("Error\n" + e.getMessage());
                                 }
                             }
                         }
@@ -160,7 +159,7 @@ public class VMinfoController {
                         deleteClickTime = System.currentTimeMillis();
                         try {
                             vmAction.Delete();
-                            TrayNotification.showNotification("VM is successfully deleted!");
+                            Notification.showSuccessNotification("VM is successfully deleted!");
                             StageManager.hideMoreInfo();
                         } catch (AuthFailException e) {
                             e.printStackTrace();
@@ -178,7 +177,7 @@ public class VMinfoController {
                             Platform.runLater(() ->  StageManager.hideVMTable());
                         }
                         catch (VMErrorException e) {
-                            TrayNotification.showNotification("Error\n" + e.getMessage());
+                            Notification.showErrorNotification("Error\n" + e.getMessage());
                         }
                     }
                 }
@@ -216,7 +215,7 @@ public class VMinfoController {
         }
 
         catch (AuthFailException | AccountErrorException | VMErrorException e) {
-            TrayNotification.showNotification("Error\n" + e.getMessage());
+            Notification.showErrorNotification("Error\n" + e.getMessage());
         }
 
         catch (ParseException e) {

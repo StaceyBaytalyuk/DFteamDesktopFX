@@ -4,7 +4,7 @@ import com.dfteam.apisdk.ApiSDK;
 import com.dfteam.apisdk.exceptions.AuthFailException;
 import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TrayNotification;
+import com.dfteam.desktop.util.Notification;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
@@ -40,7 +40,7 @@ public class LoginController {
             } catch (ServerNotSetException e) {
                 System.exit(1);
             } catch (AuthFailException e) {
-                TrayNotification.showNotification("Error\n" + e.getMessage());
+                Notification.showErrorNotification("Error\n" + e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
             }

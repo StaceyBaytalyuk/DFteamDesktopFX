@@ -9,11 +9,10 @@ import com.dfteam.apisdk.util.createvm.OS;
 import com.dfteam.apisdk.util.createvm.Region;
 import com.dfteam.apisdk.util.createvm.Type;
 import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TrayNotification;
+import com.dfteam.desktop.util.Notification;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.List;
@@ -82,7 +81,7 @@ public class CreateVMController {
         }
 
         catch (Exception e) {
-            TrayNotification.showNotification("Error\n" + e.getMessage());
+            Notification.showErrorNotification("Error\n" + e.getMessage());
         }
     }
 
@@ -94,13 +93,14 @@ public class CreateVMController {
     private void onCreate() {
         if (nameField.getText().isEmpty() || regionSelect.getValue() == null ||
                 typeSelect.getValue() == null || osSelect.getValue() == null)
-            TrayNotification.showNotification("Enter all fields");
+            Notification.showWarningNotification("Enter all fields");
 
         else if (regionSelect.getValue().toString().isEmpty() ||
                 typeSelect.getValue().toString().isEmpty() || osSelect.getValue().toString().isEmpty())
-            TrayNotification.showNotification("Enter all fields");
+            Notification.showWarningNotification("Enter all fields");
 
         else {
+            createBtn.setDisable(true);
             try {
                 if (account.getType().equals("do"))
                     DigitalOcean.createVM(
@@ -123,8 +123,10 @@ public class CreateVMController {
                             regionSelect.getSelectionModel().getSelectedItem(),
                             typeSelect.getSelectionModel().getSelectedItem(),
                             osSelect.getSelectionModel().getSelectedItem());
-                TrayNotification.showNotification("VM is successfully created!");
-                StageManager.hideCreateVM();
+                Platform.runLater(() -> {
+                    Notification.showSuccessNotification("VM is successfully created!");
+                    StageManager.hideCreateVM();
+                });
             }
 
             catch (ServerNotSetException e) {
@@ -143,11 +145,13 @@ public class CreateVMController {
             }
 
             catch (VMErrorException e) {
-                TrayNotification.showNotification("Error\nCan't create VM!\n" + e.getMessage());
+                Notification.showErrorNotification("Error\nCan't create VM!\n" + e.getMessage());
+                createBtn.setDisable(false);
             }
 
             catch (Exception e) {
-                TrayNotification.showNotification("Error\n" + e.getMessage());
+                Notification.showErrorNotification("Error\n" + e.getMessage());
+                createBtn.setDisable(false);
             }
         }
     }
@@ -156,7 +160,6 @@ public class CreateVMController {
      * Get list of VM types available in selected region
      */
     private void getType(){
-        System.out.println(1);
         if(regionSelect.getSelectionModel().getSelectedIndex()>0) {
             try {
                 Region region = regionSelect.getSelectionModel().getSelectedItem();
@@ -190,7 +193,7 @@ public class CreateVMController {
             }
 
             catch (Exception e) {
-                TrayNotification.showNotification("Error\n" + e.getMessage());
+                Notification.showErrorNotification("Error\n" + e.getMessage());
             }
         }else{
             typeSelect.getItems().clear();
@@ -229,7 +232,7 @@ public class CreateVMController {
             }
             Platform.runLater(() -> StageManager.hideVMTable());
         }  catch (Exception e) {
-            TrayNotification.showNotification("Error\n" + e.getMessage());
+            Notification.showErrorNotification("Error\n" + e.getMessage());
         }
     }
 

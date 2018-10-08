@@ -7,7 +7,7 @@ import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.StageManager;
-import com.dfteam.desktop.util.TrayNotification;
+import com.dfteam.desktop.util.Notification;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,8 +17,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
-import javafx.stage.Stage;
-import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 
 /**
@@ -108,7 +107,7 @@ public class VMsController {
                     VMsList.add(new VM(vm.get(i)));
                 }
             } else {
-                TrayNotification.showNotification("VMs not found!");
+                Notification.showWarningNotification("VMs not found!");
             }
         }
 
@@ -127,7 +126,7 @@ public class VMsController {
         }
 
         catch (Exception e) {
-            TrayNotification.showNotification("Error:\n" + e.getMessage() );
+            Notification.showErrorNotification("Error:\n" + e.getMessage() );
         }
     }
 }

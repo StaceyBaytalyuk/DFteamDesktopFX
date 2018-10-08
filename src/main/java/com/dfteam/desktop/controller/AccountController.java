@@ -12,11 +12,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 
 /**
@@ -122,7 +119,7 @@ public class AccountController {
         }
 
         catch (AuthFailException | AccountErrorException e) {
-            TrayNotification.showNotification("Error\n" + e.getMessage());
+            Notification.showErrorNotification("Error\n" + e.getMessage());
         }
 
         catch (ParseException e) {
