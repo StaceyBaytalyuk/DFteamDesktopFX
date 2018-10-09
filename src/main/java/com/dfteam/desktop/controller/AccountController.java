@@ -46,6 +46,9 @@ public class AccountController {
     private Button logoutBtn;
 
     private long othClickTime = 0;
+    private long gceClickTime = 0;
+    private long doClickTime = 0;
+    private long ec2ClickTime = 0;
 
     /**
      * Set content of accountStage
@@ -57,21 +60,38 @@ public class AccountController {
             for (int i = 0; i < GC.size(); i++) {
                 Button b = new Button( GC.get(i).getName() );
                 googPanel.getChildren().add(b);
-                b.setOnAction(event -> openVMs("gce", b.getText()));
+                b.setOnAction(event -> {
+                    if (gceClickTime == 0 || (System.currentTimeMillis() - gceClickTime) > 2000) {
+                        gceClickTime = System.currentTimeMillis();
+                        openVMs("gce", b.getText());
+                    }
+                });
             }
 
             AccountList DO = DigitalOcean.getAccountList();
             for (int i = 0; i < DO.size(); i++) {
                 Button b = new Button( DO.get(i).getName() );
                 oceanPanel.getChildren().add(b);
-                b.setOnAction(event -> openVMs("do", b.getText()));
+                b.setOnAction(event -> {
+                    if (doClickTime == 0 || (System.currentTimeMillis() - doClickTime) > 2000) {
+                        doClickTime = System.currentTimeMillis();
+                        openVMs("do", b.getText());
+                    }
+
+                });
             }
 
             AccountList AWS = AWSEC2.getAccountList();
             for (int i = 0; i < AWS.size(); i++) {
                 Button b = new Button( AWS.get(i).getName() );
                 amazPanel.getChildren().add(b);
-                b.setOnAction(event -> openVMs("ec2", b.getText()));
+                b.setOnAction(event -> {
+                    if (ec2ClickTime == 0 || (System.currentTimeMillis() - ec2ClickTime) > 2000) {
+                        ec2ClickTime = System.currentTimeMillis();
+                        openVMs("ec2", b.getText());
+                    }
+
+                });
             }
 
             otherVMsBtn.setOnAction(event -> {

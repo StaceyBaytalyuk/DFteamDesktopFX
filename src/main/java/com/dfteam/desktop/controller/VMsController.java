@@ -25,7 +25,7 @@ import java.io.IOException;
  */
 public class VMsController {
 
-    private long createVMClickTime;
+    private long createVMClickTime = 0;
 
     private static String type;
     private static String accName;

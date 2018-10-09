@@ -23,6 +23,7 @@ public class AddVMController {
 
     @FXML
     private Button addBtn;
+    private long addClickTime = 0;
 
     @FXML
     private void initialize() {
@@ -31,9 +32,13 @@ public class AddVMController {
                 Notification.showWarningNotification("Please fill all the fields");
             else {
                 try {
-                    Other.createVM(nameField.getText(), ipField.getText());
-                    Notification.showSuccessNotification("VM is successfully created!");
-                    StageManager.hideAddVM();
+                    if (addClickTime == 0 || (System.currentTimeMillis() - addClickTime) > 2000) {
+                        addClickTime = System.currentTimeMillis();
+
+                        Other.createVM(nameField.getText(), ipField.getText());
+                        Notification.showSuccessNotification("VM is successfully created!");
+                        StageManager.hideAddVM();
+                    }
                 } catch (ServerNotSetException e) {
                     System.out.println("Server is not set");
                     System.exit(1);

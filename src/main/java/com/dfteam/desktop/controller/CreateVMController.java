@@ -39,6 +39,8 @@ public class CreateVMController {
 
     private Account account;
 
+    private long createClickTime = 0;
+
     @FXML
     private void initialize() {
         try {
@@ -63,7 +65,12 @@ public class CreateVMController {
 
             CreateVMController.this.getOS();
 
-            createBtn.setOnAction(event -> onCreate());
+            createBtn.setOnAction(event -> {
+                if (createClickTime == 0 || (System.currentTimeMillis() - createClickTime) > 2000) {
+                    createClickTime = System.currentTimeMillis();
+                    onCreate();
+                }
+            });
         }
         catch (ServerNotSetException e) {
             System.out.println("Server is not set");

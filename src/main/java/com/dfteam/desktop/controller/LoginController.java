@@ -30,6 +30,7 @@ public class LoginController {
 
     @FXML
     private Button btnOK;
+    private long loginClickTime;
 
     @FXML
     private void initialize() {
@@ -53,11 +54,17 @@ public class LoginController {
 
     protected void onOK() {
         try {
-            ApiSDK.Auth(loginField.getText(), passwField.getText());
-            AddFile(ApiSDK.getToken());
-            accountWindow();
+            if (loginClickTime == 0 || (System.currentTimeMillis() - loginClickTime) > 2000) {
+                loginClickTime = System.currentTimeMillis();
+
+                ApiSDK.Auth(loginField.getText(), passwField.getText());
+                AddFile(ApiSDK.getToken());
+                accountWindow();
+            }
+
         } catch (AuthFailException e) {
-            authError();
+            //authError();
+            Notification.showErrorNotification("Wrong login or password");
         } catch (ServerNotSetException e) {
             System.exit(1);
         } catch (Exception e) {

@@ -41,7 +41,7 @@ public class OtherVMsController {
 
     @FXML
     private Button refreshBtn;
-    private long addVMClickTime;
+    private long addVMClickTime = 0;
 
     @FXML
     private void initialize() {

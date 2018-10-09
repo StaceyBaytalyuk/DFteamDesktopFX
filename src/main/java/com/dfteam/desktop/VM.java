@@ -15,7 +15,7 @@ import java.io.IOException;
 public class VM {
 
     private String id, name, type, accName="", ip="", zone="", status="";
-    private long infoClickTime;
+    private long infoClickTime = 0;
 
     /**
      * @param vm JSONObject parsed from server response
