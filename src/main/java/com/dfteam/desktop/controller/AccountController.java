@@ -6,6 +6,7 @@ import com.dfteam.apisdk.exceptions.AuthFailException;
 import com.dfteam.apisdk.exceptions.InvalidTokenException;
 import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.apisdk.util.account.AccountList;
+import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -26,12 +27,11 @@ public class AccountController {
 
     private static File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
 
+    @FXML
+    private ScrollPane scroll;
 
     @FXML
     private VBox googPanel;
-
-    @FXML
-    private ScrollPane scroll;
 
     @FXML
     private VBox oceanPanel;
@@ -61,7 +61,7 @@ public class AccountController {
                 Button b = new Button( GC.get(i).getName() );
                 googPanel.getChildren().add(b);
                 b.setOnAction(event -> {
-                    if (gceClickTime == 0 || (System.currentTimeMillis() - gceClickTime) > 2000) {
+                    if (gceClickTime == 0 || (System.currentTimeMillis() - gceClickTime) > Main.CLICKTIME) {
                         gceClickTime = System.currentTimeMillis();
                         openVMs("gce", b.getText());
                     }
@@ -73,7 +73,7 @@ public class AccountController {
                 Button b = new Button( DO.get(i).getName() );
                 oceanPanel.getChildren().add(b);
                 b.setOnAction(event -> {
-                    if (doClickTime == 0 || (System.currentTimeMillis() - doClickTime) > 2000) {
+                    if (doClickTime == 0 || (System.currentTimeMillis() - doClickTime) > Main.CLICKTIME) {
                         doClickTime = System.currentTimeMillis();
                         openVMs("do", b.getText());
                     }
@@ -86,7 +86,7 @@ public class AccountController {
                 Button b = new Button( AWS.get(i).getName() );
                 amazPanel.getChildren().add(b);
                 b.setOnAction(event -> {
-                    if (ec2ClickTime == 0 || (System.currentTimeMillis() - ec2ClickTime) > 2000) {
+                    if (ec2ClickTime == 0 || (System.currentTimeMillis() - ec2ClickTime) > Main.CLICKTIME) {
                         ec2ClickTime = System.currentTimeMillis();
                         openVMs("ec2", b.getText());
                     }
@@ -95,7 +95,7 @@ public class AccountController {
             }
 
             otherVMsBtn.setOnAction(event -> {
-                if (othClickTime == 0 || (System.currentTimeMillis() - othClickTime > 2000)) {
+                if (othClickTime == 0 || (System.currentTimeMillis() - othClickTime > Main.CLICKTIME)) {
                     othClickTime = System.currentTimeMillis();
                     try {
                         StageManager.OtherVMsStage();

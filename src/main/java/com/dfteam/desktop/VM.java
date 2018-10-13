@@ -121,7 +121,7 @@ public class VM {
     public Button getInfo() {
         Button b = new Button("More info");
         b.setOnAction(event -> {
-            if (infoClickTime == 0 || (System.currentTimeMillis() - infoClickTime) > 2000) {
+            if (infoClickTime == 0 || (System.currentTimeMillis() - infoClickTime) > Main.CLICKTIME) {
                 infoClickTime = System.currentTimeMillis();
                 OpenInfoWindow();
             }

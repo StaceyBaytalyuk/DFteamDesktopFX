@@ -3,6 +3,7 @@ package com.dfteam.desktop.controller;
 import com.dfteam.apisdk.ApiSDK;
 import com.dfteam.apisdk.exceptions.AuthFailException;
 import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
 import javafx.scene.control.*;
@@ -54,7 +55,7 @@ public class LoginController {
 
     protected void onOK() {
         try {
-            if (loginClickTime == 0 || (System.currentTimeMillis() - loginClickTime) > 2000) {
+            if (loginClickTime == 0 || (System.currentTimeMillis() - loginClickTime) > Main.CLICKTIME) {
                 loginClickTime = System.currentTimeMillis();
 
                 ApiSDK.Auth(loginField.getText(), passwField.getText());
@@ -98,11 +99,4 @@ public class LoginController {
         StageManager.AccountStage(new Stage());
     }
 
-    private void authError() {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Auth Error");
-        alert.setHeaderText(null);
-        alert.setContentText("Wrong login or password");
-        alert.showAndWait();
-    }
 }

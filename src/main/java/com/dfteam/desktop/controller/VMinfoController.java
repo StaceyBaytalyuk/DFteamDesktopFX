@@ -6,13 +6,13 @@ import com.dfteam.apisdk.GoogleCloud;
 import com.dfteam.apisdk.Other;
 import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.apisdk.util.vm.VMAction;
+import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.*;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
 
 /**
@@ -92,7 +92,7 @@ public class VMinfoController {
                     OnOffBtn.setText("OFF VM");
                     OnOffBtn.setOnAction(event -> {
                         if (ConfirmationDialog.showConfirmation("OFF VM", "Are you sure want to OFF VM?")) {
-                            if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
+                            if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > Main.CLICKTIME)) {
                                 OnOffClickTime = System.currentTimeMillis();
                                 try {
                                     vmAction.TurnOff();
@@ -123,7 +123,7 @@ public class VMinfoController {
                     OnOffBtn.setText("ON VM");
                     OnOffBtn.setOnAction(event -> {
                         if (ConfirmationDialog.showConfirmation("ON VM", "Are you sure want to ON VM?")) {
-                            if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > 2000)) {
+                            if (OnOffClickTime == 0 || (System.currentTimeMillis() - OnOffClickTime > Main.CLICKTIME)) {
                                 OnOffClickTime = System.currentTimeMillis();
                                 try {
                                     vmAction.TurnOn();
@@ -155,7 +155,7 @@ public class VMinfoController {
 
             deleteBtn.setOnAction(event -> {
                 if (ConfirmationDialog.showConfirmation("Delete VM", "Are you sure want to delete VM?")) {
-                    if (deleteClickTime == 0 || (System.currentTimeMillis() - deleteClickTime > 2000)) {
+                    if (deleteClickTime == 0 || (System.currentTimeMillis() - deleteClickTime > Main.CLICKTIME)) {
                         deleteClickTime = System.currentTimeMillis();
                         try {
                             vmAction.Delete();
@@ -187,7 +187,7 @@ public class VMinfoController {
 
             com.dfteam.apisdk.util.vm.VM finalVm = vm;
             loadBtn.setOnAction(event -> {
-                if (loadClickTime == 0 || (System.currentTimeMillis() - loadClickTime > 2000)) {
+                if (loadClickTime == 0 || (System.currentTimeMillis() - loadClickTime > Main.CLICKTIME)) {
                     loadClickTime = System.currentTimeMillis();
                     VMLoadController.setIp(finalVm.getIp());
                     try {
@@ -221,7 +221,6 @@ public class VMinfoController {
         catch (ParseException e) {
             e.printStackTrace();
         }
-
 
     }
 

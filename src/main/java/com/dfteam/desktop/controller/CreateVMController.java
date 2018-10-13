@@ -8,12 +8,12 @@ import com.dfteam.apisdk.util.account.Account;
 import com.dfteam.apisdk.util.createvm.OS;
 import com.dfteam.apisdk.util.createvm.Region;
 import com.dfteam.apisdk.util.createvm.Type;
+import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -66,7 +66,7 @@ public class CreateVMController {
             CreateVMController.this.getOS();
 
             createBtn.setOnAction(event -> {
-                if (createClickTime == 0 || (System.currentTimeMillis() - createClickTime) > 2000) {
+                if (createClickTime == 0 || (System.currentTimeMillis() - createClickTime) > Main.CLICKTIME) {
                     createClickTime = System.currentTimeMillis();
                     onCreate();
                 }

@@ -5,6 +5,7 @@ import com.dfteam.apisdk.DigitalOcean;
 import com.dfteam.apisdk.GoogleCloud;
 import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.apisdk.util.vm.VMList;
+import com.dfteam.desktop.Main;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
@@ -17,7 +18,6 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
-
 import java.io.IOException;
 
 /**
@@ -80,7 +80,7 @@ public class VMsController {
 
         refreshBtn.setOnAction(event -> initData());
         createVMbtn.setOnAction(event -> {
-            if (createVMClickTime == 0 || (System.currentTimeMillis() - createVMClickTime > 3000)) {
+            if (createVMClickTime == 0 || (System.currentTimeMillis() - createVMClickTime > Main.CLICKTIME)) {
                 createVMClickTime = System.currentTimeMillis();
                 try {
                     StageManager.CreateVMStage();

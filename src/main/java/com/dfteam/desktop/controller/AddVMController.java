@@ -2,13 +2,13 @@ package com.dfteam.desktop.controller;
 
 import com.dfteam.apisdk.Other;
 import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
 import java.io.IOException;
 
 /**
@@ -32,7 +32,7 @@ public class AddVMController {
                 Notification.showWarningNotification("Please fill all the fields");
             else {
                 try {
-                    if (addClickTime == 0 || (System.currentTimeMillis() - addClickTime) > 2000) {
+                    if (addClickTime == 0 || (System.currentTimeMillis() - addClickTime) > Main.CLICKTIME) {
                         addClickTime = System.currentTimeMillis();
 
                         Other.createVM(nameField.getText(), ipField.getText());

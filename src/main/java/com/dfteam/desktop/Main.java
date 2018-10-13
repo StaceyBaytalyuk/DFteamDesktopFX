@@ -6,19 +6,22 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+
 /**
  * Main class
  * Try to open accountStage
  */
-public class Login extends Application {
+public class Main extends Application {
+
+    public final static String url = "http://34.202.9.91:8000";
+    public final static long CLICKTIME = 2000;
 
     @Override
     public void start(Stage primaryStage) {
-        ApiSDK.setServer("http://34.202.9.91:8000");
+        ApiSDK.setServer(url);
 
         File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
         JSONParser parser = new JSONParser();

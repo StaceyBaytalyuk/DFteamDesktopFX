@@ -2,9 +2,7 @@ package com.dfteam.desktop.util;
 
 import javafx.application.Platform;
 import javafx.util.Duration;
-import tray.notification.TrayNotification;
 import tray.notification.NotificationType;
-//import org.controlsfx.control.Notifications;
 
 /**
  * Class for notifications in tray

@@ -28,7 +28,7 @@
                         <manifest>
                             <addClasspath>true</addClasspath>
                             <classpathPrefix>lib/</classpathPrefix>
-                            <mainClass>com.dfteam.desktop.Login</mainClass>
+                            <mainClass>com.dfteam.desktop.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -42,7 +42,7 @@
                     <description>DFteam app for host server</description>
                     <vendor>DFteam</vendor>
                     <verbose>true</verbose>
-                    <mainClass>com.dfteam.desktop.Login</mainClass>
+                    <mainClass>com.dfteam.desktop.Main</mainClass>
                     <appName>DFteam</appName>
                     <bundleArguments>
                         <icon>${project.basedir}/src/main/resources/images/DF.png</icon>
