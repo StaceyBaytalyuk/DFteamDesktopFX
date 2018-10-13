@@ -53,6 +53,10 @@ public class LoginController {
         btnOK.setDefaultButton(true);
     }
 
+    /**
+     * btnOK handler.
+     * Authorize and save token in file.
+     */
     protected void onOK() {
         try {
             if (loginClickTime == 0 || (System.currentTimeMillis() - loginClickTime) > Main.CLICKTIME) {
@@ -64,7 +68,6 @@ public class LoginController {
             }
 
         } catch (AuthFailException e) {
-            //authError();
             Notification.showErrorNotification("Wrong login or password");
         } catch (ServerNotSetException e) {
             System.exit(1);

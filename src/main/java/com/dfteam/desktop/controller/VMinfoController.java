@@ -224,14 +224,23 @@ public class VMinfoController {
 
     }
 
+    /**
+     * @param type2 type of account (example: DO)
+     */
     public static void setType(String type2){
         type = type2;
     }
 
+    /**
+     * @param accName2 account name (example: dima)
+     */
     public static void setAccName(String accName2){
         accName = accName2;
     }
 
+    /**
+     * @param id2 VM's id
+     */
     public static void setId(String id2){
         id = id2;
     }

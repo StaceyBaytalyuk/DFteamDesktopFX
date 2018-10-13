@@ -19,10 +19,9 @@ public class VM {
 
     /**
      * @param vm JSONObject parsed from server response
-     * @param type Type of account
-     * @param accName Account name
+     * @param type Type of account (example: DO)
+     * @param accName Account name (example: dima)
      */
-
     public VM(JSONObject vm, String type, String accName) {
         try {
             if(vm.get("error")==null) {

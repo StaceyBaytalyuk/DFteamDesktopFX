@@ -26,6 +26,7 @@ public class ConnectCheck {
 
     /**
      * Check Internet connection
+     * @return true if it`s OK
      */
     private static boolean internet(){
         try (Socket socket = new Socket()) {
@@ -38,6 +39,7 @@ public class ConnectCheck {
 
     /**
      * Check connection to server
+     * @return true if it`s OK
      */
     private static boolean server(){
         boolean result = false;

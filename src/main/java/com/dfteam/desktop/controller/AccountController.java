@@ -149,6 +149,8 @@ public class AccountController {
 
     /**
      * Open table with VMs when you press a button with account name
+     * @param type type of account (example: DO)
+     * @param accName account name (example: dima)
      */
     private void openVMs(String type, String accName) {
         VMsController.setType(type);
