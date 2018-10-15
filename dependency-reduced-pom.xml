@@ -49,22 +49,12 @@
       </plugin>
     </plugins>
   </build>
-  <dependencies>
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>javafx</artifactId>
-      <version>2.2.3</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/jfxrt.jar</systemPath>
-    </dependency>
-    <dependency>
-      <groupId>com.dfteam</groupId>
-      <artifactId>apisdk</artifactId>
-      <version>1.0</version>
-      <scope>system</scope>
-      <systemPath>${project.basedir}/lib/apisdk-1.0-jar-with-dependencies.jar</systemPath>
-    </dependency>
-  </dependencies>
+  <repositories>
+    <repository>
+      <id>my-local-repo</id>
+      <url>file://${project.basedir}/lib-maven/</url>
+    </repository>
+  </repositories>
   <properties>
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
