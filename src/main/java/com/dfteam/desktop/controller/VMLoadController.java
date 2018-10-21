@@ -54,8 +54,8 @@ public class VMLoadController {
 
     @FXML
     public void initialize(){
-        XYChart.Series<Integer, Double> series1 = new XYChart.Series<>();
-        XYChart.Series<Integer, Double> series2 = new XYChart.Series<>();
+        XYChart.Series<Integer, Double> series1 = new XYChart.Series<>(); // CPU
+        XYChart.Series<Integer, Double> series2 = new XYChart.Series<>(); // RAM
         vmLoad = new VMLoad(ip, "root");
         ////////////////////////////
         xCPU.setAutoRanging(false);

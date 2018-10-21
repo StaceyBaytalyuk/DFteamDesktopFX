@@ -52,10 +52,10 @@ public class CreateVMController {
 
             regionSelect.getItems().addAll(region);
 
-            regionSelect.setOnAction(ev -> CreateVMController.this.getType());
+            regionSelect.setOnAction( event -> CreateVMController.this.getType() );
 
             regionSelect.setPromptText("No selection");
-            regionSelect.setEditable(false);
+            regionSelect.setEditable(false); // user can choose, but not type in
 
             typeSelect.setPromptText("No selection");
             typeSelect.setEditable(false);
@@ -100,11 +100,11 @@ public class CreateVMController {
     private void onCreate() {
         if (nameField.getText().isEmpty() || regionSelect.getValue() == null ||
                 typeSelect.getValue() == null || osSelect.getValue() == null)
-            Notification.showWarningNotification("Enter all fields");
+            Notification.showWarningNotification("Enter all fields"); // if at least one field isn't chosen
 
         else if (regionSelect.getValue().toString().isEmpty() ||
                 typeSelect.getValue().toString().isEmpty() || osSelect.getValue().toString().isEmpty())
-            Notification.showWarningNotification("Enter all fields");
+            Notification.showWarningNotification("Enter all fields"); // if user deleted something
 
         else {
             createBtn.setDisable(true);
@@ -167,19 +167,19 @@ public class CreateVMController {
      * Get list of VM types available in selected region
      */
     private void getType(){
-        if(regionSelect.getSelectionModel().getSelectedIndex()>0) {
+        if(regionSelect.getSelectionModel().getSelectedIndex()>0) { // selected region
             try {
                 Region region = regionSelect.getSelectionModel().getSelectedItem();
 
                 List<Type> type = null;
 
+                // try to get all types
                 if (account.getType().equals("do")) type = DigitalOcean.getTypeList(account, region);
                 else if (account.getType().equals("gce")) type = GoogleCloud.getTypeList(account, region);
                 else if (account.getType().equals("ec2")) type = AWSEC2.getTypeList(account, region);
 
-                typeSelect.getItems().clear();
-
-                typeSelect.getItems().addAll(type);
+                typeSelect.getItems().clear(); // to avoid copies every time you choose something
+                typeSelect.getItems().addAll(type); // add list to menu
 
                 typeSelect.setOnAction(ev -> CreateVMController.this.getOS());
             }
@@ -212,9 +212,7 @@ public class CreateVMController {
      */
     private void getOS() {
         try {
-
             List<OS> os = null;
-
             if (account.getType().equals("do"))
                 os = DigitalOcean.getOSList(account);
             else if (account.getType().equals("gce"))
@@ -223,13 +221,14 @@ public class CreateVMController {
                 os = AWSEC2.getOSList(account);
 
             osSelect.getItems().clear();
-
             osSelect.getItems().addAll(os);
         }
+
         catch (ServerNotSetException e) {
             System.out.println("Server is not set");
             System.exit(1);
         }
+
         catch (InvalidTokenException e) {
             StageManager.closeAllWindows();
             try {
@@ -238,7 +237,9 @@ public class CreateVMController {
                 e1.printStackTrace();
             }
             Platform.runLater(() -> StageManager.hideVMTable());
-        }  catch (Exception e) {
+        }
+
+        catch (Exception e) {
             Notification.showErrorNotification("Error\n" + e.getMessage());
         }
     }

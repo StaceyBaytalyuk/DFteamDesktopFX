@@ -30,6 +30,7 @@ public class AccountController {
     @FXML
     private ScrollPane scroll;
 
+    // columns which will contain buttons with account names
     @FXML
     private VBox googPanel;
 
@@ -39,6 +40,7 @@ public class AccountController {
     @FXML
     private VBox amazPanel;
 
+    // buttons in the bottom of the window
     @FXML
     private Button otherVMsBtn;
 
@@ -59,8 +61,8 @@ public class AccountController {
             AccountList GC = GoogleCloud.getAccountList();
             for (int i = 0; i < GC.size(); i++) {
                 Button b = new Button( GC.get(i).getName() );
-                googPanel.getChildren().add(b);
-                b.setOnAction(event -> {
+                googPanel.getChildren().add(b); // add button to the column
+                b.setOnAction(event -> { // open VM Table when you press the button
                     if (gceClickTime == 0 || (System.currentTimeMillis() - gceClickTime) > Main.CLICKTIME) {
                         gceClickTime = System.currentTimeMillis();
                         openVMs("gce", b.getText());
@@ -107,16 +109,16 @@ public class AccountController {
 
             logoutBtn.setOnAction(event -> {
                 if (ConfirmationDialog.showConfirmation("Log Out", "Are you sure want to log out?")) {
-                    if(HomeDir.exists()){
+                    if(HomeDir.exists()){ // delete file with token
                         ConfigFile.delete();
                     }
                     StageManager.closeAllWindows();
                     try {
-                        StageManager.LoginStage();
+                        StageManager.LoginStage(); // let user to log in again
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    StageManager.hideAccounts();
+                    StageManager.hideAccounts(); // current window should be closed after everything is done
                 }
             });
 
@@ -135,7 +137,7 @@ public class AccountController {
             } catch (IOException e1) {
                 e1.printStackTrace();
             }
-            Platform.runLater(() ->  StageManager.hideVMTable());
+            Platform.runLater(() ->  StageManager.hideVMTable()); // multithreading in GUI make lots of problems, so I need to use this thing
         }
 
         catch (AuthFailException | AccountErrorException e) {

@@ -31,6 +31,7 @@ public class LoginController {
 
     @FXML
     private Button btnOK;
+
     private long loginClickTime;
 
     @FXML
@@ -63,7 +64,7 @@ public class LoginController {
                 loginClickTime = System.currentTimeMillis();
 
                 ApiSDK.Auth(loginField.getText(), passwField.getText());
-                AddFile(ApiSDK.getToken());
+                AddFile(ApiSDK.getToken()); // save token to file
                 accountWindow();
             }
 
@@ -89,8 +90,8 @@ public class LoginController {
         json.put("token", token);
         try {
             FileWriter fileWriter = new FileWriter(ConfigFile);
-            fileWriter.write(json.toJSONString());
-            fileWriter.flush();
+            fileWriter.write(json.toJSONString()); // write json to file
+            fileWriter.flush(); // clean and close steam to avoid problems
             fileWriter.close();
         } catch (IOException e) {
             e.printStackTrace();

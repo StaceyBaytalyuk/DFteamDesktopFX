@@ -28,18 +28,19 @@ public class VM {
                 name = (String) vm.get("name");
                 this.type = type;
 
-                if (!type.equals("oth")) {
+                if (!type.equals("oth")) { // other VMs don't have status ans zone
                     status = (String) vm.get("status");
                     zone = (String) vm.get("zone");
                     if (status.equals("active") || status.equals("running")) {
-                        ip = (String) vm.get("ip");
+                        ip = (String) vm.get("ip"); // don't show IP if VM doesn't work
                     }
 
-                    if (type.equals("do")) {
+                    if (type.equals("do")) { // DF way to get ID (only for Digital Ocean)
                         id = new StringBuilder().append(vm.get("id")).toString();
-                    } else {
+                    } else {                 // normal way to get ID (for others)
                         id = (String) vm.get("id");
                     }
+
                     this.accName = accName;
                 } else {
                     ip = (String) vm.get("ip");
@@ -100,13 +101,14 @@ public class VM {
      * @return Circle for table
      */
     public Circle getStatus_circle(){
-        Circle test = new Circle();
-        test.setRadius(8);
-        if(!isOn())
-            test.setFill(Color.RED);
-        else
-            test.setFill(Color.GREEN);
-        return test;
+        Circle c = new Circle();
+        c.setRadius(8);
+        if ( isOn() ) {
+            c.setFill(Color.GREEN);
+        } else {
+            c.setFill(Color.RED);
+        }
+        return c;
     }
 
     public boolean isOn(){

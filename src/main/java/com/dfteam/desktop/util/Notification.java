@@ -14,7 +14,7 @@ public class Notification {
      */
     public static void showWarningNotification(String head) {
         try {
-            Platform.runLater(() -> {
+            Platform.runLater(() -> { // to avoid problems with multithreading
                         tray.notification.TrayNotification tray = new tray.notification.TrayNotification(head, "", NotificationType.NOTICE);
                         tray.showAndDismiss(Duration.seconds(3d));
                     }

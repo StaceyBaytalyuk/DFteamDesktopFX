@@ -41,12 +41,14 @@ public class OtherVMsController {
 
     @FXML
     private Button refreshBtn;
+
     private long addVMClickTime = 0;
 
     @FXML
     private void initialize() {
         try {
             initData();
+            // fill table
             name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
             ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
             info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
@@ -116,7 +118,7 @@ public class OtherVMsController {
      * Get data for table
      */
     private void initData() throws AuthFailException, VMErrorException, ParseException, InvalidTokenException, AccountErrorException, ServerNotSetException {
-        VMsList.clear();
+        VMsList.clear(); // to avoid copies
         VMList vm = Other.getVMList();
         if(vm.size()>0) {
             for (int i = 0; i < vm.size(); i++) {

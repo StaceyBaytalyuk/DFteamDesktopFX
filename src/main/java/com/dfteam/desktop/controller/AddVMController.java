@@ -15,6 +15,7 @@ import java.io.IOException;
  * Class controller of addVMStage
  */
 public class AddVMController {
+
     @FXML
     private TextField nameField;
 
@@ -23,11 +24,12 @@ public class AddVMController {
 
     @FXML
     private Button addBtn;
+
     private long addClickTime = 0;
 
     @FXML
     private void initialize() {
-        addBtn.setOnAction(event -> {
+        addBtn.setOnAction(event -> { // add VM with chosen name and IP
             if(nameField.getText().isEmpty() || ipField.getText().isEmpty())
                 Notification.showWarningNotification("Please fill all the fields");
             else {

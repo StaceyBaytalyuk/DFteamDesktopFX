@@ -27,10 +27,11 @@ public class StageManager {
 
     public static void LoginStage() throws IOException {
         loginStage = new Stage();
+        // set the look of window
         Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("login.fxml")));
         loginStage.setTitle("DFteam - Login");
         loginStage.getIcons().add(new Image("/images/DF.png"));
-        loginStage.setScene(new Scene(root));
+        loginStage.setScene(new Scene(root)); // apply settings to the scene
         loginStage.show();
     }
 
@@ -41,9 +42,11 @@ public class StageManager {
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
         primaryStage.setOnCloseRequest(event -> Platform.exit());
-        if( !ApiSDK.CheckToken()) {
+        if ( ApiSDK.CheckToken() ) {
+            primaryStage.show();
+        } else {
             hideAccounts();
-        } else primaryStage.show();
+        }
     }
 
     public static void VMTableStage() throws IOException {

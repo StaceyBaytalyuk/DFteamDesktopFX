@@ -20,7 +20,7 @@ import java.io.IOException;
  */
 public class VMinfoController {
 
-    private VMAction vmAction;
+    private VMAction vmAction; // On, Off, Delete
 
     private static String type;
 
@@ -76,7 +76,7 @@ public class VMinfoController {
 
             nameText.setText("Name: " + vm.getName());
 
-            if (vm.isOn() || type.equals("oth")) {
+            if ( vm.isOn() || type.equals("oth") ) { // show IP only if VM works or it is Other VM
                 ipText.setText("IP: " + vm.getIp());
                 ipText.setVisible(true);
             } else {
@@ -84,10 +84,10 @@ public class VMinfoController {
             }
 
             if (vm.getAccountType().equals("oth")) statusText.setVisible(false);
-            else statusText.setText("Status: " + vm.getStatus());
+            else statusText.setText("Status: " + vm.getStatus()); // Other VM don't have status
 
             if(vm.getAccountType().equals("oth")) OnOffBtn.setVisible(false);
-            else {
+            else { // can't On/Off Other VM
                 if (vm.isOn()) {
                     OnOffBtn.setText("OFF VM");
                     OnOffBtn.setOnAction(event -> {

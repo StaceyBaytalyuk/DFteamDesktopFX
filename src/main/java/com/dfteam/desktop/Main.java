@@ -17,7 +17,7 @@ import java.io.IOException;
 public class Main extends Application {
 
     public final static String url = "http://34.202.9.91:8000";
-    public final static long CLICKTIME = 2000;
+    public final static long CLICKTIME = 2000; // milliseconds between clicks
 
     @Override
     public void start(Stage primaryStage) {
@@ -28,10 +28,10 @@ public class Main extends Application {
         if(file2.exists()) {
             try {
                 FileReader fileReader = new FileReader(file2);
-                JSONObject json = (JSONObject) parser.parse(fileReader);
+                JSONObject json = (JSONObject) parser.parse(fileReader); // read from file to JSONObject
                 fileReader.close();
                 ApiSDK.Auth((String) json.get("token"));
-                StageManager.AccountStage(primaryStage);
+                StageManager.AccountStage(primaryStage); // AccountStage - main stage of this app
             } catch (Exception e) {
                 e.printStackTrace();
             }
