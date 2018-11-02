@@ -5,8 +5,8 @@ import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.VM;
-import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
+import com.dfteam.desktop.util.StageManager;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,6 +15,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 
 /**

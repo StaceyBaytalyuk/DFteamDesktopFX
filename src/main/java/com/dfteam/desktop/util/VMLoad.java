@@ -1,6 +1,10 @@
 package com.dfteam.desktop.util;
 
-import com.jcraft.jsch.*;
+import com.jcraft.jsch.Channel;
+import com.jcraft.jsch.ChannelExec;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+
 import java.io.InputStream;
 import java.text.DecimalFormat;
 

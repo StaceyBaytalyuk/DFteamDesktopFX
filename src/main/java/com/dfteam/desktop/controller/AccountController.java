@@ -1,19 +1,24 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.*;
+import com.dfteam.apisdk.AWSEC2;
+import com.dfteam.apisdk.DigitalOcean;
+import com.dfteam.apisdk.GoogleCloud;
 import com.dfteam.apisdk.exceptions.AccountErrorException;
 import com.dfteam.apisdk.exceptions.AuthFailException;
 import com.dfteam.apisdk.exceptions.InvalidTokenException;
 import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.apisdk.util.account.AccountList;
 import com.dfteam.desktop.Main;
-import com.dfteam.desktop.util.*;
+import com.dfteam.desktop.util.ConfirmationDialog;
+import com.dfteam.desktop.util.Notification;
+import com.dfteam.desktop.util.StageManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
 import org.json.simple.parser.ParseException;
+
 import java.io.File;
 import java.io.IOException;
 
@@ -21,8 +26,6 @@ import java.io.IOException;
  * Class controller of accountStage
  */
 public class AccountController {
-    public static String token;
-
     private static File HomeDir = new File(System.getProperty("user.home")+File.separator+".dfteam");
 
     private static File ConfigFile = new File(HomeDir.getPath()+File.separator+"config.json");
@@ -140,7 +143,7 @@ public class AccountController {
             Platform.runLater(() ->  StageManager.hideVMTable()); // multithreading in GUI make lots of problems, so I need to use this thing
         }
 
-        catch (AuthFailException | AccountErrorException e) {
+        catch (AccountErrorException e) {
             Notification.showErrorNotification("Error\n" + e.getMessage());
         }
 

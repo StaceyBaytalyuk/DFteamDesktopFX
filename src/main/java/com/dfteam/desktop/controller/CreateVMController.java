@@ -3,17 +3,22 @@ package com.dfteam.desktop.controller;
 import com.dfteam.apisdk.AWSEC2;
 import com.dfteam.apisdk.DigitalOcean;
 import com.dfteam.apisdk.GoogleCloud;
-import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.exceptions.InvalidTokenException;
+import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.apisdk.exceptions.VMErrorException;
 import com.dfteam.apisdk.util.account.Account;
 import com.dfteam.apisdk.util.createvm.OS;
 import com.dfteam.apisdk.util.createvm.Region;
 import com.dfteam.apisdk.util.createvm.Type;
 import com.dfteam.desktop.Main;
-import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
+import com.dfteam.desktop.util.StageManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -63,7 +68,7 @@ public class CreateVMController {
             osSelect.setPromptText("No selection");
             osSelect.setEditable(false);
 
-            CreateVMController.this.getOS();
+            getOS();
 
             createBtn.setOnAction(event -> {
                 if (createClickTime == 0 || (System.currentTimeMillis() - createClickTime) > Main.CLICKTIME) {
@@ -181,7 +186,6 @@ public class CreateVMController {
                 typeSelect.getItems().clear(); // to avoid copies every time you choose something
                 typeSelect.getItems().addAll(type); // add list to menu
 
-                typeSelect.setOnAction(ev -> CreateVMController.this.getOS());
             }
 
             catch (ServerNotSetException e) {

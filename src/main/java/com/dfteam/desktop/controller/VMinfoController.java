@@ -4,15 +4,21 @@ import com.dfteam.apisdk.AWSEC2;
 import com.dfteam.apisdk.DigitalOcean;
 import com.dfteam.apisdk.GoogleCloud;
 import com.dfteam.apisdk.Other;
-import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.exceptions.AccountErrorException;
+import com.dfteam.apisdk.exceptions.InvalidTokenException;
+import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.apisdk.exceptions.VMErrorException;
 import com.dfteam.apisdk.util.vm.VMAction;
 import com.dfteam.desktop.Main;
-import com.dfteam.desktop.util.*;
+import com.dfteam.desktop.util.ConfirmationDialog;
+import com.dfteam.desktop.util.Notification;
+import com.dfteam.desktop.util.StageManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import org.json.simple.parser.ParseException;
+
 import java.io.IOException;
 
 /**
@@ -98,8 +104,6 @@ public class VMinfoController {
                                     vmAction.TurnOff();
                                     Notification.showSuccessNotification("VM is OFF");
                                     updateInfo();
-                                } catch (AuthFailException e) {
-                                    e.printStackTrace();
                                 } catch (ServerNotSetException e) {
                                     System.out.println("Server is not set");
                                     System.exit(1);
@@ -129,9 +133,7 @@ public class VMinfoController {
                                     vmAction.TurnOn();
                                     Notification.showSuccessNotification("VM is ON");
                                     updateInfo();
-                                } catch (AuthFailException e) {
-                                    e.printStackTrace();
-                                } catch (ServerNotSetException e) {
+                                }catch (ServerNotSetException e) {
                                     System.out.println("Server is not set");
                                     System.exit(1);
                                 }
@@ -161,8 +163,6 @@ public class VMinfoController {
                             vmAction.Delete();
                             Notification.showSuccessNotification("VM is successfully deleted!");
                             StageManager.hideMoreInfo();
-                        } catch (AuthFailException e) {
-                            e.printStackTrace();
                         } catch (ServerNotSetException e) {
                             System.out.println("Server is not set");
                             System.exit(1);
@@ -214,7 +214,7 @@ public class VMinfoController {
             Platform.runLater(() ->  StageManager.hideVMTable());
         }
 
-        catch (AuthFailException | AccountErrorException | VMErrorException e) {
+        catch (AccountErrorException | VMErrorException e) {
             Notification.showErrorNotification("Error\n" + e.getMessage());
         }
 

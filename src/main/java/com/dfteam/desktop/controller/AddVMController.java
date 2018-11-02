@@ -1,14 +1,17 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.apisdk.Other;
-import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.exceptions.InvalidTokenException;
+import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.apisdk.exceptions.VMErrorException;
 import com.dfteam.desktop.Main;
-import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
+import com.dfteam.desktop.util.StageManager;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+
 import java.io.IOException;
 
 /**
@@ -56,9 +59,7 @@ public class AddVMController {
                     Platform.runLater(StageManager::hideOtherVMs);
                 }
 
-                catch (AuthFailException e) {
-                    Notification.showErrorNotification("Error\n" + e.getMessage());
-                } catch (VMErrorException e) {
+                 catch (VMErrorException e) {
                     Notification.showErrorNotification("Error\nCan't create VM!\n" + e.getMessage());
                 }
             }

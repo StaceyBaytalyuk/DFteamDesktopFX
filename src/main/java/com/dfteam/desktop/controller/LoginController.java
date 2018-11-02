@@ -4,15 +4,18 @@ import com.dfteam.apisdk.ApiSDK;
 import com.dfteam.apisdk.exceptions.AuthFailException;
 import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.desktop.Main;
-import com.dfteam.desktop.util.StageManager;
 import com.dfteam.desktop.util.Notification;
-import javafx.scene.control.*;
+import com.dfteam.desktop.util.StageManager;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
-import javafx.fxml.FXML;
-import java.io.*;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 
 /**
  * Class controller of loginStage
