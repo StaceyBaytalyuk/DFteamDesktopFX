@@ -1,10 +1,7 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.ApiSDK;
-import com.dfteam.apisdk.exceptions.AuthFailException;
-import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.apisdk.SDK;
 import com.dfteam.desktop.Main;
-import com.dfteam.desktop.util.Notification;
 import com.dfteam.desktop.util.StageManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -39,14 +36,10 @@ public class LoginController {
 
     @FXML
     private void initialize() {
-        if(HomeDir.exists()){
+        if(HomeDir.exists()) {
             try {
-                ApiSDK.CheckToken();
-                accountWindow();
-            } catch (ServerNotSetException e) {
-                System.exit(1);
-            } catch (AuthFailException e) {
-                Notification.showErrorNotification("Error\n" + e.getMessage());
+                if (SDK.CheckToken())
+                    accountWindow();
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -66,15 +59,12 @@ public class LoginController {
             if (loginClickTime == 0 || (System.currentTimeMillis() - loginClickTime) > Main.CLICKTIME) {
                 loginClickTime = System.currentTimeMillis();
 
-                ApiSDK.Auth(loginField.getText(), passwField.getText());
-                AddFile(ApiSDK.getToken()); // save token to file
-                accountWindow();
+                Main.customer = SDK.Auth(loginField.getText(), passwField.getText());
+                if (Main.customer != null) {
+                    AddFile(SDK.getToken()); // save token to file
+                    accountWindow();
+                }
             }
-
-        } catch (AuthFailException e) {
-            Notification.showErrorNotification("Wrong login or password");
-        } catch (ServerNotSetException e) {
-            System.exit(1);
         } catch (Exception e) {
             e.printStackTrace();
         }

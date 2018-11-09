@@ -1,16 +1,11 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.AWSEC2;
-import com.dfteam.apisdk.DigitalOcean;
-import com.dfteam.apisdk.GoogleCloud;
-import com.dfteam.apisdk.exceptions.InvalidTokenException;
-import com.dfteam.apisdk.exceptions.ServerNotSetException;
+import com.dfteam.apisdk.util.account.Account;
 import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.Notification;
 import com.dfteam.desktop.util.StageManager;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -98,12 +93,8 @@ public class VMsController {
      */
     private void initData() {
         VMsList.clear();
-        VMList vm = null;
-        try {
-            if ( type.equals("gce") ) vm = GoogleCloud.getVMList(accName);
-            else if ( type.equals("do") ) vm = DigitalOcean.getVMList(accName);
-            else if ( type.equals("ec2") ) vm = AWSEC2.getVMList(accName);
-
+        VMList vm;
+            vm = new Account(accName, type).getVMList();
             if (vm.size() > 0) {
                 for (int i = 0; i < vm.size(); i++) {
                     VMsList.add(new VM(vm.get(i)));
@@ -111,24 +102,5 @@ public class VMsController {
             } else {
                 Notification.showWarningNotification("VMs not found!");
             }
-        }
-
-        catch (ServerNotSetException e) {
-            System.exit(1);
-        }
-
-        catch (InvalidTokenException e) {
-            StageManager.closeAllWindows();
-            try {
-                StageManager.LoginStage();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            Platform.runLater(() ->  StageManager.hideVMTable());
-        }
-
-        catch (Exception e) {
-            Notification.showErrorNotification("Error:\n" + e.getMessage() );
-        }
     }
 }

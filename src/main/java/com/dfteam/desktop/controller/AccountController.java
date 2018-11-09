@@ -1,23 +1,13 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.AWSEC2;
-import com.dfteam.apisdk.DigitalOcean;
-import com.dfteam.apisdk.GoogleCloud;
-import com.dfteam.apisdk.exceptions.AccountErrorException;
-import com.dfteam.apisdk.exceptions.AuthFailException;
-import com.dfteam.apisdk.exceptions.InvalidTokenException;
-import com.dfteam.apisdk.exceptions.ServerNotSetException;
 import com.dfteam.apisdk.util.account.AccountList;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.ConfirmationDialog;
-import com.dfteam.desktop.util.Notification;
 import com.dfteam.desktop.util.StageManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-import org.json.simple.parser.ParseException;
 
 import java.io.File;
 import java.io.IOException;
@@ -61,9 +51,9 @@ public class AccountController {
     @FXML
     private void initialize() {
         try {
-            AccountList GC = GoogleCloud.getAccountList();
-            for (int i = 0; i < GC.size(); i++) {
-                Button b = new Button( GC.get(i).getName() );
+            AccountList accounts = Main.customer.selectGoogle_Cloud().getAccountList();
+            for (int i = 0; i < accounts.size(); i++) {
+                Button b = new Button(accounts.get(i).toString());
                 googPanel.getChildren().add(b); // add button to the column
                 b.setOnAction(event -> { // open VM Table when you press the button
                     if (gceClickTime == 0 || (System.currentTimeMillis() - gceClickTime) > Main.CLICKTIME) {
@@ -73,9 +63,9 @@ public class AccountController {
                 });
             }
 
-            AccountList DO = DigitalOcean.getAccountList();
-            for (int i = 0; i < DO.size(); i++) {
-                Button b = new Button( DO.get(i).getName() );
+            accounts = Main.customer.selectDigital_Ocean().getAccountList();
+            for (int i = 0; i < accounts.size(); i++) {
+                Button b = new Button(accounts.get(i).toString());
                 oceanPanel.getChildren().add(b);
                 b.setOnAction(event -> {
                     if (doClickTime == 0 || (System.currentTimeMillis() - doClickTime) > Main.CLICKTIME) {
@@ -86,9 +76,9 @@ public class AccountController {
                 });
             }
 
-            AccountList AWS = AWSEC2.getAccountList();
-            for (int i = 0; i < AWS.size(); i++) {
-                Button b = new Button( AWS.get(i).getName() );
+            accounts = Main.customer.selectAWS_EC2().getAccountList();
+            for (int i = 0; i < accounts.size(); i++) {
+                Button b = new Button(accounts.get(i).toString());
                 amazPanel.getChildren().add(b);
                 b.setOnAction(event -> {
                     if (ec2ClickTime == 0 || (System.currentTimeMillis() - ec2ClickTime) > Main.CLICKTIME) {
@@ -112,7 +102,7 @@ public class AccountController {
 
             logoutBtn.setOnAction(event -> {
                 if (ConfirmationDialog.showConfirmation("Log Out", "Are you sure want to log out?")) {
-                    if(HomeDir.exists()){ // delete file with token
+                    if (HomeDir.exists()) { // delete file with token
                         ConfigFile.delete();
                     }
                     StageManager.closeAllWindows();
@@ -126,28 +116,7 @@ public class AccountController {
             });
 
             scroll.setFitToHeight(true);
-        }
-
-        catch (ServerNotSetException e) {
-            System.out.println("Server is not set");
-            System.exit(1);
-        }
-
-        catch (InvalidTokenException e) {
-            StageManager.closeAllWindows();
-            try {
-                StageManager.LoginStage();
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            Platform.runLater(() ->  StageManager.hideVMTable()); // multithreading in GUI make lots of problems, so I need to use this thing
-        }
-
-        catch (AccountErrorException e) {
-            Notification.showErrorNotification("Error\n" + e.getMessage());
-        }
-
-        catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

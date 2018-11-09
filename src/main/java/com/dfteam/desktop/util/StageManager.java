@@ -1,6 +1,6 @@
 package com.dfteam.desktop.util;
 
-import com.dfteam.apisdk.ApiSDK;
+import com.dfteam.apisdk.SDK;
 import com.dfteam.desktop.controller.VMLoadController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -43,7 +43,7 @@ public class StageManager {
         primaryStage.getIcons().add(new Image("/images/DF.png"));
         primaryStage.setScene(new Scene(root));
         primaryStage.setOnCloseRequest(event -> Platform.exit());
-        if ( ApiSDK.CheckToken() ) {
+        if ( SDK.CheckToken() ) {
             primaryStage.show();
         } else {
             hideAccounts();

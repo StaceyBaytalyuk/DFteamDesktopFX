@@ -1,18 +1,12 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.Other;
-import com.dfteam.apisdk.exceptions.InvalidTokenException;
-import com.dfteam.apisdk.exceptions.ServerNotSetException;
-import com.dfteam.apisdk.exceptions.VMErrorException;
+import com.dfteam.apisdk.util.account.Account;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.Notification;
 import com.dfteam.desktop.util.StageManager;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-
-import java.io.IOException;
 
 /**
  * Class controller of addVMStage
@@ -33,34 +27,19 @@ public class AddVMController {
     @FXML
     private void initialize() {
         addBtn.setOnAction(event -> { // add VM with chosen name and IP
-            if(nameField.getText().isEmpty() || ipField.getText().isEmpty())
+            if (nameField.getText().isEmpty() || ipField.getText().isEmpty())
                 Notification.showWarningNotification("Please fill all the fields");
             else {
-                try {
-                    if (addClickTime == 0 || (System.currentTimeMillis() - addClickTime) > Main.CLICKTIME) {
-                        addClickTime = System.currentTimeMillis();
+                if (addClickTime == 0 || (System.currentTimeMillis() - addClickTime) > Main.CLICKTIME) {
+                    addClickTime = System.currentTimeMillis();
 
-                        Other.createVM(nameField.getText(), ipField.getText());
+                    if (new Account(" ", "oth").createVM(nameField.getText(), ipField.getText()) != null) {
+//                        Other.createVM(nameField.getText(), ipField.getText());
                         Notification.showSuccessNotification("VM is successfully created!");
                         StageManager.hideAddVM();
+                    } else {
+                        Notification.showErrorNotification("Error\nCan't create VM!\n");
                     }
-                } catch (ServerNotSetException e) {
-                    System.out.println("Server is not set");
-                    System.exit(1);
-                }
-
-                catch (InvalidTokenException e) {
-                    StageManager.closeAllWindows();
-                    try {
-                        StageManager.LoginStage();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    Platform.runLater(StageManager::hideOtherVMs);
-                }
-
-                 catch (VMErrorException e) {
-                    Notification.showErrorNotification("Error\nCan't create VM!\n" + e.getMessage());
                 }
             }
         });

@@ -1,7 +1,7 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.Other;
 import com.dfteam.apisdk.exceptions.*;
+import com.dfteam.apisdk.util.account.Account;
 import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.VM;
@@ -47,85 +47,40 @@ public class OtherVMsController {
 
     @FXML
     private void initialize() {
-        try {
+        initData();
+        // fill table
+        name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
+        ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
+        info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
+        table.setItems(VMsList);
+
+        refreshBtn.setOnAction(event -> {
             initData();
-            // fill table
-            name.setCellValueFactory(new PropertyValueFactory<VM, String>("name"));
-            ip.setCellValueFactory(new PropertyValueFactory<VM, String>("ip"));
-            info.setCellValueFactory(new PropertyValueFactory<VM, Button>("info"));
-            table.setItems(VMsList);
+        });
 
-            refreshBtn.setOnAction(event -> {
+        addVMbtn.setOnAction(event -> {
+            if (addVMClickTime == 0 || (System.currentTimeMillis() - addVMClickTime > Main.CLICKTIME)) {
+                addVMClickTime = System.currentTimeMillis();
                 try {
-                    initData();
-                } catch (ServerNotSetException e) {
-                    System.exit(1);
-                }
-
-                catch (InvalidTokenException e) {
-                    StageManager.closeAllWindows();
-                    try {
-                        StageManager.LoginStage();
-                    } catch (IOException e1) {
-                        e1.printStackTrace();
-                    }
-                    StageManager.hideOtherVMs();
-                }
-
-                catch (VMErrorException | AccountErrorException e) {
-                    Notification.showErrorNotification("Error:\n" + e.getMessage() );
-                }
-
-                catch (AuthFailException | ParseException e) {
+                    StageManager.AddVMStage();
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            });
-
-            addVMbtn.setOnAction(event -> {
-                if (addVMClickTime == 0 || (System.currentTimeMillis() - addVMClickTime > Main.CLICKTIME)) {
-                    addVMClickTime = System.currentTimeMillis();
-                    try {
-                        StageManager.AddVMStage();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-        }
-        catch (ServerNotSetException e) {
-            System.exit(1);
-        }
-
-        catch (InvalidTokenException e) {
-            StageManager.closeAllWindows();
-            try {
-                StageManager.LoginStage();
-            } catch (IOException e1) {
-                e1.printStackTrace();
             }
-            StageManager.hideOtherVMs();
-        }
-
-        catch (VMErrorException | AccountErrorException e) {
-            Notification.showErrorNotification("Error:\n" + e.getMessage() );
-        }
-
-        catch (AuthFailException | ParseException e) {
-            e.printStackTrace();
-        }
+        });
     }
 
     /**
      * Get data for table
      */
-    private void initData() throws AuthFailException, VMErrorException, ParseException, InvalidTokenException, AccountErrorException, ServerNotSetException {
+    private void initData() {
         VMsList.clear(); // to avoid copies
-        VMList vm = Other.getVMList();
-        if(vm.size()>0) {
+        VMList vm = new Account(" ", "oth").getVMList();
+        if (vm.size() > 0) {
             for (int i = 0; i < vm.size(); i++) {
                 VMsList.add(new VM(vm.get(i)));
             }
-        }else{
+        } else {
             Notification.showWarningNotification("VMs not found!");
         }
     }
