@@ -35,9 +35,6 @@
           <needMenu>true</needMenu>
           <bundleArguments>
             <icon>${project.basedir}/src/main/resources/images/DF.png</icon>
-            <bundleName>DFteam</bundleName>
-            <linux.bundleName>DFteam</linux.bundleName>
-            <windows.bundleName>DFteam</windows.bundleName>
           </bundleArguments>
         </configuration>
       </plugin>
@@ -65,8 +62,8 @@
   </build>
   <repositories>
     <repository>
-      <id>my-local-repo</id>
-      <url>file://${project.basedir}/lib-maven/</url>
+      <id>snapshots</id>
+      <url>http://68.183.15.99:8081/artifactory/libs-release</url>
     </repository>
   </repositories>
   <properties>

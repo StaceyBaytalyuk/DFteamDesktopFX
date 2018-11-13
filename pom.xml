@@ -17,8 +17,8 @@
 
     <repositories>
         <repository>
-            <id>my-local-repo</id>
-            <url>file://${project.basedir}/lib-maven/</url>
+            <id>snapshots</id>
+            <url>http://68.183.15.99:8081/artifactory/libs-release</url>
         </repository>
     </repositories>
 
@@ -40,13 +40,18 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>3.1.1</version>
+            </plugin>
+            <plugin>
                 <groupId>com.zenjava</groupId>
                 <artifactId>javafx-maven-plugin</artifactId>
                 <version>8.8.3</version>
                 <configuration>
                     <appName>DFteam</appName>
                     <title>DFteam</title>
-                    <nativeReleaseVersion>${version}</nativeReleaseVersion>
+                    <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
                     <description>DFteam app for host server</description>
                     <vendor>DFteam</vendor>
                     <verbose>true</verbose>
