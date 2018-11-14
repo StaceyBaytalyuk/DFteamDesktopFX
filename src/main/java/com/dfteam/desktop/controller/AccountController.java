@@ -1,6 +1,6 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.util.account.AccountList;
+import com.dfteam.apisdk.util.account.Account;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.util.ConfirmationDialog;
 import com.dfteam.desktop.util.StageManager;
@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Class controller of accountStage
@@ -51,7 +52,7 @@ public class AccountController {
     @FXML
     private void initialize() {
         try {
-            AccountList accounts = Main.customer.selectGoogle_Cloud().getAccountList();
+            List<Account> accounts = Main.customer.selectGoogle_Cloud().getAccountList();
             for (int i = 0; i < accounts.size(); i++) {
                 Button b = new Button(accounts.get(i).toString());
                 googPanel.getChildren().add(b); // add button to the column

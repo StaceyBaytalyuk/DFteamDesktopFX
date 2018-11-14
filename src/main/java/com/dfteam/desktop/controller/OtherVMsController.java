@@ -1,8 +1,6 @@
 package com.dfteam.desktop.controller;
 
-import com.dfteam.apisdk.exceptions.*;
 import com.dfteam.apisdk.util.account.Account;
-import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.Notification;
@@ -14,9 +12,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Class controller of otherVMStage
@@ -75,7 +73,7 @@ public class OtherVMsController {
      */
     private void initData() {
         VMsList.clear(); // to avoid copies
-        VMList vm = new Account(" ", "oth").getVMList();
+        List<com.dfteam.apisdk.util.vm.VM> vm = new Account(" ", "oth").getVMList();
         if (vm.size() > 0) {
             for (int i = 0; i < vm.size(); i++) {
                 VMsList.add(new VM(vm.get(i)));

@@ -1,7 +1,6 @@
 package com.dfteam.desktop.controller;
 
 import com.dfteam.apisdk.util.account.Account;
-import com.dfteam.apisdk.util.vm.VMList;
 import com.dfteam.desktop.Main;
 import com.dfteam.desktop.VM;
 import com.dfteam.desktop.util.Notification;
@@ -16,6 +15,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.shape.Circle;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Class controller of vmTableStage
@@ -93,8 +93,7 @@ public class VMsController {
      */
     private void initData() {
         VMsList.clear();
-        VMList vm;
-            vm = new Account(accName, type).getVMList();
+        List<com.dfteam.apisdk.util.vm.VM> vm = new Account(accName, type).getVMList();
             if (vm.size() > 0) {
                 for (int i = 0; i < vm.size(); i++) {
                     VMsList.add(new VM(vm.get(i)));
