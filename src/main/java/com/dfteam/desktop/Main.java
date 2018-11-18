@@ -21,7 +21,7 @@ import java.io.IOException;
  */
 public class Main extends Application {
 
-    public final static String url = "http://34.202.9.91:8000";
+    public final static String url = "http://35.204.138.143:8000";
     public final static long CLICKTIME = 2000; // milliseconds between clicks
     public static Customer customer = null;
 

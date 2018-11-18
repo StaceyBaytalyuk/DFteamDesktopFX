@@ -75,8 +75,8 @@ public class OtherVMsController {
         VMsList.clear(); // to avoid copies
         List<com.dfteam.apisdk.util.vm.VM> vm = new Account(" ", "oth").getVMList();
         if (vm.size() > 0) {
-            for (int i = 0; i < vm.size(); i++) {
-                VMsList.add(new VM(vm.get(i)));
+            for (com.dfteam.apisdk.util.vm.VM vm1 : vm) {
+                VMsList.add(new VM(vm1));
             }
         } else {
             Notification.showWarningNotification("VMs not found!");

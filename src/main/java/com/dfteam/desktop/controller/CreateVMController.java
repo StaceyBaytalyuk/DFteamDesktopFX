@@ -41,9 +41,8 @@ public class CreateVMController {
 
     @FXML
     private void initialize() {
-        List<Region> region = null;
         account = new Account(VMsController.getAccName(), VMsController.getType());
-        region = account.getRegionList();
+        List<Region> region = account.getRegionList();
 
         regionSelect.getItems().addAll(region);
 
