@@ -20,13 +20,17 @@
         </configuration>
       </plugin>
       <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>3.1.1</version>
+      </plugin>
+      <plugin>
         <groupId>com.zenjava</groupId>
         <artifactId>javafx-maven-plugin</artifactId>
         <version>8.8.3</version>
         <configuration>
           <appName>DFteam</appName>
           <title>DFteam</title>
-          <nativeReleaseVersion>${version}</nativeReleaseVersion>
+          <nativeReleaseVersion>${project.version}</nativeReleaseVersion>
           <description>DFteam app for host server</description>
           <vendor>DFteam</vendor>
           <verbose>true</verbose>
@@ -62,7 +66,7 @@
   </build>
   <repositories>
     <repository>
-      <id>snapshots</id>
+      <id>Remove repo</id>
       <url>http://68.183.15.99:8081/artifactory/libs-release</url>
     </repository>
   </repositories>
