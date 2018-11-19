@@ -8,7 +8,7 @@
 
     <groupId>com.dfteam</groupId>
     <artifactId>DFteamDesktopFX</artifactId>
-    <version>1.9</version>
+    <version>2.0</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -106,15 +106,8 @@
         <dependency>
             <groupId>com.dfteam</groupId>
             <artifactId>apisdk</artifactId>
-            <version>1.2</version>
+            <version>1.2.1</version>
         </dependency>
-
-        <dependency>
-            <groupId>com.dorkbox</groupId>
-            <artifactId>SystemTray</artifactId>
-            <version>3.17</version>
-        </dependency>
-
     </dependencies>
 
 
