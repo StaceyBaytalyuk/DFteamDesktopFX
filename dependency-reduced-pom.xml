@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.dfteam</groupId>
   <artifactId>DFteamDesktopFX</artifactId>
-  <version>1.9</version>
+  <version>2.0</version>
   <build>
     <plugins>
       <plugin>
@@ -67,7 +67,7 @@
   <repositories>
     <repository>
       <id>Remove repo</id>
-      <url>http://68.183.15.99:8081/artifactory/libs-release</url>
+      <url>https://maven.dfteam.me/artifactory/lib-release</url>
     </repository>
   </repositories>
   <properties>

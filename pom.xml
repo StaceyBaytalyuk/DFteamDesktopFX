@@ -106,8 +106,15 @@
         <dependency>
             <groupId>com.dfteam</groupId>
             <artifactId>apisdk</artifactId>
-            <version>1.2.2</version>
+            <version>LATEST</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>8.0.8</version>
+        </dependency>
+
     </dependencies>
 
 
