@@ -9,7 +9,6 @@ import com.dfteam.desktop.util.StageManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-
 import java.io.IOException;
 
 /**

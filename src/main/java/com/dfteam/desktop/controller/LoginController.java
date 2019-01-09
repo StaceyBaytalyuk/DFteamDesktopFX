@@ -9,7 +9,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import org.json.simple.JSONObject;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;

@@ -7,7 +7,6 @@ import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import org.json.simple.JSONObject;
-
 import java.io.IOException;
 
 /**

@@ -106,6 +106,12 @@
         <dependency>
             <groupId>com.dfteam</groupId>
             <artifactId>apisdk</artifactId>
+            <version>1.8.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.dfteam.apisdk</groupId>
+            <artifactId>socket</artifactId>
             <version>LATEST</version>
         </dependency>
 

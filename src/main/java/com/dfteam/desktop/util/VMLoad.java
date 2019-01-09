@@ -4,7 +4,6 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
-
 import java.io.InputStream;
 import java.text.DecimalFormat;
 
@@ -155,4 +154,5 @@ public class VMLoad { //TODO docs
         return "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC519CkXfp8owCJWZszEvuefyhkma4I1etdUbg2PPuc8fmewl3CfJrBWsmp17HekL878Sc5Cij7IeXTqf+vI8/a+EhmndfqzDFEFr+u+u5YfT1QfGLSJNY1zr5TMf0RNtyG67ohFDgQBkHjIQeyIM+ewIh6BUjXaweP1B8ENYhU3zvG8X8B2GM7MXbz12ZvuMu2IOrSXLtoD9LhSca08/iE0XDCX4zJWmJTYD0S0wxrNp3i8s/KLcgyPFNGc8pasPkUs6fnAK9Bk8y6KRZiTbiiXB9GXnN4p9nJ7DrYU1dvs+nL7ZnPY5PS2VKjDnf2yXkkKmBJIIgiGOQ4/Qj/1umX chitkiu@chitkiu-Aspire-ES1-731G".getBytes();
 
     }
+
 }

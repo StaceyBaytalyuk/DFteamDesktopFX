@@ -8,7 +8,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-
 import java.io.IOException;
 import java.util.Objects;
 
@@ -25,6 +24,10 @@ public class StageManager {
     private static Stage addVMStage;
     private static Stage loadStage;
     private static Stage moreInfoStage;
+    private static Stage todoStage;
+    private static Stage taskInfoStage;
+    private static Stage createTaskStage;
+
 
     public static void LoginStage() throws IOException {
         loginStage = new Stage();
@@ -107,6 +110,33 @@ public class StageManager {
         moreInfoStage.show();
     }
 
+    public static void TODOStage() throws IOException {
+        todoStage = new Stage();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("todo.fxml")));
+        todoStage.setTitle("DFteam - TODO list");
+        todoStage.getIcons().add(new Image("/images/DF.png"));
+        todoStage.setScene(new Scene(root));
+        todoStage.show();
+    }
+
+    public static void TaskInfoStage() throws IOException {
+        taskInfoStage = new Stage();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("taskInfo.fxml")));
+        taskInfoStage.setTitle("DFteam - Task");
+        taskInfoStage.getIcons().add(new Image("/images/DF.png"));
+        taskInfoStage.setScene(new Scene(root));
+        taskInfoStage.show();
+    }
+
+    public static void CreateTaskStage() throws IOException {
+        taskInfoStage = new Stage();
+        Parent root = FXMLLoader.load(Objects.requireNonNull(StageManager.class.getClassLoader().getResource("createTask.fxml")));
+        taskInfoStage.setTitle("DFteam - Create task");
+        taskInfoStage.getIcons().add(new Image("/images/DF.png"));
+        taskInfoStage.setScene(new Scene(root));
+        taskInfoStage.show();
+    }
+
     private static void closeWindow(Stage stage){
         if (stage!=null) {
             if(stage.isShowing()){
@@ -123,6 +153,9 @@ public class StageManager {
         hideAddVM();
         hideLoad();
         hideMoreInfo();
+        hideTODO();
+        hideTaskInfo();
+        hideCreateTask();
     }
 
     public static void hideLogin(){
@@ -157,5 +190,16 @@ public class StageManager {
         closeWindow(moreInfoStage);
     }
 
+    public static void hideTaskInfo(){
+        closeWindow(taskInfoStage);
+    }
+
+    public static void hideTODO(){
+        closeWindow(todoStage);
+    }
+
+    public static void hideCreateTask(){
+        closeWindow(createTaskStage);
+    }
 
 }

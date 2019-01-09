@@ -8,7 +8,6 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.VBox;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -40,6 +39,9 @@ public class AccountController {
 
     @FXML
     private Button logoutBtn;
+
+    @FXML
+    private Button taskBtn;
 
     private long othClickTime = 0;
     private long gceClickTime = 0;
@@ -113,6 +115,14 @@ public class AccountController {
                         e.printStackTrace();
                     }
                     StageManager.hideAccounts(); // current window should be closed after everything is done
+                }
+            });
+
+            taskBtn.setOnAction(event -> {
+                try {
+                    StageManager.TODOStage();
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             });
 
