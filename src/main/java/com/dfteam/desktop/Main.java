@@ -23,6 +23,7 @@ public class Main extends Application {
     public final static String url = "https://server.dfteam.me";
     public final static long CLICKTIME = 2000; // milliseconds between clicks
     public static Customer customer = null;
+    public static final File HOME_DIR = new File(System.getProperty("user.home")+File.separator+".dfteam");
 
     @Override
     public void start(Stage primaryStage) {
@@ -63,11 +64,11 @@ public class Main extends Application {
 
         SDK.setServer(url);
 
-        File file2 = new File(System.getProperty("user.home")+File.separator+".dfteam"+File.separator+"config.json");
+        File file = new File(HOME_DIR.getPath()+File.separator+"config.json");
         JSONParser parser = new JSONParser();
-        if(file2.exists()) {
+        if(file.exists()) {
             try {
-                FileReader fileReader = new FileReader(file2);
+                FileReader fileReader = new FileReader(file);
                 JSONObject json = (JSONObject) parser.parse(fileReader); // read from file to JSONObject
                 fileReader.close();
                 customer = SDK.Auth((String) json.get("token"));
@@ -90,4 +91,5 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }
